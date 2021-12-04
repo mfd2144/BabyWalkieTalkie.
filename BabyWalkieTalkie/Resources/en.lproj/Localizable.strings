@@ -1,0 +1,77 @@
+/* 
+  Localizable.strings
+  BabyWalkieTalkie
+
+  Created by Mehmet fatih DOĞAN on 9.08.2021.
+  
+*/
+
+"firstPC.title" = "Baby Walkie Talkie";
+"Login" = "Log In";
+"firstPC.create" = "Create New Account";
+"Signup.title" = "Sign Up";
+"Signup.subtitle" = "Fill all empty fields";
+"Signup.emailPlaceholder" = "Enter your email address";
+"Signup.emailPlaceholder2" = "Re-enter your email address";
+"Signup.namePlaceholder" = "Enter your user name";
+"Signup.passwordPlaceholder" = "Enter a password";
+"Signup.button" = "Sign Up";
+"Caution" = "Caution";
+"Or" = "or";
+"Google" = "Sign in with Google";
+"Facebook" = "Sign in with Facebook";
+"UnknownError" = "Unknown Error";
+"Signup.invalidPassword" = "Invalid Password.Password must have total 6 characters contaning letters and numbers.";
+"Signup.invalidEmail" = "invalid Email.Check your email address";
+"Signup.emptyField" = "You must enter a username";
+"Signup.emailError" = "Email addresses must be same";
+"Firebase.error" = "An error occured: ";
+"LogOut" = "Log out";
+"LogOut.message" = "Are you sure to log out ?";
+"Cancel" = "Cancel";
+"Login.emailplaceholder" = "Enter your email";
+"Login.passwordplaceholder" = "Enter your password";
+"Login.forgotPassword" =  "Forgot password?";
+"Login.labelText" = "Don't have a account?";
+"Firebase.unknownError" = "Unknown Error";
+"Error" = "Error";
+"Ok" = "Ok";
+"PasswordLocal.trouble" = "Trouble logging in?";
+"PasswordLocal.troubleDescription" = "Enter your email address, app will send you a link to get back into your account.";
+"PasswordLocal.send" = "Send Link";
+ "PasswordLocal.back" = "Back To Log In";
+"PasswordLocal.FBCancel" = "Facebook login cancelled";
+ "PasswordLocal.sentMessage" = "Link will sent your email address.Check your mails.";
+"googleSignError" = "google sign in error";
+
+"Connect" = "Connect";
+"Disconnect" = "Disconnect";
+"Loading" = "Loading";
+"Purchase" = "Purchase";
+"Parent" = "Parent Walkie Talkie";
+"Baby" = "Baby  Walkie Talkie";
+"Select" = "Set your device as";
+"Settings" = "Settings";
+"Upgrade" = "Upgrade your membership";
+"DisconnectRequest" = "Are you sure to disconnect";
+"Accept" = "Accept";
+"OpenChannel" = "Open Channel";
+"SearchChannel" = "Search For Channel";
+"Connecting" = "Connecting";
+"Alert" = "Alert";
+"LogOutError" = "Log Out Error";
+"TryAgain" = "Try Again";
+
+"OneDay" = "Demo - One day left";
+"TwoDays" = "Demo - Two days left";
+"ThreeDays" = "Demo - Three days left";
+"DaysFinished" = "Demo finished";
+"Buy" = "Buy";
+
+"BadConnection" = "Bad Connection";
+"BadConnectionDefine" = "Check your internet connection";
+
+"DemoCaution" = "Demo Caution";
+"DemoCautionDefine" = "Demo version finished. For using application more you need to purchase one packet.";
+
+

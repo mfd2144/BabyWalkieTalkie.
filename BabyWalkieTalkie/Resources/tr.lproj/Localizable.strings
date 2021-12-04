@@ -1,0 +1,76 @@
+/* 
+  Localizable.strings
+  BabyWalkieTalkie
+
+  Created by Mehmet fatih DOĞAN on 9.08.2021.
+  
+*/
+
+"firstPC.title" = "Bebek Telsizi";
+"Login" = "Giriş Yap";
+"firstPC.create" = "Yeni Hesap Oluştur";
+"Signup.title" = "Kayıt Ol";
+"Signup.subtitle" = "Bütün boş alanları doldurunuz.";
+"Signup.emailPlaceholder" = "Email adresinizi girin";
+"Signup.emailPlaceholder2" = "Email adresinizi tekrar girin";
+"Signup.namePlaceholder" = "Kullanıcı adınızı girin";
+"Signup.passwordPlaceholder" = "Bir şifre girin";
+"Signup.button" = "Kayıt ol";
+"Caution" = "İkaz";
+"UnknownError" = "Bilinmeyen Hata";
+"Signup.invalidPassword" = "Geçersiz şifre. Şifre harf ve rakamlardan oluşan toplam 6 karakterden oluşmalıdır.";
+"Signup.invalidEmail" = "Geçersiz email adresi. Email adresinizi kontrol edin";
+"Signup.emptyField" = "Bir kullanıcı adı giriniz";
+"Signup.emailError" = "Email adresleri aynı olmalı";
+"Firebase.error" = "Hata meydana geldi: ";
+"LogOut" = "Çıkış Yap";
+"LogOut.message" = "Çıkış yapmak istediğinizden emin misiniz?";
+"Cancel" = "İptal";
+"Login.emailplaceholder" = "Mail adresinizi girin";
+"Login.passwordplaceholder" = "Parolanızı girin";
+"Login.forgotPassword" =  "Şifremi unuttum?";
+"Login.labelText" = "Henüz hesabınız yok mu?";
+"Firebase.unknownError" = "Bilinmeyen Hata";
+"Error" = "Hata";
+"Or" = "veya";
+"Google" = "Google ile bağlan";
+"Facebook" = "Facebook ile bağlan";
+"Ok" = "Tamam";
+"PasswordLocal.trouble" = "Parolayı Unuttum?";
+"PasswordLocal.troubleDescription" = "Mail adresinizi girin,uygulama size hesabınızı kurtarmanız için link gönderecek. ";
+"PasswordLocal.send" = "Link Gönder";
+ "PasswordLocal.back" = "Bağlan Sayfasına Geri Dön";
+"PasswordLocal.FBCancel" = "Facebookla bağlanma iptal edildi";
+ "PasswordLocal.sentMessage" = "Link email adresinize gönderildi. Mail adresinizi kontrol edin.";
+"googleSignError" = "google ile bağlantı hatası";
+
+
+"Connect" = "Bağlan";
+"Disconnect" = "Bağlantıyı Kes";
+"Loading" = "Yükleniyor";
+"Purchase" = "Satın Al";
+"Parent" = "Aile Telsizi";
+"Baby" = "Bebek Telsizi";
+"Select" = "Cihazı ayarlayın";
+"Settings" = "Ayarlar";
+"Upgrade" = "Üyeliği yükselt";
+"DisconnectRequest" = "Bağlantıyı kesmek istiyor musun?";
+"Accept" = "Kabul";
+"OpenChannel" = "Kanal Aç";
+"SearchChannel" = "Kanal Ara";
+"Connecting" = "Bağlanıyor";
+"Alert" = "İkaz";
+"LogOutError" = "Çıkış yapma hatası";
+"TryAgain" = "Tekrar Dene";
+
+"OneDay" = "Demo - 1 gün kaldı";
+"TwoDays" = "Demo - 2 gün kaldı";
+"ThreeDays" = "Demo - 3 gün kaldı";
+"DaysFinished" = "Demo bitti";
+"Buy" = "Satın Al";
+
+"BadConnection" = "Zayıf Bağlantı";
+"BadConnectionDefine" = "Lütfen internet bağlantınızı kontrol edin";
+
+"DemoCaution" = "Demo İkazı";
+"DemoCautionDefine" = "Demo versiyonu sona erdi. Uygulamayı daha fazla kullanabilmek için bir paket satın almalısınız.";
