@@ -7,10 +7,7 @@
 
 import UIKit
 
-
-
 final class AddAnySimpleCaution:UIAlertController{
-
     convenience init(title:String,message:String,handler :((UIAlertAction) -> Void )? = nil) {
         self.init(title: title, message: message, preferredStyle: .alert)
         addAction(handler)

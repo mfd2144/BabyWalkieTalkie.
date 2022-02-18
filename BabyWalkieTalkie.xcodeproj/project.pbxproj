@@ -3,15 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D9D0380246925DCCD227478 /* Pods_BabyWalkieTalkie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85845A4CBFAC0003C9FC9536 /* Pods_BabyWalkieTalkie.framework */; };
+		75D21B7F9255D965E0E150AA /* Pods_BabyWalkieTalkie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D176B3312176F19C678C662 /* Pods_BabyWalkieTalkie.framework */; };
+		BA0A287A27629F7A00F8A6B7 /* AgoraMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0A287927629F7A00F8A6B7 /* AgoraMessageService.swift */; };
+		BA12037E27B8436B00EEDA92 /* PurchasedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA12037D27B8436B00EEDA92 /* PurchasedItem.swift */; };
 		BA17DABD274ADCCD00B94B6C /* IAPTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA17DABC274ADCCD00B94B6C /* IAPTableView.swift */; };
 		BA17DABF274ADD2E00B94B6C /* IAPTableBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA17DABE274ADD2E00B94B6C /* IAPTableBuilder.swift */; };
 		BA1C32BB2714CEA300F19FF1 /* ParentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C32BA2714CEA300F19FF1 /* ParentRouter.swift */; };
 		BA5EC4A0272A9B27004A4FFB /* SourceEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5EC49F272A9B27004A4FFB /* SourceEnum.swift */; };
+		BA712FE927ABCC7E00881BFE /* IdentityData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA712FE827ABCC7E00881BFE /* IdentityData.swift */; };
 		BA7248B9273D1EF100B98295 /* Local.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7248B8273D1EF100B98295 /* Local.swift */; };
 		BA74498626C0437B009D4E40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA74498526C0437B009D4E40 /* AppDelegate.swift */; };
 		BA74498826C0437B009D4E40 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA74498726C0437B009D4E40 /* SceneDelegate.swift */; };
@@ -22,10 +25,11 @@
 		BA78DF8B26D0249A0096F3C3 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA78DF8A26D0249A0096F3C3 /* Notification.swift */; };
 		BA7D5EEB26CFBB3800CF9EAF /* SelectReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EEA26CFBB3800CF9EAF /* SelectReusableView.swift */; };
 		BA7D5EEE26CFBB6000CF9EAF /* SelectCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EED26CFBB6000CF9EAF /* SelectCollectionCell.swift */; };
-		BA7D5EF026CFD24300CF9EAF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA7D5EEF26CFD24300CF9EAF /* LaunchScreen.storyboard */; };
 		BA7D5EF226CFD82900CF9EAF /* ListenBabyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EF126CFD82900CF9EAF /* ListenBabyRouter.swift */; };
 		BA7D5EF626CFDA0B00CF9EAF /* SelectRoleSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EF526CFDA0B00CF9EAF /* SelectRoleSections.swift */; };
 		BA7D5EF826CFE0EC00CF9EAF /* MyPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EF726CFE0EC00CF9EAF /* MyPrint.swift */; };
+		BA8378212791719B00C7DA5C /* CustomViewColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8378202791719B00C7DA5C /* CustomViewColor.swift */; };
+		BA837824279171CB00C7DA5C /* CustomViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA837823279171CB00C7DA5C /* CustomViewProtocol.swift */; };
 		BA850D4526CA879E0039CBEA /* FirebaseAgoraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA850D4426CA879E0039CBEA /* FirebaseAgoraService.swift */; };
 		BA850D4726CB0DD90039CBEA /* FirebaseLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA850D4626CB0DD90039CBEA /* FirebaseLocal.swift */; };
 		BA850D4926CB116F0039CBEA /* SelectRoleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA850D4826CB116F0039CBEA /* SelectRoleViewModel.swift */; };
@@ -95,29 +99,52 @@
 		BAA226DD272EBDDA001B449F /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA226DC272EBDDA001B449F /* IAPHelper.swift */; };
 		BAB11249274D6F4C0046FD2B /* IAPCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB11248274D6F4C0046FD2B /* IAPCondition.swift */; };
 		BAB80B2727313E0A004E3EC1 /* UIButton extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB80B2627313E0A004E3EC1 /* UIButton extension.swift */; };
+		BAB9B8AB27C01E31004C76D1 /* SavedPurchaseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB9B8AA27C01E31004C76D1 /* SavedPurchaseItem.swift */; };
 		BABDE160274E7F49009930EF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABDE15F274E7F49009930EF /* Reachability.swift */; };
 		BABFAA4726DC298800965954 /* FirebaseMatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABFAA4626DC298800965954 /* FirebaseMatchService.swift */; };
+		BAC137A427BA2D6600073DDA /* PurchaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC137A327BA2D6600073DDA /* PurchaseCell.swift */; };
 		BAC28BC12733CF3E0021ACCA /* FBLoginHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC28BC02733CF3E0021ACCA /* FBLoginHelper.swift */; };
 		BAC7274B274CDBA600D1A6A0 /* ConnectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC7274A274CDBA600D1A6A0 /* ConnectionType.swift */; };
 		BAC7274D274CDBC000D1A6A0 /* PurchaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC7274C274CDBC000D1A6A0 /* PurchaseType.swift */; };
 		BACF767826C5123F00A3FAD5 /* ShortUserPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACF767726C5123F00A3FAD5 /* ShortUserPresentation.swift */; };
+		BAD0F2B22771DD8200512ECD /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD0F2B12771DD8200512ECD /* Date.swift */; };
+		BAD0F2B62771FF7900512ECD /* MessageResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD0F2B52771FF7900512ECD /* MessageResults.swift */; };
 		BAE0DBCA26C3E09F00E82AE3 /* AppSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE0DBC926C3E09F00E82AE3 /* AppSingleton.swift */; };
+		BAE1B6A3277C6ED700D02A2F /* MessageComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE1B6A2277C6ED700D02A2F /* MessageComment.swift */; };
 		BAE7CD8126D14A39009665F5 /* SmartListenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE7CD8026D14A39009665F5 /* SmartListenerDelegate.swift */; };
 		BAF08F7A26CD145F00974F38 /* AgoraVideoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F7926CD145F00974F38 /* AgoraVideoService.swift */; };
 		BAF08F7D26CD17F500974F38 /* ParentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F7C26CD17F500974F38 /* ParentViewModel.swift */; };
 		BAF08F7F26CD180200974F38 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F7E26CD180200974F38 /* ParentView.swift */; };
 		BAF08F8126CD181100974F38 /* ParentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F8026CD181100974F38 /* ParentBuilder.swift */; };
 		BAF08F8326CD182B00974F38 /* ParentContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F8226CD182B00974F38 /* ParentContracts.swift */; };
+		BAF55BE627BD798100A64078 /* FirebasePaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF55BE527BD798100A64078 /* FirebasePaymentService.swift */; };
+		BAF9FD50279F36EC00D413BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAF9FD4F279F36EC00D413BD /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BA42D1AA277B3C48006B7583 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		60B42F82A19610D9A0475ED7 /* Pods-BabyWalkieTalkie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.debug.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.debug.xcconfig"; sourceTree = "<group>"; };
-		85845A4CBFAC0003C9FC9536 /* Pods_BabyWalkieTalkie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BabyWalkieTalkie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D5CBF18D8C37405F636D149 /* Pods-BabyWalkieTalkie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.release.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.release.xcconfig"; sourceTree = "<group>"; };
+		3D176B3312176F19C678C662 /* Pods_BabyWalkieTalkie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BabyWalkieTalkie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62E22EC9E423CBB1765E2513 /* Pods-BabyWalkieTalkie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.release.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.release.xcconfig"; sourceTree = "<group>"; };
+		9F2B5F44ED95BC091571203C /* Pods-BabyWalkieTalkie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.debug.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.debug.xcconfig"; sourceTree = "<group>"; };
+		BA0A287927629F7A00F8A6B7 /* AgoraMessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraMessageService.swift; sourceTree = "<group>"; };
+		BA12037D27B8436B00EEDA92 /* PurchasedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedItem.swift; sourceTree = "<group>"; };
 		BA17DABC274ADCCD00B94B6C /* IAPTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTableView.swift; sourceTree = "<group>"; };
 		BA17DABE274ADD2E00B94B6C /* IAPTableBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTableBuilder.swift; sourceTree = "<group>"; };
 		BA1C32BA2714CEA300F19FF1 /* ParentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentRouter.swift; sourceTree = "<group>"; };
 		BA5EC49F272A9B27004A4FFB /* SourceEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceEnum.swift; sourceTree = "<group>"; };
+		BA712FE827ABCC7E00881BFE /* IdentityData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityData.swift; sourceTree = "<group>"; };
 		BA7248B8273D1EF100B98295 /* Local.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Local.swift; sourceTree = "<group>"; };
 		BA74498226C0437B009D4E40 /* BabyWalkieTalkie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BabyWalkieTalkie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA74498526C0437B009D4E40 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "../New Group/AppDelegate.swift"; sourceTree = "<group>"; };
@@ -130,10 +157,11 @@
 		BA78DF8A26D0249A0096F3C3 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		BA7D5EEA26CFBB3800CF9EAF /* SelectReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectReusableView.swift; sourceTree = "<group>"; };
 		BA7D5EED26CFBB6000CF9EAF /* SelectCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollectionCell.swift; sourceTree = "<group>"; };
-		BA7D5EEF26CFD24300CF9EAF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BA7D5EF126CFD82900CF9EAF /* ListenBabyRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenBabyRouter.swift; sourceTree = "<group>"; };
 		BA7D5EF526CFDA0B00CF9EAF /* SelectRoleSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoleSections.swift; sourceTree = "<group>"; };
 		BA7D5EF726CFE0EC00CF9EAF /* MyPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPrint.swift; sourceTree = "<group>"; };
+		BA8378202791719B00C7DA5C /* CustomViewColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewColor.swift; sourceTree = "<group>"; };
+		BA837823279171CB00C7DA5C /* CustomViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewProtocol.swift; sourceTree = "<group>"; };
 		BA850D4426CA879E0039CBEA /* FirebaseAgoraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAgoraService.swift; sourceTree = "<group>"; };
 		BA850D4626CB0DD90039CBEA /* FirebaseLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLocal.swift; sourceTree = "<group>"; };
 		BA850D4826CB116F0039CBEA /* SelectRoleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoleViewModel.swift; sourceTree = "<group>"; };
@@ -204,19 +232,26 @@
 		BAA226DC272EBDDA001B449F /* IAPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		BAB11248274D6F4C0046FD2B /* IAPCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPCondition.swift; sourceTree = "<group>"; };
 		BAB80B2627313E0A004E3EC1 /* UIButton extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton extension.swift"; sourceTree = "<group>"; };
+		BAB9B8AA27C01E31004C76D1 /* SavedPurchaseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedPurchaseItem.swift; sourceTree = "<group>"; };
 		BABDE15F274E7F49009930EF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		BABFAA4626DC298800965954 /* FirebaseMatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMatchService.swift; sourceTree = "<group>"; };
+		BAC137A327BA2D6600073DDA /* PurchaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseCell.swift; sourceTree = "<group>"; };
 		BAC28BC02733CF3E0021ACCA /* FBLoginHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBLoginHelper.swift; sourceTree = "<group>"; };
 		BAC7274A274CDBA600D1A6A0 /* ConnectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionType.swift; sourceTree = "<group>"; };
 		BAC7274C274CDBC000D1A6A0 /* PurchaseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseType.swift; sourceTree = "<group>"; };
 		BACF767726C5123F00A3FAD5 /* ShortUserPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortUserPresentation.swift; sourceTree = "<group>"; };
+		BAD0F2B12771DD8200512ECD /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		BAD0F2B52771FF7900512ECD /* MessageResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageResults.swift; sourceTree = "<group>"; };
 		BAE0DBC926C3E09F00E82AE3 /* AppSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSingleton.swift; sourceTree = "<group>"; };
+		BAE1B6A2277C6ED700D02A2F /* MessageComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComment.swift; sourceTree = "<group>"; };
 		BAE7CD8026D14A39009665F5 /* SmartListenerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartListenerDelegate.swift; sourceTree = "<group>"; };
 		BAF08F7926CD145F00974F38 /* AgoraVideoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraVideoService.swift; sourceTree = "<group>"; };
 		BAF08F7C26CD17F500974F38 /* ParentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentViewModel.swift; sourceTree = "<group>"; };
 		BAF08F7E26CD180200974F38 /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
 		BAF08F8026CD181100974F38 /* ParentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentBuilder.swift; sourceTree = "<group>"; };
 		BAF08F8226CD182B00974F38 /* ParentContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentContracts.swift; sourceTree = "<group>"; };
+		BAF55BE527BD798100A64078 /* FirebasePaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePaymentService.swift; sourceTree = "<group>"; };
+		BAF9FD4F279F36EC00D413BD /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,8 +259,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D9D0380246925DCCD227478 /* Pods_BabyWalkieTalkie.framework in Frameworks */,
 				BAA226DB272EBB73001B449F /* StoreKit.framework in Frameworks */,
+				75D21B7F9255D965E0E150AA /* Pods_BabyWalkieTalkie.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,8 +270,8 @@
 		12D665867D0CE1BC61C4F57A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				60B42F82A19610D9A0475ED7 /* Pods-BabyWalkieTalkie.debug.xcconfig */,
-				9D5CBF18D8C37405F636D149 /* Pods-BabyWalkieTalkie.release.xcconfig */,
+				9F2B5F44ED95BC091571203C /* Pods-BabyWalkieTalkie.debug.xcconfig */,
+				62E22EC9E423CBB1765E2513 /* Pods-BabyWalkieTalkie.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -245,15 +280,25 @@
 			isa = PBXGroup;
 			children = (
 				BAA226DA272EBB73001B449F /* StoreKit.framework */,
-				85845A4CBFAC0003C9FC9536 /* Pods_BabyWalkieTalkie.framework */,
+				3D176B3312176F19C678C662 /* Pods_BabyWalkieTalkie.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA12037C27B8435D00EEDA92 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				BA12037D27B8436B00EEDA92 /* PurchasedItem.swift */,
+				BAB9B8AA27C01E31004C76D1 /* SavedPurchaseItem.swift */,
+			);
+			path = Structs;
 			sourceTree = "<group>";
 		};
 		BA17DABB274ADCAC00B94B6C /* IAPTableView */ = {
 			isa = PBXGroup;
 			children = (
 				BA17DABC274ADCCD00B94B6C /* IAPTableView.swift */,
+				BAC137A327BA2D6600073DDA /* PurchaseCell.swift */,
 				BA17DABE274ADD2E00B94B6C /* IAPTableBuilder.swift */,
 			);
 			path = IAPTableView;
@@ -311,8 +356,19 @@
 				BA7D5EF526CFDA0B00CF9EAF /* SelectRoleSections.swift */,
 				BA8D199C26DEE7AD00D95570 /* MultipeerConnectivty.swift */,
 				BA8D199E26DEE93800D95570 /* MatchingRequest.swift */,
+				BA712FE827ABCC7E00881BFE /* IdentityData.swift */,
 			);
 			path = Vendors;
+			sourceTree = "<group>";
+		};
+		BA837822279171A400C7DA5C /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				BA8378202791719B00C7DA5C /* CustomViewColor.swift */,
+				BA88FBC426CD8ACA004C99BE /* CustomView.swift */,
+				BA837823279171CB00C7DA5C /* CustomViewProtocol.swift */,
+			);
+			path = CustomView;
 			sourceTree = "<group>";
 		};
 		BA8C62F926C15F04006ED350 /* AfterLoginPages */ = {
@@ -437,6 +493,7 @@
 				BA850D4626CB0DD90039CBEA /* FirebaseLocal.swift */,
 				BABFAA4626DC298800965954 /* FirebaseMatchService.swift */,
 				BA850D4426CA879E0039CBEA /* FirebaseAgoraService.swift */,
+				BAF55BE527BD798100A64078 /* FirebasePaymentService.swift */,
 			);
 			path = FirebaseServices;
 			sourceTree = "<group>";
@@ -483,6 +540,7 @@
 		BAB5C03D26C05E5100607E52 /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
+				BA12037C27B8435D00EEDA92 /* Structs */,
 				BABC05C3273D4183000C4B18 /* Class */,
 				BABC05C2273D4170000C4B18 /* Enum */,
 				BAB80B2827314689004E3EC1 /* Extensions */,
@@ -509,9 +567,9 @@
 				BA9AC9B926C0748600DEEB58 /* GoogleService-Info.plist */,
 				BA74498E26C0437E009D4E40 /* Assets.xcassets */,
 				BA74499326C0437E009D4E40 /* Info.plist */,
+				BAF9FD4F279F36EC00D413BD /* LaunchScreen.storyboard */,
 				BA9ACA3826C07A0E00DEEB58 /* Fonts */,
 				BA8C62ED26C11C72006ED350 /* Localizable.strings */,
-				BA7D5EEF26CFD24300CF9EAF /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -526,6 +584,7 @@
 				BA9ACA2626C0793B00DEEB58 /* View.swift */,
 				BA9ACA2426C0791D00DEEB58 /* CALayer.swift */,
 				BA88FBC626CD8C90004C99BE /* ColorExtension.swift */,
+				BAD0F2B12771DD8200512ECD /* Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -542,6 +601,7 @@
 				BA9ACA3226C079B200DEEB58 /* GeneralErrors.swift */,
 				BAC7274A274CDBA600D1A6A0 /* ConnectionType.swift */,
 				BAC7274C274CDBC000D1A6A0 /* PurchaseType.swift */,
+				BAE1B6A2277C6ED700D02A2F /* MessageComment.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -549,11 +609,11 @@
 		BABC05C3273D4183000C4B18 /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				BA837822279171A400C7DA5C /* CustomView */,
 				BA9ACA2E26C0798100DEEB58 /* AddAnySimpleCaution.swift */,
 				BA9ACA3B26C07DCB00DEEB58 /* PasswordFieldWithEye.swift */,
 				BA9ACA3626C079D100DEEB58 /* FBLogOut.swift */,
 				BA9ACA3026C079A600DEEB58 /* Animator.swift */,
-				BA88FBC426CD8ACA004C99BE /* CustomView.swift */,
 				BAA226DC272EBDDA001B449F /* IAPHelper.swift */,
 				BA754F6A26C262E1006E3821 /* LogOutAlert.swift */,
 				BAE0DBC926C3E09F00E82AE3 /* AppSingleton.swift */,
@@ -570,11 +630,20 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
+		BAD0F2B42771FF6600512ECD /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				BAD0F2B52771FF7900512ECD /* MessageResults.swift */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
 		BAF08F7826CD144B00974F38 /* AgoraService */ = {
 			isa = PBXGroup;
 			children = (
 				BAF08F7926CD145F00974F38 /* AgoraVideoService.swift */,
 				BA9298A82722E0FD00C6BEFE /* AgoraAudioService.swift */,
+				BA0A287927629F7A00F8A6B7 /* AgoraMessageService.swift */,
 			);
 			path = AgoraService;
 			sourceTree = "<group>";
@@ -582,6 +651,7 @@
 		BAF08F7B26CD17D200974F38 /* Parent */ = {
 			isa = PBXGroup;
 			children = (
+				BAD0F2B42771FF6600512ECD /* Vendor */,
 				BA967C942725E0A200E0BF21 /* Video */,
 				BAF08F7C26CD17F500974F38 /* ParentViewModel.swift */,
 				BAF08F8226CD182B00974F38 /* ParentContracts.swift */,
@@ -599,13 +669,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BA7449AC26C0437E009D4E40 /* Build configuration list for PBXNativeTarget "BabyWalkieTalkie" */;
 			buildPhases = (
-				4A20087D69AAED480D43BB73 /* [CP] Check Pods Manifest.lock */,
+				6F47B00A67850B725528464F /* [CP] Check Pods Manifest.lock */,
 				BA74497E26C0437B009D4E40 /* Sources */,
 				BA74497F26C0437B009D4E40 /* Frameworks */,
 				BA74498026C0437B009D4E40 /* Resources */,
-				16B7B7243EA9109E58171860 /* [CP] Embed Pods Frameworks */,
 				BA8C62F826C15B4E006ED350 /* Firebase Crashlytics
  */,
+				BAF0AA8C276CCDE8003258FC /* ShellScript */,
+				BA42D1AA277B3C48006B7583 /* Embed Frameworks */,
+				52F23891A7C5F5598D238DE1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -658,7 +730,7 @@
 				BA9AC9BA26C0748600DEEB58 /* GoogleService-Info.plist in Resources */,
 				BA8C62EB26C11C72006ED350 /* Localizable.strings in Resources */,
 				BA74498F26C0437E009D4E40 /* Assets.xcassets in Resources */,
-				BA7D5EF026CFD24300CF9EAF /* LaunchScreen.storyboard in Resources */,
+				BAF9FD50279F36EC00D413BD /* LaunchScreen.storyboard in Resources */,
 				BA9ACA3A26C07A0E00DEEB58 /* Cookie-Regular.ttf in Resources */,
 				BA967CA82725EA2000E0BF21 /* Log.storyboard in Resources */,
 			);
@@ -667,9 +739,8 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		16B7B7243EA9109E58171860 /* [CP] Embed Pods Frameworks */ = {
+		52F23891A7C5F5598D238DE1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -685,7 +756,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4A20087D69AAED480D43BB73 /* [CP] Check Pods Manifest.lock */ = {
+		6F47B00A67850B725528464F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -728,6 +799,23 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
+		BAF0AA8C276CCDE8003258FC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -736,6 +824,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAF08F7D26CD17F500974F38 /* ParentViewModel.swift in Sources */,
+				BAE1B6A3277C6ED700D02A2F /* MessageComment.swift in Sources */,
 				BA7D5EF826CFE0EC00CF9EAF /* MyPrint.swift in Sources */,
 				BA967CB527260B1700E0BF21 /* VideoChatViewController.swift in Sources */,
 				BAB11249274D6F4C0046FD2B /* IAPCondition.swift in Sources */,
@@ -755,11 +844,13 @@
 				BA7D5EF226CFD82900CF9EAF /* ListenBabyRouter.swift in Sources */,
 				BA7248B9273D1EF100B98295 /* Local.swift in Sources */,
 				BA9AC9FF26C074FB00DEEB58 /* SignUpMethodView.swift in Sources */,
+				BA712FE927ABCC7E00881BFE /* IdentityData.swift in Sources */,
 				BA8C630426C15F60006ED350 /* SelectRoleView.swift in Sources */,
 				BA9ACA2B26C0796500DEEB58 /* UIViewController.swift in Sources */,
 				BAF08F8326CD182B00974F38 /* ParentContracts.swift in Sources */,
 				BA9AC9FD26C074FB00DEEB58 /* FirstPageRouter.swift in Sources */,
 				BA9ACA2926C0794C00DEEB58 /* TextField.swift in Sources */,
+				BAD0F2B62771FF7900512ECD /* MessageResults.swift in Sources */,
 				BA754F6B26C262E1006E3821 /* LogOutAlert.swift in Sources */,
 				BA88AEB926C57B5A002C2214 /* ListenBabyBuilder.swift in Sources */,
 				BA9AC9F926C074FB00DEEB58 /* LoginRouter.swift in Sources */,
@@ -774,6 +865,7 @@
 				BA9ACA0326C074FB00DEEB58 /* SignUpMethodViewModel.swift in Sources */,
 				BA17DABD274ADCCD00B94B6C /* IAPTableView.swift in Sources */,
 				BABDE160274E7F49009930EF /* Reachability.swift in Sources */,
+				BA837824279171CB00C7DA5C /* CustomViewProtocol.swift in Sources */,
 				BA9ACA2126C076F200DEEB58 /* Cons.swift in Sources */,
 				BA9AC9F326C074FB00DEEB58 /* ForgotThePasswordRouter.swift in Sources */,
 				BABFAA4726DC298800965954 /* FirebaseMatchService.swift in Sources */,
@@ -798,14 +890,19 @@
 				BA9ACA3526C079B600DEEB58 /* DecoderErrors.swift in Sources */,
 				BA88FBC726CD8C90004C99BE /* ColorExtension.swift in Sources */,
 				BA7D5EF626CFDA0B00CF9EAF /* SelectRoleSections.swift in Sources */,
+				BAD0F2B22771DD8200512ECD /* Date.swift in Sources */,
 				BA9ACA3C26C07DCB00DEEB58 /* PasswordFieldWithEye.swift in Sources */,
 				BA850D4726CB0DD90039CBEA /* FirebaseLocal.swift in Sources */,
 				BAA226DD272EBDDA001B449F /* IAPHelper.swift in Sources */,
+				BA0A287A27629F7A00F8A6B7 /* AgoraMessageService.swift in Sources */,
 				BA9AC9F126C074FB00DEEB58 /* LoginView.swift in Sources */,
 				BA9D7658274C346400B23F15 /* Local_After.swift in Sources */,
 				BA9ACA1C26C0752600DEEB58 /* FirebaseAuthenticationService.swift in Sources */,
+				BAB9B8AB27C01E31004C76D1 /* SavedPurchaseItem.swift in Sources */,
 				BAF08F7F26CD180200974F38 /* ParentView.swift in Sources */,
 				BA9AC9FE26C074FB00DEEB58 /* FirstPageContracts.swift in Sources */,
+				BAC137A427BA2D6600073DDA /* PurchaseCell.swift in Sources */,
+				BA12037E27B8436B00EEDA92 /* PurchasedItem.swift in Sources */,
 				BA9ACA1F26C0762500DEEB58 /* UserInfo.swift in Sources */,
 				BA9ACA0126C074FB00DEEB58 /* SignUpMethodBuilder.swift in Sources */,
 				BA9298A92722E0FD00C6BEFE /* AgoraAudioService.swift in Sources */,
@@ -822,7 +919,9 @@
 				BAB80B2727313E0A004E3EC1 /* UIButton extension.swift in Sources */,
 				BA8C630126C15F60006ED350 /* SelectRoleRouter.swift in Sources */,
 				BA74C40E26C55A68007FEF65 /* ListenBabyContracts.swift in Sources */,
+				BAF55BE627BD798100A64078 /* FirebasePaymentService.swift in Sources */,
 				BA850D4926CB116F0039CBEA /* SelectRoleViewModel.swift in Sources */,
+				BA8378212791719B00C7DA5C /* CustomViewColor.swift in Sources */,
 				BA9AC9FC26C074FB00DEEB58 /* FirstPageView.swift in Sources */,
 				BA74498826C0437B009D4E40 /* SceneDelegate.swift in Sources */,
 				BACF767826C5123F00A3FAD5 /* ShortUserPresentation.swift in Sources */,
@@ -965,18 +1064,20 @@
 		};
 		BA7449AD26C0437E009D4E40 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60B42F82A19610D9A0475ED7 /* Pods-BabyWalkieTalkie.debug.xcconfig */;
+			baseConfigurationReference = 9F2B5F44ED95BC091571203C /* Pods-BabyWalkieTalkie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = BabyWalkieTalkie/BabyWalkieTalkieDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = L3BFY9Y29C;
+				GCC_NO_COMMON_BLOCKS = NO;
 				INFOPLIST_FILE = BabyWalkieTalkie/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"${SRCROOT}/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mfd.BabyWalkieTalkie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -987,17 +1088,19 @@
 		};
 		BA7449AE26C0437E009D4E40 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9D5CBF18D8C37405F636D149 /* Pods-BabyWalkieTalkie.release.xcconfig */;
+			baseConfigurationReference = 62E22EC9E423CBB1765E2513 /* Pods-BabyWalkieTalkie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = BabyWalkieTalkie/BabyWalkieTalkie.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L3BFY9Y29C;
+				GCC_NO_COMMON_BLOCKS = NO;
 				INFOPLIST_FILE = BabyWalkieTalkie/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"${SRCROOT}/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mfd.BabyWalkieTalkie;
 				PRODUCT_NAME = "$(TARGET_NAME)";

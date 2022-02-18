@@ -10,125 +10,104 @@ import UIKit
 import AgoraRtcKit
 
 class VideoChatViewController: UIViewController {
-    @IBOutlet weak var localContainer: UIView!
+//    @IBOutlet weak var localContainer: UIView!
     @IBOutlet weak var remoteContainer: UIView!
     @IBOutlet weak var remoteVideoMutedIndicator: UIImageView!
-    @IBOutlet weak var localVideoMutedIndicator: UIView!
+//    @IBOutlet weak var localVideoMutedIndicator: UIView!
     @IBOutlet weak var micButton: UIButton!
-    @IBOutlet weak var cameraButton: UIButton!
+
     
     weak var logVC: LogViewController?
     var agoraKit: AgoraRtcEngineKit!
-    var localVideo: AgoraRtcVideoCanvas?
+    var messageService:AgoraMessageService!
+//    var localVideo: AgoraRtcVideoCanvas?
     var remoteVideo: AgoraRtcVideoCanvas?
     var token:String?
     var channelID:String?
     let appID:String = "3d3cffb6fa994521b3e0617bb8063577"
     var firebaseService : FirebaseAgoraService!
-    var connectionSource: ConnectionSource = .audio
-    
-    
-    var isRemoteVideoRender: Bool = true {
-        didSet {
-            if let it = localVideo, let view = it.view {
-                if view.superview == localContainer {
-                    remoteVideoMutedIndicator.isHidden = isRemoteVideoRender
-                    remoteContainer.isHidden = !isRemoteVideoRender
-                } else if view.superview == remoteContainer {
-                    localVideoMutedIndicator.isHidden = isRemoteVideoRender
-                }
-            }
-        }
-    }
-    
-    var isLocalVideoRender: Bool = false {
-        didSet {
-            if let it = localVideo, let view = it.view {
-                if view.superview == localContainer {
-                    localVideoMutedIndicator.isHidden = isLocalVideoRender
-                } else if view.superview == remoteContainer {
-                    remoteVideoMutedIndicator.isHidden = isLocalVideoRender
-                }
-            }
-        }
-    }
-    
+//        var isRemoteVideoRender: Bool = true {
+//            didSet {
+//                if let it = localVideo, let view = it.view {
+//                    if view.superview == localContainer {
+//                        remoteVideoMutedIndicator.isHidden = isRemoteVideoRender
+//                        remoteContainer.isHidden = !isRemoteVideoRender
+//                    } else if view.superview == remoteContainer {
+//                        localVideoMutedIndicator.isHidden = isRemoteVideoRender
+//                    }
+//                }
+//            }
+//        }
+//        var isLocalVideoRender: Bool = false {
+//            didSet {
+//                if let it = localVideo, let view = it.view {
+//                    if view.superview == localContainer {
+//                        localVideoMutedIndicator.isHidden = isLocalVideoRender
+//                    } else if view.superview == remoteContainer {
+//                        remoteVideoMutedIndicator.isHidden = isLocalVideoRender
+//                    }
+//                }
+//            }
+//        }
     var isStartCalling: Bool = true {
         didSet {
             if isStartCalling {
                 micButton.isSelected = false
             }
             micButton.isHidden = !isStartCalling
-            cameraButton.isHidden = !isStartCalling
+//            cameraButton.isHidden = !isStartCalling
         }
     }
-    
+    //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        sendStatus(source: .video)
+        messageService.sendMessage(.video)
         initializeVideo()
-       
     }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        sendStatus(source: .audio)
-        
+        leaveChannel()
+        messageService.sendMessage(.audio)
     }
-    
-    func sendStatus(source:ConnectionSource){
-        firebaseService.sendConnectionStatusRequest(source){ result in
-            
+    func initializeVideo() {
+        firebaseService = FirebaseAgoraService(role: .parent)
+        firebaseService.fetchAppID {[unowned self] result in
+            switch result{
+            case .success(let appID):
+                guard let appID = appID else{
+                    return
+                }
+                agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
+                joinChannel()
+                setupVideo()
+                setupLocalVideo()
+            case.failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
-    
-     func initializeVideo() {
-  
-         firebaseService = FirebaseAgoraService(role: .parent)
-         firebaseService.fetchAppID {[unowned self] result in
-             switch result{
-             case .success(let appID):
-                 guard let appID = appID else{
-                     return
-                 }
-                 printNew(appID)
-                 agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
-                 joinChannel()
-                 setupVideo()
-                 setupLocalVideo()
-             case.failure(let error):
-                 print(error.localizedDescription)
-                 
-             }
-         }
-     }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let identifier = segue.identifier else {
             return
         }
-        
         if identifier == "EmbedLogViewController",
-            let vc = segue.destination as? LogViewController {
+           let vc = segue.destination as? LogViewController {
             self.logVC = vc
         }
     }
-    
-
     func setupVideo() {
         // In simple use cases, we only need to enable video capturing
         // and rendering once at the initialization step.
         // Note: audio recording and playing is enabled by default.
         agoraKit.enableVideo()
-        
         // Set video configuration
         // Please go to this page for detailed explanation
-        // https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#af5f4de754e2c1f493096641c5c5c1d8f
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-       
+        agoraKit
+            .setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size:
+                                                                            AgoraVideoDimension640x360,
+                                                                         frameRate: .fps15,
+                                                                         bitrate: AgoraVideoBitrateStandard,
+                                                                         orientationMode: .adaptative))
     }
     
     func setupLocalVideo() {
@@ -139,21 +118,21 @@ class VideoChatViewController: UIViewController {
         // Our server will assign one and return the uid via the block
         // callback (joinSuccessBlock) after
         // joining the channel successfully.
-        let view = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: localContainer.frame.size))
-        localVideo = AgoraRtcVideoCanvas()
-        localVideo!.view = view
-        localVideo!.renderMode = .hidden
-        localVideo!.uid = 0
-        localContainer.addSubview(localVideo!.view!)
-        agoraKit.setupLocalVideo(localVideo)
-        agoraKit.startPreview()
+//        let view = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: localContainer.frame.size))
+//        localVideo = AgoraRtcVideoCanvas()
+//        localVideo!.view = view
+//        localVideo!.renderMode = .hidden
+//        localVideo!.uid = 0
+//        localContainer.addSubview(localVideo!.view!)
+//        agoraKit.setupLocalVideo(localVideo)
+//        agoraKit.startPreview()
     }
     
     func joinChannel() {
         guard let token = token, let channelID = channelID else {
             return
         }
-
+        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -163,12 +142,8 @@ class VideoChatViewController: UIViewController {
         // you use to generate this token.
         agoraKit.joinChannel(byToken: token, channelId: channelID, info: nil, uid: 1) { [unowned self] (channel, uid, elapsed) -> Void in
             // Did join channel "demoChannel1"
-            self.isLocalVideoRender = true
+//            self.isLocalVideoRender = true
             self.logVC?.log(type: .info, content: "did join channel")
-            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-               
-            }
-           
         }
         isStartCalling = true
         UIApplication.shared.isIdleTimerDisabled = true
@@ -178,8 +153,8 @@ class VideoChatViewController: UIViewController {
         // leave channel and end chat
         agoraKit.leaveChannel(nil)
         
-        isRemoteVideoRender = false
-        isLocalVideoRender = false
+//        isRemoteVideoRender = false
+//        isLocalVideoRender = false
         isStartCalling = false
         UIApplication.shared.isIdleTimerDisabled = false
         self.logVC?.log(type: .info, content: "did leave channel")
@@ -188,34 +163,26 @@ class VideoChatViewController: UIViewController {
     @IBAction func didClickHangUpButton(_ sender: UIButton) {
         sender.isSelected.toggle()
         if sender.isSelected {
-           
-//            leaveChannel()
-//            removeFromParent(localVideo)
-//            localVideo = nil
-//            removeFromParent(remoteVideo)
-//            remoteVideo = nil
         }
-//        else {
-//            setupLocalVideo()
-//            joinChannel()
-//        }
+      
     }
     
     @IBAction func didClickMuteButton(_ sender: UIButton) {
         sender.isSelected.toggle()
         // mute local audio
         agoraKit.muteLocalAudioStream(sender.isSelected)
+        
     }
     
-    @IBAction func didClickSwitchCameraButton(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        agoraKit.switchCamera()
-    }
+//    @IBAction func didClickSwitchCameraButton(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        agoraKit.switchCamera()
+//    }
     
-    @IBAction func didClickLocalContainer(_ sender: Any) {
-        switchView(localVideo)
-        switchView(remoteVideo)
-    }
+//    @IBAction func didClickLocalContainer(_ sender: Any) {
+//        switchView(localVideo)
+//        switchView(remoteVideo)
+//    }
     
     func removeFromParent(_ canvas: AgoraRtcVideoCanvas?) -> UIView? {
         if let it = canvas, let view = it.view {
@@ -228,37 +195,37 @@ class VideoChatViewController: UIViewController {
         return nil
     }
     
-    func switchView(_ canvas: AgoraRtcVideoCanvas?) {
-        let parent = removeFromParent(canvas)
-        if parent == localContainer {
-            canvas!.view!.frame.size = remoteContainer.frame.size
-            remoteContainer.addSubview(canvas!.view!)
-        } else if parent == remoteContainer {
-            canvas!.view!.frame.size = localContainer.frame.size
-            localContainer.addSubview(canvas!.view!)
-        }
-    }
+//    func switchView(_ canvas: AgoraRtcVideoCanvas?) {
+//        let parent = removeFromParent(canvas)
+//        if parent == localContainer {
+//            canvas!.view!.frame.size = remoteContainer.frame.size
+//            remoteContainer.addSubview(canvas!.view!)
+//        } else if parent == remoteContainer {
+//            canvas!.view!.frame.size = localContainer.frame.size
+//            localContainer.addSubview(canvas!.view!)
+//        }
+//    }
 }
 
 extension VideoChatViewController: AgoraRtcEngineDelegate {
-
+    
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        isRemoteVideoRender = true
-     
+//        isRemoteVideoRender = true
+//
         var parent: UIView = remoteContainer
-        if let it = localVideo, let view = it.view {
-            if view.superview == parent {
-                parent = localContainer
-            }
-        }
-
+//        if let it = localVideo, let view = it.view {
+//            if view.superview == parent {
+//                parent = localContainer
+//            }
+//        }
+        
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         if remoteVideo != nil {
             return
         }
-
+        
         let view = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: parent.frame.size))
         remoteVideo = AgoraRtcVideoCanvas()
         remoteVideo!.view = view
@@ -266,7 +233,7 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
         remoteVideo!.uid = uid
         parent.addSubview(remoteVideo!.view!)
         agoraKit.setupRemoteVideo(remoteVideo!)
-      
+        
     }
     
     /// Occurs when a remote user (Communication)/host (Live Broadcast) leaves a channel.
@@ -275,7 +242,7 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
     ///   - uid: ID of the user or host who leaves a channel or goes offline.
     ///   - reason: Reason why the user goes offline
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid:UInt, reason:AgoraUserOfflineReason) {
-        isRemoteVideoRender = false
+//        isRemoteVideoRender = false
         if let it = remoteVideo, it.uid == uid {
             removeFromParent(it)
             remoteVideo = nil
@@ -288,7 +255,7 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
     ///   - muted: YES for paused, NO for resumed.
     ///   - byUid: User ID of the remote user.
     func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoMuted muted:Bool, byUid:UInt) {
-        isRemoteVideoRender = !muted
+//        isRemoteVideoRender = !muted
     }
     
     /// Reports a warning during SDK runtime.

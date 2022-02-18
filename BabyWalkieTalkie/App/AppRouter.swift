@@ -26,7 +26,6 @@ final class AppRouter:NSObject{
         navController.navigationBar.isHidden = true
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
-
     }
     
     func startAsLoggedIn(_ windowScene: UIWindowScene){
@@ -35,12 +34,10 @@ final class AppRouter:NSObject{
         let selectView = SelectRoleBuilder.make()
         window?.rootViewController = selectView
         window?.makeKeyAndVisible()
-        
         //Check FCM and rewrite db if it need to be saved
         appContainer.authService.checkFCM()
-        
-        // if there is a recorded user set db as online
-//        appContainer.authService.setUserOnline()
+        //Check is there any unsaved purchase data before
+        FirebasePaymentService.setOldPayment()
     }
 
     func isUserLoginOrNot(_ windowScene: UIWindowScene){
@@ -51,7 +48,6 @@ final class AppRouter:NSObject{
               start(windowScene)
         }
     }
-    
     func checkLogin(){
         if Auth.auth().currentUser != nil {
               startAsLoggedIn(scene)
@@ -79,6 +75,27 @@ final class AppRouter:NSObject{
             }else{
                 // login
                 
+            }
+        }
+    }
+    
+    func getTopVC()->UIViewController?{
+        guard let topController = window?.rootViewController else {return nil}
+        return getVisibleViewControllerFrom(vc: topController)
+    }
+    
+    private func getVisibleViewControllerFrom(vc:UIViewController) -> UIViewController {
+        if vc.isKind(of: UINavigationController.self) {
+            let navigationController = vc as! UINavigationController
+            return navigationController.visibleViewController!
+        } else if vc.isKind(of: UITabBarController.self) {
+            let tabBarController = vc as! UITabBarController
+           return tabBarController.selectedViewController!
+        } else {
+            if let presentedViewController = vc.presentedViewController {
+                return presentedViewController
+            } else {
+                return vc
             }
         }
     }

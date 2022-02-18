@@ -8,7 +8,6 @@
 import Foundation
 import FirebaseFunctions
 
-
 enum FamilyMemberRole:String{
     case baby
     case parent
@@ -57,7 +56,6 @@ final class FirebaseAgoraService{
         }
     }
     
-    
     public func enterTheChannel(role:FamilyMemberRole){
         var data:Dictionary<String,String> = [:]
         if role == .baby{
@@ -65,19 +63,17 @@ final class FirebaseAgoraService{
         }else{
             data = ["role":"parent"]
         }
-        
         function.httpsCallable("enterTheChannel").call(data) {result,error in
             if let error = error {
                 print(error)
             }else{
-                print((result?.data as? NSDictionary)?["result"] as? String)
+                //todo
             }
         }
     }
 
 
     public func decideAboutChannel(completion:@escaping (Results<String>)->Void) {
-        
         function.httpsCallable("decideAboutChannel").call{result, error in
             if let error = error {
                 completion(.failure(error))
@@ -89,7 +85,6 @@ final class FirebaseAgoraService{
     }
 
     public func exitTheChannel(role:FamilyMemberRole, completion:@escaping (Results<String>)->Void){
-        
         function.httpsCallable("exitTheChannel").call(["role":role.rawValue]){result, error in
             if let error = error {
                 completion(.failure(error))
@@ -97,7 +92,6 @@ final class FirebaseAgoraService{
                 let _result = (result?.data as? NSDictionary)?["result"] as? String
                 completion(.success(_result))
             }
-            
         }
     }
     
@@ -112,10 +106,8 @@ final class FirebaseAgoraService{
         }
     }
     
-    
     func sendConnectionStatusRequest(_ connectionSource: ConnectionSource,completion:@escaping stringResult){
         let data:NSDictionary = ["source":connectionSource.rawValue]
-        
         function.httpsCallable("sendConnectionStatusChangeRequest").call(data) {result, error in
             if let error = error {
                 completion(.failure(error))
@@ -125,4 +117,15 @@ final class FirebaseAgoraService{
             }
         }
     }
+    
+    func iAmCrying(){
+        let timeString = Date.actualStringTime()
+        let data:NSDictionary = ["timeData":timeString]
+        function.httpsCallable("babyIsCrying").call(data){result, error in
+            if let error = error {
+               
+            }else{
+                //
+            }
+        }    }
 }

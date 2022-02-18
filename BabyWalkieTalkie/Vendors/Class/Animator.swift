@@ -22,16 +22,17 @@ public class Animator {
         indicator.center = transpranView.center
         indicator.startAnimating()
         indicator.color = .systemTeal
-        
-        
     }
 
-    
     func showAnimation(){
         DispatchQueue.main.async{
-            appContainer.router.window?.addSubview(self.transpranView)
-            appContainer.router.window?.addSubview(self.indicator)
-           
+            guard let controller = appContainer.router.getTopVC() else {return}
+//            appContainer.router.window?.addSubview(self.transpranView)
+//            appContainer.router.window?.addSubview(self.indicator)
+            controller.view.addSubview(self.transpranView)
+            controller.view.addSubview(self.indicator)
+            controller.view.bringSubviewToFront(self.transpranView)
+            controller.view.bringSubviewToFront(self.indicator)
         }
     }
     func hideAnimation(){

@@ -14,14 +14,13 @@ final class ParentBuilder{
         let firebaseAgoraService = FirebaseAgoraService(role: .parent)
         let tokenGeneratoService = TokenGeneratorService()
         let router = ParentRouter()
-        
+    
         router.view = view
         view.viewModel = viewModel
         viewModel.delegate = view
         viewModel.router = router
         viewModel.firebaseService = firebaseAgoraService
         viewModel.tokenDelegate = tokenGeneratoService
-        
         view.modalPresentationStyle = .fullScreen
         return view
     }

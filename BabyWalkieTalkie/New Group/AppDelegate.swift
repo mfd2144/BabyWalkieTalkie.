@@ -11,9 +11,6 @@ import UserNotifications
 import FirebaseMessaging
 import FBSDKCoreKit
 
-
-
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate{
     
@@ -23,18 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     ) -> Bool {
         //Firebase configuration
         FirebaseApp.configure()
-        
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
-        
         //Remote notification push
         setRemoteNotification(application)
-        
         //Firebase cloud messaging
         Messaging.messaging().delegate = self
-        
         //Reset badge number whenever app starts
         UIApplication.shared.applicationIconBadgeNumber = 0
-        
         do {
             try Network.reachability = Reachability(hostname: "www.google.com")
         }
@@ -52,11 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 print(error)
             }
         }
-
-        
         return true
     }
-    
     private func setRemoteNotification(_ application:UIApplication){
         if #available(iOS 10.0, *){
             UNUserNotificationCenter.current().delegate = self
@@ -70,11 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         application.registerForRemoteNotifications()
     }
     
-    
     // MARK: UISceneSession Lifecycle
-    
-    
-    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
@@ -87,8 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 }
-
-
 @available(iOS 10, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
     // Receive displayed notifications for iOS 10 devices.
@@ -97,40 +80,28 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
                                 -> Void) {
         let userInfo = notification.request.content.userInfo
-        
         // With swizzling disabled you must let Messaging know about the message, for Analytics
         Messaging.messaging().appDidReceiveMessage(userInfo)
-        
         let title = notification.request.content.title
         if  title == "Disconnect"{
-
             let actualController = (appContainer.router.window?.rootViewController as? UINavigationController)?.visibleViewController
-           
             if let selectview = actualController as? SelectRoleView{
                 // change condition
+                selectview.viewModel.otherDeviceDidUnpair()
             }else if let parentView = actualController as? ParentView{
                 // automatically go back and show caution
+                parentView.viewModel.otherDeviceDidUnpair()
             }else if  let babyView = actualController as? ListenBabyView{
                 // automatically go back and show caution
             }
-        }else if title == "video"{
-            NotificationCenter.default.post(name: .notificationVideoOrAudio, object: ConnectionSource.video)
-        }else if title == "audio"{
-            NotificationCenter.default.post(name: .notificationVideoOrAudio, object: ConnectionSource.audio)
         }else{
+            UIApplication.shared.applicationIconBadgeNumber += 1
             completionHandler([[.banner, .sound]])
             // Change this to your preferred presentation option
-            
         }
     }
-    
 }
-
-
-
 extension AppDelegate:MessagingDelegate{
-    
-    
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         Messaging.messaging().token { token, error in
             if let error = error {
@@ -140,12 +111,7 @@ extension AppDelegate:MessagingDelegate{
                 UserDefaults.standard.set(token, forKey: Cons.fcmToken)
             }
         }
-        
     }
-    
-  
-    
-    
 }
 
 

@@ -26,7 +26,6 @@ final class ListenBabyBuilder{
         router.view = view
         viewModel.router = router
         view.modalPresentationStyle = .fullScreen
-        
         return view
     }
 }

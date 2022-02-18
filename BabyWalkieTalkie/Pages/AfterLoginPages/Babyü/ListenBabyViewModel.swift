@@ -5,93 +5,102 @@
 //  Created by Mehmet fatih DOĞAN on 12.08.2021.
 //
 import Foundation
-
+import Combine
 
 final class ListenBabyViewModel:ListenBabyViewModelProtocol{
+ 
     weak var delegate: ListenBabyViewModelDelegate?
     var router:ListenBabyRouter!
-    var smartListenerProtocol:SmartListenerProtocol!
-    var tokenDelegate: TokenServiceProtocol?
-    let userName = "baby"
     var firebaseService: FirebaseAgoraService!
     var agoraService: AgoraAudioService!
+    var agoraMessageService: AgoraMessageService!
     var videoService: AgoraVideoService!
+    var smartListenerProtocol:SmartListenerProtocol!
+    var tokenDelegate: TokenServiceProtocol?
+    var notification:NotificationCenter!
+    let userName = "baby"
     var token: String!
     var rtmToken:String!
     var channelID: String!
-    
-    var notification:NotificationCenter!
+    var soundLevel:Float = -27
+    var messageTimer:Timer?
+    var resetTimer:Timer?
+    var stopTimer:Timer?
+    var isSoundGoOn:Bool = false
+    var isParentDeviceOnline:Bool = false
+    var timeLogic = CurrentValueSubject<Bool,Never>(true)
+    var subscriber:Set<AnyCancellable> = []
     var source:ConnectionSource?{
         didSet{
             switch source {
             case .video:
-                stopEverything()
-                startVideoBroadcast()
+                stopAudio()
+                startVideo()
             case .audio:
-                startEverything()
+                startAudio()
+                stopVideo()
             default:
                 break
             }
         }
     }
     
-    
-    
-    var soundLevel:Float = -20
-    var resetTimer:Timer?
-    var stopTimer:Timer?
-    var isSoundGoOn:Bool = false
-    
     init() {
         notification = NotificationCenter
             .default
-        notification.addObserver(self, selector: #selector(selectConnectionType), name: .notificationVideoOrAudio, object: nil)
+        timeLogic.sink { [unowned self] bool in
+            if bool == false{
+                messageTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(timerFunction), userInfo: nil, repeats: false)
+            }
+        }.store(in: &subscriber)
     }
-  
     
+    @objc func timerFunction(){
+        timeLogic.send(true)
+    }
     @objc func startSmartAgain(){
         smartListenerProtocol?.startToListen()
     }
-    
-    @objc func selectConnectionType(notification:Notification){
-        guard let _source = notification.object as? ConnectionSource else {return}
-       source = _source
-    }
-    
     deinit {
-      myPrint()
-        
+        printNew("listen baby view model deinit")
     }
-    
     //user press button
     //first check isthere anybody in channel
-    // then retur mutual channel id
+    // then return mutual channel id
     // then create token
     // create service
     // listen to medium
     // than send
-    
-    func startEverything() {
+    //MARK: - Audio 
+    func startAudio() {
+        //add observer notification
         notification.addObserver(self, selector: #selector(startSmartAgain), name: .notificationStartSmartListener, object: nil)
+        //set baby to channel or if already have one in channel protect user enter channel as a baby role
         firebaseService.decideAboutChannel(){ [unowned self]result in
             switch result{
             case .success(let response):
                 guard let response = response else {fatalError("empty result")}
-                if response == "success"{
+                if response != "baby"{
                     firebaseService.enterTheChannel(role: .baby)
+                    goOnAudioStartingSequence()
                 }else{
-                    printNew("faillllll")
+                    delegate?.handleOutputs(.alreadyLogisAsBaby)
+                    delegate?.handleOutputs(.isLoading(false))
+                    return
                 }
-             
             case.failure(let error):
-                printNew(error.localizedDescription)
+                //todo
+                delegate?.handleOutputs(.isLoading(false))
+                return
             }
         }
+    }
+    private func goOnAudioStartingSequence(){
+        // start listen to medium
         smartListenerProtocol?.startToListen()
+        // change status as connected
         delegate?.handleOutputs(.connected)
-        delegate?.handleOutputs(.isLoading(true))
-        
-        
+        //fetch channel informations and start broadcast
         firebaseService.fetchChannelID(){[unowned self] result in
             switch result{
             case .failure(let error):
@@ -104,16 +113,14 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
             }
         }
     }
-    
-    func stopEverything(){
-        agoraService?.pauseBroadcast()
+    func stopAudio(){
+        agoraService?.stopBroadcast()
         smartListenerProtocol.stopToListen()
-        notification.removeObserver(self, name: .notificationStartSmartListener, object: nil)
         smartListenerProtocol.deleteAllTimer()
         deleteAllTimer()
     }
-    
     func startBroadcast(_ channel:String) {
+        // get rtc token according to channel
         tokenDelegate?.fetchRtcToken( channel: channel) {[unowned self] tokenResult in
             switch tokenResult{
             case.failure(let error):
@@ -122,9 +129,8 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
             case .success(let _token):
                 guard let _token = _token else {return}
                 token = _token
-                
+                // get rtm token according to channel
                 tokenDelegate?.fetchRtmToken(userName:userName){ rtmTokenResult in
-               
                     switch rtmTokenResult{
                     case.failure(let error):
                         delegate?.handleOutputs(.isLoading(false))
@@ -132,10 +138,9 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
                     case .success(let _rtmToken):
                         guard let _rtmToken = _rtmToken else {return}
                         rtmToken = _rtmToken
-                        print(channelID)
-                        printNew("token : \(token)")
-                        printNew("rtmToken\(rtmToken)")
-                        agoraService = AgoraAudioService( rtmToken: rtmToken, token: token, channel: channel, username: "baby", role: .broadcaster)
+                        agoraService = AgoraAudioService( token: token, channel: channel, username: "baby", role: .broadcaster)
+                        agoraMessageService = AgoraMessageService(rtmToken: rtmToken, channel: channel, username: "baby")
+                        agoraMessageService.delegate = self
                         delegate?.handleOutputs(.isLoading(false))
                     }
                 }
@@ -143,49 +148,55 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
         }
     }
     
-    func returnSelect() {
-        stopEverything()
-        firebaseService.exitTheChannel(role: .baby) {[unowned self] _ in
-            smartListenerProtocol = nil
-            notification = nil
-            stopTimer = nil
-            resetTimer = nil
-            router.routeTo(.toSelectPage)
-        }
-    }
     
+    func returnToSelectPage() {
+        stopAudio()
+        stopVideo()
+        subscriber.removeAll()
+        messageTimer?.invalidate()
+        smartListenerProtocol = nil
+        tokenDelegate = nil
+        firebaseService = nil
+        agoraService = nil
+        agoraMessageService = nil
+        router.routeTo(.toSelectPage)
+    }
+    func closePressed() {
+        firebaseService.exitTheChannel(role: .baby) { _ in}
+        returnToSelectPage()
+    }
     func setPrecision(_ soundTreshold: Float) {
         soundLevel = soundTreshold
     }
-    
-    func testItself() {
-        
-    }
-    
     func deleteAllTimer(){
         stopTimer?.invalidate()
         resetTimer?.invalidate()
     }
-    
-    func startVideoBroadcast(){
+    func startVideo() {
         defer{
             videoService.connectAgoraVideo()
         }
         videoService = AgoraVideoService(token: token, channel: channelID, username: "baby", role: .broadcaster)
     }
-    
-    func stopVideoBroadcast(){
-        
+    func stopVideo() {
         videoService = nil
     }
 }
-
 extension ListenBabyViewModel:SmartListenerDelegate{
     func setSoundLevel() -> Float {
         return soundLevel
     }
-    
     func thereIsSoundAround() {
+       //check parent online or not
+        //if not send message via push notification(firebase)
+        //prevent sent message always timelogic stop it for 1 minutes
+        if !isParentDeviceOnline && timeLogic.value == true{
+            firebaseService.iAmCrying()
+            timeLogic.send(false)
+            return
+        }else if !isParentDeviceOnline && timeLogic.value == false{
+            return
+        }
         //there wasn't any sound before
         if !isSoundGoOn{
             smartListenerProtocol?.stopToListen()
@@ -203,23 +214,46 @@ extension ListenBabyViewModel:SmartListenerDelegate{
             //there isn't sound for 10 seconds
             isSoundGoOn = false
         })
-        
         stopTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: false, block: { [unowned self] _ in
             //sound isn't heard any more
             stopBroadcast()
         })
-        
-        
     }
-    
     private func stopBroadcast(){
         if !isSoundGoOn{
-            agoraService?.pauseBroadcast()
+            agoraService?.stopBroadcast()
             delegate?.handleOutputs(.soundComing(false))
-            
         }
     }
-    
+}
+
+extension ListenBabyViewModel:AgoraMessageServiceProtocol{
+    func listenerOrSpeaker(_ listener: Bool) {
+        //if it value is false, smart listener must be stop and agora audio must listen continuously
+        if listener{
+            smartListenerProtocol.startToListen()
+            stopBroadcast()
+        }else{//parent device is audience
+            smartListenerProtocol.stopToListen()
+            agoraService.startBroadcast()
+        }
+    }
+    func selectConnectionType(type: ConnectionSource) {
+        switch type {
+        case .video:
+            smartListenerProtocol.stopToListen()
+            source = .video
+        case .audio:
+            smartListenerProtocol.startToListen()
+            source = .audio
+
+        }
+    }//todo
+    func testOK() { } // for parent device
+    func whiteSound() { }//todo
+    func didOtherDeviceConnect(_ logic: Bool) {
+        isParentDeviceOnline = logic
+    }
 }
 
 

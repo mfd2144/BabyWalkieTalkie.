@@ -81,7 +81,6 @@ final class FirebaseAuthenticationService{
                 for firUserInfo in providerData {
                     email =  firUserInfo.email
                 }
-                
                 guard let mail = email,
                       let name = authResult?.user.displayName
                 else {return}

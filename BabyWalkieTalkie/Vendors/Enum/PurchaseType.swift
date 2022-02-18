@@ -10,4 +10,5 @@ import Foundation
 enum PurchaseType:String{
     case videoAudio = "com.mfd.BabyWalkieTalkie.openAudio"
     case audio = "com.mfd.BabyWalkieTalkie.openVideoAudio"
+    case video = "com.mfd.BabyWalkieTalkie.justVideo"
 }

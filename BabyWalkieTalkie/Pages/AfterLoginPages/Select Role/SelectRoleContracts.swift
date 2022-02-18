@@ -7,16 +7,18 @@
 
 import Foundation
 
-
 protocol SelectRoleViewModelProtocol:AnyObject{
     var delegate: SelectRoleViewModelDelegate? {get set}
+    func checkDidPairBefore()
+    func checkDidConnetionLostBefore()
     func toParentControl()
     func toListenBaby()
     func openConnection()
     func searchForConnection()
-    func disconnetRequest()
+    func disconnectRequest()
     func checkDemo()
     func toPurchase()
+    func otherDeviceDidUnpair()
 }
 
 enum SelectRoleViewModelOutputs{

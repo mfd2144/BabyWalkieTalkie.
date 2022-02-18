@@ -83,8 +83,8 @@ extension SelectRoleView{
         super.viewWillAppear(animated)
         collectionView.collectionViewLayout = createLayout()
         setNavigationControllerproperties()
-        viewModel.checkDemo()
-        
+        viewModel.checkDidConnetionLostBefore()
+        viewModel.checkDidPairBefore()
     }
     
     override func viewDidLoad() {
@@ -93,7 +93,6 @@ extension SelectRoleView{
         applySnapshot()
         setSubviews()
         collectionView.alwaysBounceVertical = false
-
     }
     
     //MARK: - TableView Data Source
@@ -154,9 +153,7 @@ extension SelectRoleView{
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: supplementarySize, elementKind: UICollectionView.elementKindSectionHeader,containerAnchor:headerAnchor)
             sectionHeader.pinToVisibleBounds = false
             sectionHeader.contentInsets = .init(top: 0, leading: buttonSize, bottom: 0, trailing: buttonSize)
-            
             section.boundarySupplementaryItems = [sectionHeader]
-//             section.contentInsetsReference = .safeArea
             section.orthogonalScrollingBehavior = .paging
             section.visibleItemsInvalidationHandler = { [unowned self]items, offset, env in
                 pageControl.currentPage = (items.last?.indexPath.row)!
@@ -165,8 +162,6 @@ extension SelectRoleView{
         })
         return layout
     }
-    
-    
     
     @objc private func babyImageTapped(){
         viewModel.toListenBaby()
@@ -216,11 +211,11 @@ extension SelectRoleView{
         let indexPath = IndexPath.init(row: pageControl.currentPage, section: 0)
         collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
     }
+    
     @objc private func purchasedPressed(){
         inAppPurchaseButton.pressAnimation()
         viewModel.toPurchase()
     }
-    
     
     //MARK: - NavigationController
     private func setNavigationControllerproperties(){
@@ -231,7 +226,6 @@ extension SelectRoleView{
         navigationItem.leftBarButtonItem = loadingButton
     }
     
-    
     @objc private func settingsPressed(){
         let alertView = UIAlertController(title: Local_A.settings, message: nil, preferredStyle: .actionSheet)
         let logoutAction = UIAlertAction(title: Local_A.logOut, style: .default) { [unowned self] _ in
@@ -240,6 +234,7 @@ extension SelectRoleView{
         let upgrade = UIAlertAction(title: actionName ?? Local_A.upgrade, style: .default) { [unowned self] _ in
             purchasedPressed()
         }
+        
         let cancelAction = UIAlertAction(title: Local_A.cancel, style: .destructive, handler: nil)
         let actions = [logoutAction,upgrade,cancelAction]
         for action in actions{
@@ -257,7 +252,7 @@ extension SelectRoleView{
     @objc private func separate(){
         let  alerView = UIAlertController(title: Local_A.disconnect, message:  Local_A.disconnectRequest, preferredStyle: .alert)
         let actionAccept = UIAlertAction(title: Local_A.disconnect, style: .default) { [unowned self] _ in
-            viewModel.disconnetRequest()
+            viewModel.disconnectRequest()
         }
         let cancel = UIAlertAction(title: Local_A.cancel, style: .cancel, handler: nil)
         let actions = [actionAccept,cancel]
@@ -291,22 +286,19 @@ extension SelectRoleView:SelectRoleViewModelDelegate{
         return true
     }
     
-    
-    
     func handleOutputs(_ output: SelectRoleViewModelOutputs) {
         switch  output {
         case .isLoading(let loading):
-            loading ? Animator.sharedInstance.showAnimation() : Animator.sharedInstance.hideAnimation()
-            
+            DispatchQueue.main.async{
+                loading ? Animator.sharedInstance.showAnimation() : Animator.sharedInstance.hideAnimation()
+            }
         case .showAnyAlert(let alert):
             addCaution(title: "Alert", message: alert)
-            
         case .showNearbyUser(let user):
             let alert = UIAlertController(title: Local_A.connecting, message: "Connecting to \(user)", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: Local_A.ok, style: .cancel, handler: nil)
             alert.addAction(cancelAction)
             present(alert, animated: true, completion: nil)
-            
         case .matchStatus(let status):
             DispatchQueue.main.async { [unowned self] in
                 switch status {
@@ -320,7 +312,6 @@ extension SelectRoleView:SelectRoleViewModelDelegate{
                     navigationItem.leftBarButtonItem = connectButton
                 }
             }
-            
             
         case .remainingDay(let demoCondition):
             DispatchQueue.main.async {[unowned self] in
@@ -339,7 +330,8 @@ extension SelectRoleView:SelectRoleViewModelDelegate{
                     usageCaution.text = Local_A.daysFinished
                     usageCaution.isHidden = false
                     usageCaution.reloadShadow()
-                case.aleadyMember(let purchaseType):
+                case.alreadyMember:
+                    printNew("already member")
                     inAppPurchaseButton.isHidden = true
                     usageCaution.isHidden = true
                 }
@@ -353,7 +345,6 @@ extension SelectRoleView:SelectRoleViewModelDelegate{
         case .badConnection:
            let caution = AddAnySimpleCaution(title: Local_A.badConnection, message: Local_A.badConDefine, handler: nil)
             present(caution, animated: true)
-            
         case .membershipCaution:
             let caution = AddAnySimpleCaution(title: Local_A.demoCaution, message: Local_A.demoCautionDefine, handler: nil)
              present(caution, animated: true)

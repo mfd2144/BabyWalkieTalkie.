@@ -14,4 +14,7 @@ extension Notification.Name{
     static let notificationPageControl = Notification.Name("NotificationPageControl")
 }
 
+extension Notification.Name {
+    static let IAPHelperPurchaseNotification = Notification.Name("IAPHelperPurchaseNotification")
+}
 

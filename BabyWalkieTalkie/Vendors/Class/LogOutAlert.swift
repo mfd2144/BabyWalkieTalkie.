@@ -40,7 +40,6 @@ class LogOutAlert:UIAlertController{
     
 }
 
-
 struct LogOutLocal {
     static let logOut = NSLocalizedString("LogOut", comment: "")
     static let message = NSLocalizedString("LogOut.message", comment: "")

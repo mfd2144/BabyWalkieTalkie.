@@ -13,8 +13,6 @@ final class SignUpMethodBuilder{
         let viewModel = SignUpMethodViewModel()
         let router = SignUpMethodRouter()
 
-        
-
         viewModel.service = appContainer.authService
         viewModel.router = router
         viewModel.delegate = view

@@ -50,9 +50,7 @@ class FirebaseMatchService{
             }else{
                 completion(.success(nil))
             }
-            
         }
-        
     }
     
     func fetchRegisterDate(completion:@escaping stringResult){
@@ -64,7 +62,6 @@ class FirebaseMatchService{
                     completion(.success(stringDate))
                 }
             }
-           
         }
     }
 }

@@ -25,7 +25,6 @@ class CustomMultipeerConnectivity:NSObject{
     var channelID:String!
     var matchService: FirebaseMatchService!
     
-    
     //MARK: - Functions
     
     func becomeAdvertiser() {
@@ -48,28 +47,23 @@ class CustomMultipeerConnectivity:NSObject{
         browser?.startBrowsingForPeers()
     }
     
-    
 }
 
 extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate{
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        switch state {
-        case MCSessionState.connected:
-            delegate?.connectionStatus(.paired)
-        case MCSessionState.connecting:
-            delegate?.connectionStatus(.connecting)
-        case MCSessionState.notConnected:
-            delegate?.connectionStatus(.notConnected)
-        default:
-            delegate?.connectionStatus(.notConnected)
+        if state == .connected && advertiser != nil{
+            sendRequest { _ in
+                
+            }
         }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let request = MatchingRequest.getPacketFromData(data: data) {
-            delegate?.connectionStatus(.connecting)
+            delegate?.pairStatus(.connecting)
             if advertiser == nil {
+                //user searching channel
                 // data send by device which opening channel
                 DispatchQueue.main.async { [unowned self] in
                     matchService = FirebaseMatchService()
@@ -81,9 +75,8 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
                             //todo maybe clear when sending process fail
                             printNew(error.localizedDescription)
                         case .success(let response):
-                            printNew(response!)
                             sendRequest2(channelID: channelID) { sendingResult in
-                                delegate?.connectionStatus(.paired)
+                                delegate?.pairStatus(.paired)
                                 //todo maybe clear when sending process fail
                             }
                         }
@@ -96,7 +89,7 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
                     let channelID = request.mutualChannel
                     let requestOwnerID = request.requestOwnerId
                     matchService.saveChannelToUser(channelID: channelID, partnerID: requestOwnerID){ result in
-                        delegate?.connectionStatus(.paired)
+                        delegate?.pairStatus(.paired)
                     }
                 }
             }
@@ -105,6 +98,9 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         delegate?.decideToInvitation(by: peerID.displayName, completionHandler: { userDecision in
+            guard let context = context else { return }
+            let id = IdentityData.getId(data: context)
+            guard id?.sender == "receiver" else {return}
             if userDecision{
                 session = MCSession(peer: myId)
                 session?.delegate = self
@@ -131,7 +127,8 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
         session = MCSession(peer: myId)
         session?.delegate = self
         self.connectedPeer = peerID
-        browser?.invitePeer(peerID, to: session!, withContext: nil, timeout: 30)
+        let id = IdentityData.getData(id: IdentityData(sender: "receiver"))
+        browser?.invitePeer(peerID, to: session!, withContext: id, timeout: 30)
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
@@ -157,6 +154,9 @@ extension CustomMultipeerConnectivity:CustomMCProtocol{
     func stop() {
         advertiser?.stopAdvertisingPeer()
         session?.disconnect()
+        advertiser = nil
+        browser = nil
+        session = nil
     }
     
     func sendRequest(completion:@escaping (Results<String>)->Void) {
@@ -189,10 +189,6 @@ extension CustomMultipeerConnectivity:CustomMCProtocol{
             }
         }
     }
-    
-    func requestCheck(){
-        
-    }
 }
 
 
@@ -202,17 +198,15 @@ protocol CustomMCProtocol:NSObject{
     func searchUser()
     func sendRequest(completion:@escaping (Results<String>)->Void)
     func stop()
-    
 }
 
 protocol CustomMCDelegate:NSObject{
-    func connectionStatus(_ status:Status)
+    func pairStatus(_ status:Status)
     func decideToInvitation(by invitationOwner:String,completionHandler: (Bool) -> ())
     func showNearbyDevice(_ peerName:String)
     func requestError(_ error:Error)
     
 }
-
 
 enum Status{
     case connecting

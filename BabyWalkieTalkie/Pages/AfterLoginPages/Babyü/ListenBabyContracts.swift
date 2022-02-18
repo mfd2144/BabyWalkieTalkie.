@@ -11,20 +11,21 @@ protocol ListenBabyViewModelProtocol:AnyObject{
     var delegate:ListenBabyViewModelDelegate? {get set}
     var soundLevel:Float{get set}
     func startBroadcast(_ channel:String)
-    func stopEverything()
-    func testItself()
-    func startEverything()
-    func returnSelect()
+    func stopAudio()
+    func startAudio()
+    func startVideo()
+    func stopVideo()
+    func returnToSelectPage()
+    func closePressed()
     func setPrecision(_ soundTreshold: Float)
 }
-
-
 
 enum ListenBabyViewModelOutputs{
     case anyErrorOccurred(String)
     case isLoading(Bool)
     case soundComing(Bool)
     case connected
+    case alreadyLogisAsBaby
 }
 
 protocol ListenBabyViewModelDelegate:AnyObject{

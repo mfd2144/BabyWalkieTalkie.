@@ -8,11 +8,12 @@
 import UIKit
 
 final class VideoChatBuilder{
-    static func make(token:String,channelID:String)->UIViewController?{
+    static func make(token:String,channelID:String,messageService:AgoraMessageService)->UIViewController?{
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let firebaseService = FirebaseAgoraService(role: .parent)
         guard let videoController = storyBoard.instantiateViewController(withIdentifier: "VideoController") as? VideoChatViewController else {return nil}
         videoController.token  = token
+        videoController.messageService = messageService
         videoController.firebaseService = firebaseService
         videoController.channelID = channelID
         return videoController

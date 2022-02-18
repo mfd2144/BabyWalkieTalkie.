@@ -20,32 +20,13 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
             delegate?.handleOutputs(.isLoading(false))
         }
     }
-    
     var customMC:CustomMCProtocol!{
         didSet{
             customMC.delegate = self
         }
     }
-    
-    
     var connectionType:ConnectionType!
-    var matchService: FirebaseMatchService!{
-        didSet{
-            matchService.checkmatchStatus(){ [unowned self] actualStatus in
-                switch actualStatus{
-                case.connected:
-                    delegate?.handleOutputs(.matchStatus(.connected))
-                case.error:
-                    delegate?.handleOutputs(.matchStatus(.error))
-                case.readyToConnect:
-                    delegate?.handleOutputs(.matchStatus(.readyToConnect))
-                default:
-                    fatalError()
-                }
-                
-            }
-        }
-    }
+    var matchService: FirebaseMatchService!
     
     override init() {
         super.init()
@@ -54,88 +35,107 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
                          selector: #selector(statusManager),
                          name: .flagsChanged,
                          object: nil)
-        
 #if targetEnvironment(simulator)
         connectionStatus = true
 #else
         connectionStatus = Network.reachability.status == .unreachable ? false : true
 #endif
+    }
+    
+    
+   
+    //MARK: - Data Check
+    ///If phone lost internet connection before, this part will change revelant part of user data on net
+    func checkDidConnetionLostBefore() {
         
     }
     
-//MARK: - Reachability
-@objc private func statusManager(_ notification: Notification) {
-    updateConnectionStatus()
-}
-
-
-private func updateConnectionStatus(){
-    switch Network.reachability.status{
-    case.unreachable:
-        connectionStatus = false
-    case.wifi,.wwan:
-        connectionStatus = true
+    func otherDeviceDidUnpair() {
+        disconnectRequest()
     }
-}
-
-//MARK: - Multipeer Connectivty
-func openConnection() {
-    //connectionstatus check
-    guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
-    connectionType = .transmitter
-    customMC.inviteUser()
-}
-
-func searchForConnection() {
-    //connectionstatus check
-    guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
-    connectionType = .receiver
-    customMC.searchUser()
-}
-
-func disconnetRequest() {
-    guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
-    delegate?.handleOutputs(.isLoading(true))
-    matchService.disconnetUsers { [unowned self] results in
-        delegate?.handleOutputs(.isLoading(false))
-        switch results{
-        case .failure(let error):
-            delegate?.handleOutputs(.showAnyAlert(error.localizedDescription))
-        case.success:
-            delegate?.handleOutputs(.matchStatus(.readyToConnect))
+    
+    //MARK: - Check Pair Condition
+    func checkDidPairBefore() {
+        matchService.checkmatchStatus(){ [unowned self] actualStatus in
+            switch actualStatus{
+            case.connected:
+                delegate?.handleOutputs(.matchStatus(.connected))
+            case.error:
+                delegate?.handleOutputs(.matchStatus(.error))
+            case.readyToConnect:
+                delegate?.handleOutputs(.matchStatus(.readyToConnect))
+            default:
+                fatalError()
+            }
+            
         }
     }
+    //MARK: - Reachability
+    @objc private func statusManager(_ notification: Notification) {
+        updateConnectionStatus()
+    }
+    
+    private func updateConnectionStatus(){
+        switch Network.reachability.status{
+        case.unreachable:
+            connectionStatus = false
+        case.wifi,.wwan:
+            connectionStatus = true
+        }
+    }
+    
+    //MARK: - Multipeer Connectivty
+    func openConnection() {
+        //connectionstatus check
+        guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
+        connectionType = .transmitter
+        customMC.inviteUser()
+    }
+    
+    func searchForConnection() {
+        //connectionstatus check
+        guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
+        connectionType = .receiver
+        customMC.searchUser()
+    }
+    
+    func disconnectRequest() {
+        guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
+        delegate?.handleOutputs(.isLoading(true))
+        matchService.disconnetUsers { [unowned self] results in
+            delegate?.handleOutputs(.isLoading(false))
+            switch results{
+            case .failure(let error):
+                delegate?.handleOutputs(.showAnyAlert(error.localizedDescription))
+            case.success:
+                delegate?.handleOutputs(.matchStatus(.readyToConnect))
+            }
+        }
+    }
+    
+    //MARK: - Routes
+    func toParentControl() {
+        //first check connection-done
+        guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
+        guard iAPCondition != .finished && iAPCondition != nil else {delegate?.handleOutputs(.membershipCaution);return}
+        router.routeToPage(.toParentControl)
+    }
+    
+    func toListenBaby() {
+        // first check connection
+        guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
+        router.routeToPage(.toListenBaby)
+    }
+    
+    func toPurchase() {
+        router.routeToPage(.toPurchaseTable(helper: iAPHelper))
+    }
 }
-
-//MARK: - Routes
-func toParentControl() {
-    //first check connection-done
-    guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
-    guard iAPCondition != .finished && iAPCondition != nil else {delegate?.handleOutputs(.membershipCaution);return}
-    router.routeToPage(.toParentControl)
-}
-
-func toListenBaby() {
-    // first check connection
-    guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
-    router.routeToPage(.toListenBaby)
-}
-
-func toPurchase() {
-    router.routeToPage(.toPurchaseTable(helper: iAPHelper))
-}
-
-
-}
-
 extension SelectRoleViewModel:CustomMCDelegate{
     func decideToInvitation(by invitionOwner: String, completionHandler: (Bool) -> ()) {
         guard let result = delegate?.invitationArrived(by: invitionOwner) else {return}
         completionHandler(result)
     }
-    
-    
-    
     func requestError(_ error: Error) {
         
     }
@@ -144,22 +144,19 @@ extension SelectRoleViewModel:CustomMCDelegate{
         delegate?.handleOutputs(.showNearbyUser(peerName))
     }
     
-    func connectionStatus(_ status: Status) {
-        if status == .paired && connectionType == .transmitter{
-            customMC.sendRequest(){ result in
-            }
-        }
+    func pairStatus(_ status: Status) {
         if status == .paired{
             delegate?.handleOutputs(.matchStatus(.connected))
         }else if status == .connecting{
             delegate?.handleOutputs(.matchStatus(.loading))
+        }else if status == .notConnected{
+            delegate?.handleOutputs(.matchStatus(.readyToConnect))
         }
-        
     }
 }
+
+//MARK: - Purchase
 extension SelectRoleViewModel{
-    
-    //MARK: - Purchase
     private func checkPuchaseCondition(completion:@escaping(Bool,PurchaseType?)->Void){
         if iAPHelper.isProductPurchased(ProductIdentifier.init(PurchaseType.audio.rawValue)){
             completion(true,.audio)
@@ -175,17 +172,16 @@ extension SelectRoleViewModel{
         guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
         delegate?.handleOutputs(.isLoading(true))
         checkPuchaseCondition{[unowned self] purchaseResult,purchaseType in
+            print(purchaseType)
             switch purchaseResult{
             case true:
                 guard let purchaseType = purchaseType else {return}
-                iAPCondition = .aleadyMember(purchaseType)
-//                delegate?.handleOutputs(.purchasedBefore(purchaseType))
+                delegate?.handleOutputs(.remainingDay(.alreadyMember))
             case false:
                 checkRemainingDemo()
             }
         }
     }
-    
     
     private func checkRemainingDemo(){
         matchService.fetchRegisterDate {[unowned self] result in
@@ -193,22 +189,19 @@ extension SelectRoleViewModel{
             case .failure(let error):
                 print(error.localizedDescription)
             case .success(let dateString):
-                //                let testDate = "Sat Nov 20 2021 17:12:10 GMT+0000 (Coordinated Universal Time)"
+                // "Sat Nov 20 2021 17:12:10 GMT+0000 (Coordinated Universal Time)"
                 guard let dateString = dateString else{return}
+                let trimmedIsoDate = dateString.replacingOccurrences(of: "GMT([+-]\\d{4})\\s\\([^)]+\\)", with: "$1", options: .regularExpression)
                 let dateFormat = "E MMM dd yyyy HH:mm:ss Z"
                 let dateFormatter = DateFormatter()
                 dateFormatter.locale = Locale(identifier: "en_US_POSIX")
                 dateFormatter.dateFormat = dateFormat
                 dateFormatter.timeZone = TimeZone(identifier: "UTC")
-                let trimmedIsoDate = dateString.replacingOccurrences(of: "GMT([+-]\\d{4})\\s\\([^)]+\\)", with: "$1", options: .regularExpression)
-                
                 guard let registerDate = dateFormatter.date(from: trimmedIsoDate),
                       let oneDayAfter = Calendar.current.date(byAdding: .day, value: 1, to: registerDate),
                       let twoDayAfter:Date = Calendar.current.date(byAdding: .day, value: 2, to: registerDate),
                       let threeDayAfter = Calendar.current.date(byAdding: .day, value: 3, to: registerDate) else {return}
-                
                 let now = Date()
-                
                 let firstComp = now.compare(oneDayAfter)
                 let secondComp = now.compare(twoDayAfter)
                 let thirdComp = now.compare(threeDayAfter)
@@ -241,5 +234,19 @@ extension SelectRoleViewModel{
         }
     }
 }
-
-
+extension SelectRoleViewModel:IAPHelperDelegate{
+    func errorBeforeTransactionSave(_ transactionID: String) {
+        printNew("errorBeforeTransactionSave \(transactionID)")
+    }
+    
+    func loadProduct() {
+        checkDemo()
+    }
+    
+    func busy(){
+        delegate?.handleOutputs(.isLoading(true))
+    }
+    func purchaseCompleted(){
+        delegate?.handleOutputs(.remainingDay(IAPCondition.alreadyMember))
+    }
+}

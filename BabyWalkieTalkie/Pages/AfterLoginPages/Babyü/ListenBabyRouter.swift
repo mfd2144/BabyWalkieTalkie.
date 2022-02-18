@@ -12,10 +12,7 @@ final class ListenBabyRouter:ListenBabyRouterProtocol{
     func routeTo(_ page: ListenBabyRoutes) {
         switch page {
         case .toSelectPage:
-            let selectPage = SelectRoleBuilder.make()
-            view.present(selectPage, animated: false, completion: nil)
+            view.dismiss(animated: true)
         }
     }
-    
-    
 }

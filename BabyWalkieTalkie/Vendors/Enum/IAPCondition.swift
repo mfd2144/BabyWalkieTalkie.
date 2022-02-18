@@ -12,5 +12,5 @@ enum IAPCondition:Equatable{
     case twoDays
     case threeDays
     case finished
-    case aleadyMember(PurchaseType)
+    case alreadyMember
 }

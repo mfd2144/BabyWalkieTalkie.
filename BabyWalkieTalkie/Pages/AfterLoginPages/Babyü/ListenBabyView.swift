@@ -11,12 +11,11 @@ import Combine
 final class ListenBabyView:UIViewController{
     
     var viewModel:ListenBabyViewModelProtocol!
-    var subscrition = Set<AnyCancellable>()
+    var subscriber = Set<AnyCancellable>()
     var soundLevel = CurrentValueSubject<Float,Never>(-15)
-    weak var customProtocol:CustomViewProtocol?
-    
     let closeButton: UIButton = {
-        let button = UIButton(type: .close)
+        let button = UIButton.addNewButton(imageName: nil, title: "Close")
+        button.addShadow()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -31,19 +30,38 @@ final class ListenBabyView:UIViewController{
     }()
     let slider:UISlider = {
         let slider = UISlider()
-        slider.minimumValue = 0
-        slider.maximumValue = 30
-        slider.value = 15
+        slider.minimumValue = 20
+        slider.maximumValue = 34
+        slider.value = 27
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
-    
     lazy var customView: CustomView = {
-        let customView = CustomView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        let customView = CustomView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width-2*buttonDistance, height: 200))
         customView.translatesAutoresizingMaskIntoConstraints = false
         customView.delegate = self
         customView.buttonName = "Start"
         return customView
+    }()
+    
+    let stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.distribution = .fill
+        stack.spacing = buttonDistance
+        stack.axis = .vertical
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.alignment = .fill
+        return stack
+    }()
+    
+    let customStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.distribution = .fill
+        stack.spacing = buttonDistance
+        stack.axis = .horizontal
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.alignment = .center
+        return stack
     }()
     
     //MARK: - Life Cycle
@@ -55,42 +73,37 @@ final class ListenBabyView:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        customProtocol = customView
-        view.backgroundColor = .colorBackgroud
+        view.backgroundColor = MyColor.myBlueColor
+        viewModel.startAudio()
         soundLevel.sink {[unowned self] soundLevelFloat in
             viewModel.soundLevel = soundLevelFloat
-        }.store(in: &subscrition)
+        }.store(in: &subscriber)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        viewModel = nil
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        closeButton.reloadShadow()
+    }
+    //MARK: - Set subviews and add targets
     func setSubviews(){
-        view.addSubview(customView)
-        view.addSubview(sliderLabel)
-        view.addSubview(slider)
-        view.addSubview(closeButton)
-        
+        customStackView.addArrangedSubview(customView)
+        let subviews = [customStackView,sliderLabel,slider,closeButton]
+        for subview in subviews{
+            stackView.addArrangedSubview(subview)
+        }
+        view.addSubview(stackView)
         NSLayoutConstraint.activate([
-            customView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            customView.topAnchor.constraint(equalTo: view.topAnchor,constant: 100),
-            customView.heightAnchor.constraint(equalToConstant: 200),
-            customView.widthAnchor.constraint(equalToConstant: 200),
-            sliderLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            sliderLabel.topAnchor.constraint(equalTo: customView.bottomAnchor, constant: 100),
-            sliderLabel.heightAnchor.constraint(equalToConstant: 50),
-            sliderLabel.widthAnchor.constraint(equalToConstant: 150),
-            slider.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            slider.topAnchor.constraint(equalTo: sliderLabel.bottomAnchor, constant:10),
-            slider.heightAnchor.constraint(equalToConstant: 20),
-            slider.widthAnchor.constraint(equalToConstant: 150),
-            closeButton.topAnchor.constraint(equalTo: slider.bottomAnchor, constant: 100),
-            closeButton.heightAnchor.constraint(equalToConstant: 50),
-            closeButton.widthAnchor.constraint(equalToConstant: 100),
-            closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: buttonDistance*(-1)),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: buttonDistance),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: buttonDistance*(-1)),
+            closeButton.heightAnchor.constraint(equalToConstant: buttonSize)
         ])
+        Animator.sharedInstance.showAnimation()
     }
     
     private func addTargets(){
@@ -99,12 +112,21 @@ final class ListenBabyView:UIViewController{
     }
     
     @objc func closePressed(){
-        viewModel.returnSelect()
+        viewModel.closePressed()
     }
     
     @objc func sliderChanged(_ sender: UISlider){
         let value = Float(Int(sender.value)*(-1))
         soundLevel.send(value)
+    }
+    //MARK: - Functions
+    private func showAlert(){
+        let alert = UIAlertController(title: "Caution", message: "Already baby device login to system. Please change device role.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Go Back", style: .default) {[unowned self] _ in
+            viewModel.returnToSelectPage()
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -117,17 +139,19 @@ extension ListenBabyView:ListenBabyViewModelDelegate{
             loading ? Animator.sharedInstance.showAnimation(): Animator.sharedInstance.hideAnimation()
         case .soundComing(let sound):
             if  sound{
-                customProtocol?.setTitle("Sound")
-                customProtocol?.setColor(.sound)
+                customView.setTitle("Sound")
+                customView.setColor(.sound)
                 customView.isUserInteractionEnabled = false
             }else{
-                customProtocol?.setTitle("Ready")
-                customProtocol?.setColor(.ready)
+                customView.setTitle("Ready")
+                customView.setColor(.ready)
                 customView.isUserInteractionEnabled = false
             }
         case .connected:
-            customProtocol?.setTitle("Connecting")
-            customProtocol?.setColor(.loading)
+            customView.setTitle("Waiting for parent")
+            customView.setColor(.loading)
+        case .alreadyLogisAsBaby:
+            showAlert()
         }
     }
 }
@@ -135,8 +159,5 @@ extension ListenBabyView:ListenBabyViewModelDelegate{
 extension ListenBabyView: CustomViewDelegate{
     func broadcastPausePlay() {
     }
-    
-    func buttonPressed(){
-        viewModel.startEverything()
-    }
+    func buttonPressed(){}
 }

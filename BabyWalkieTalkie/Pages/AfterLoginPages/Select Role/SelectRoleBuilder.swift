@@ -17,9 +17,10 @@ final class SelectRoleBuilder{
         let customMC = CustomMultipeerConnectivity()
         let service = FirebaseMatchService()
         let navController = UINavigationController(rootViewController: view)
-        let productIds: Set<ProductIdentifier> = [PurchaseType.videoAudio.rawValue,PurchaseType.audio.rawValue]
+        let productIds: Set<ProductIdentifier> = [PurchaseType.videoAudio.rawValue,
+                                                  PurchaseType.video.rawValue,
+                                                  PurchaseType.audio.rawValue]
         let iAPHelper = IAPHelper(productIds: productIds)
-    
         view.viewModel = viewModel
         viewModel.productIds = productIds
         viewModel.iAPHelper = iAPHelper
@@ -29,6 +30,7 @@ final class SelectRoleBuilder{
         viewModel.customMC = customMC
         customMC.matchService = service
         router.view = view
+        iAPHelper.delegate = viewModel
         navController.modalPresentationStyle = .fullScreen
         navController.modalTransitionStyle = .crossDissolve
         return navController
