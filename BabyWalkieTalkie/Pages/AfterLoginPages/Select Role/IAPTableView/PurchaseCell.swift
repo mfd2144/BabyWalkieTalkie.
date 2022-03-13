@@ -28,6 +28,7 @@ class PurchaseCell: UITableViewCell {
     }
     
   var buyButtonHandler: ((_ product: SKProduct) -> Void)?
+    var accessoryLogic: Bool = false
   var product: SKProduct? {
     didSet {
       guard let product = product else { return }
@@ -40,7 +41,11 @@ class PurchaseCell: UITableViewCell {
           PurchaseCell.priceFormatter.locale = product.priceLocale
         detailTextLabel?.text = PurchaseCell.priceFormatter.string(from: product.price)
         accessoryType = .none
-        accessoryView = self.newBuyButton()
+          if accessoryLogic{
+              accessoryType = .checkmark
+          }else{
+              accessoryView = self.newBuyButton()
+          }
       } else {
         detailTextLabel?.text = "Not available"
       }
@@ -61,7 +66,7 @@ class PurchaseCell: UITableViewCell {
   func newBuyButton() -> UIButton {
     let button = UIButton(type: .system)
     button.setTitleColor(tintColor, for: .normal)
-      let buy = Local_A.buy
+      let buy = LocalAfterPages.buy
     button.setTitle(buy, for: .normal)
     button.addTarget(self, action: #selector(PurchaseCell.buyButtonTapped(_:)), for: .touchUpInside)
     button.sizeToFit()

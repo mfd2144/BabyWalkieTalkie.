@@ -11,11 +11,10 @@ import Firebase
 final class AppRouter:NSObject{
     var window:UIWindow?
     var scene:UIWindowScene!
+    
     override init() {
         super.init()
-      
         NotificationCenter.default.addObserver(self, selector: #selector(userDidChangeStatus(_ :)), name: .AuthStateDidChange, object: nil)
-
     }
 
     func start(_ windowScene: UIWindowScene){
@@ -29,16 +28,20 @@ final class AppRouter:NSObject{
     }
     
     func startAsLoggedIn(_ windowScene: UIWindowScene){
-        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-        window?.windowScene = windowScene
-        let selectView = SelectRoleBuilder.make()
-        window?.rootViewController = selectView
-        window?.makeKeyAndVisible()
-        //Check FCM and rewrite db if it need to be saved
-        appContainer.authService.checkFCM()
         //Check is there any unsaved purchase data before
-        FirebasePaymentService.setOldPayment()
-    }
+        FirebasePaymentService.setOldPayment { [unowned self]  _ in
+            window = UIWindow(frame: windowScene.coordinateSpace.bounds)
+            window?.windowScene = windowScene
+            let selectView = SelectRoleBuilder.make()
+            window?.rootViewController = selectView
+            window?.makeKeyAndVisible()
+            //get height and width for select page
+            AppSingleton.sharedInstance.safeBottomHeight = window?.safeAreaInsets.bottom ?? buttonSize
+            AppSingleton.sharedInstance.safeTopHeight = window?.safeAreaInsets.top ?? buttonSize
+            //Check FCM and rewrite db if it need to be saved
+            appContainer.authService.checkFCM()
+        }
+            }
 
     func isUserLoginOrNot(_ windowScene: UIWindowScene){
        scene = windowScene

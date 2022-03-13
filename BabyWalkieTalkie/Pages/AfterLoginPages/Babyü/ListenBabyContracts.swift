@@ -18,6 +18,7 @@ protocol ListenBabyViewModelProtocol:AnyObject{
     func returnToSelectPage()
     func closePressed()
     func setPrecision(_ soundTreshold: Float)
+    func otherDeviceDidUnpair()
 }
 
 enum ListenBabyViewModelOutputs{
@@ -26,6 +27,8 @@ enum ListenBabyViewModelOutputs{
     case soundComing(Bool)
     case connected
     case alreadyLogisAsBaby
+    case otherDeviceDidUnpair
+    case mustBeConnected
 }
 
 protocol ListenBabyViewModelDelegate:AnyObject{

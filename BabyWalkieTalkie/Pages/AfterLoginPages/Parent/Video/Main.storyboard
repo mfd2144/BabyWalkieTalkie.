@@ -29,7 +29,20 @@
                                         <state key="selected" image="mute"/>
                                         <state key="highlighted" image="mic_pressed"/>
                                         <connections>
-                                            <action selector="didClickMuteButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CZi-wc-I4W"/>
+                                            <action selector="didClickMuteButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hCE-ta-byU"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lvV-dj-Yy2" userLabel="turnButton">
+                                        <rect key="frame" x="270" y="571" width="55" height="55"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="lvV-dj-Yy2" secondAttribute="height" multiplier="1:1" id="LBQ-JQ-a62"/>
+                                            <constraint firstAttribute="width" constant="55" id="zP8-Nv-0XW"/>
+                                        </constraints>
+                                        <state key="normal" title="Mute" image="switch"/>
+                                        <state key="selected" image="mute"/>
+                                        <state key="highlighted" image="mic_pressed"/>
+                                        <connections>
+                                            <action selector="turnButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="z8C-bp-Bem"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -37,7 +50,10 @@
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="7Wh-nG-1kC" secondAttribute="bottom" constant="41" id="AHG-W6-4ft"/>
+                                    <constraint firstAttribute="bottom" secondItem="lvV-dj-Yy2" secondAttribute="bottom" constant="41" id="mkk-8G-u5N"/>
+                                    <constraint firstAttribute="trailing" secondItem="lvV-dj-Yy2" secondAttribute="trailing" constant="50" id="tTR-Gm-9Se"/>
                                     <constraint firstItem="7Wh-nG-1kC" firstAttribute="centerX" secondItem="U9u-fT-DFZ" secondAttribute="centerX" id="uBt-q1-dAo"/>
+                                    <constraint firstItem="lvV-dj-Yy2" firstAttribute="width" secondItem="lvV-dj-Yy2" secondAttribute="height" multiplier="1:1" id="zy9-S5-5Vs"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LZg-5L-xeZ" userLabel="remoteVideoMutedIndicator">
@@ -76,6 +92,7 @@
                         <outlet property="micButton" destination="7Wh-nG-1kC" id="Re9-h7-ykU"/>
                         <outlet property="remoteContainer" destination="U9u-fT-DFZ" id="Z12-jR-svL"/>
                         <outlet property="remoteVideoMutedIndicator" destination="LZg-5L-xeZ" id="mmM-KM-ixK"/>
+                        <outlet property="turnButton" destination="lvV-dj-Yy2" id="euR-l1-IQR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -101,5 +118,6 @@
         <image name="mic" width="220" height="220"/>
         <image name="mic_pressed" width="220" height="220"/>
         <image name="mute" width="204" height="204"/>
+        <image name="switch" width="220" height="220"/>
     </resources>
 </document>

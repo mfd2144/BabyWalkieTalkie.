@@ -5,7 +5,6 @@
 //  Created by Mehmet fatih DOĞAN on 10.08.2021.
 //
 
-import Foundation
 import GoogleSignIn
 import Firebase
 import UIKit

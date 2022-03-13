@@ -10,7 +10,7 @@ import AgoraRtcKit
 
 class AgoraAudioService: NSObject {
     var channel: String
-    var appId = "3d3cffb6fa994521b3e0617bb8063577"
+    //var appId = "3d3cffb6fa994521b3e0617bb8063577"
     var token: String?
     var username: String
     var role: AgoraClientRole = .broadcaster
@@ -19,6 +19,7 @@ class AgoraAudioService: NSObject {
     var userID: UInt = 0
     
     init(token: String?, channel: String, username: String, role: AgoraClientRole) {
+        printNew("agora service init")
         self.token = token
         self.channel = channel
         self.username = username
@@ -30,7 +31,7 @@ class AgoraAudioService: NSObject {
     }
     private func connectAgora() {
         // Create connection to RTC
-        agkit = AgoraRtcEngineKit.sharedEngine(withAppId: self.appId, delegate: self)
+        agkit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
         agkit?.enableAudio()
         agkit?.enableAudioVolumeIndication(1000, smooth: 3, report_vad: true)
         agkit?.setChannelProfile(.liveBroadcasting)
@@ -58,7 +59,6 @@ class AgoraAudioService: NSObject {
         agkit = nil
         AgoraRtcEngineKit.destroy()
         NotificationCenter.default.post(name: .notificationStartSmartListener, object: nil)
-        
     }
     
 }

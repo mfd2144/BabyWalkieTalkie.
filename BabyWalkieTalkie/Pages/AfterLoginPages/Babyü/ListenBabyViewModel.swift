@@ -8,7 +8,6 @@ import Foundation
 import Combine
 
 final class ListenBabyViewModel:ListenBabyViewModelProtocol{
- 
     weak var delegate: ListenBabyViewModelDelegate?
     var router:ListenBabyRouter!
     var firebaseService: FirebaseAgoraService!
@@ -22,7 +21,7 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
     var token: String!
     var rtmToken:String!
     var channelID: String!
-    var soundLevel:Float = -27
+    var soundLevel:Float = -30
     var messageTimer:Timer?
     var resetTimer:Timer?
     var stopTimer:Timer?
@@ -79,18 +78,26 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
         firebaseService.decideAboutChannel(){ [unowned self]result in
             switch result{
             case .success(let response):
-                guard let response = response else {fatalError("empty result")}
-                if response != "baby"{
+                guard let response = response else {
+                    delegate?.handleOutputs(.anyErrorOccurred("Unknown error.Please restart application"))
+                    delegate?.handleOutputs(.isLoading(false))
+                    return
+                }
+                if response == "notConnected"{
+                    delegate?.handleOutputs(.isLoading(false))
+                    delegate?.handleOutputs(.mustBeConnected)
+                    return
+                } else if response != "baby"{
                     firebaseService.enterTheChannel(role: .baby)
                     goOnAudioStartingSequence()
-                }else{
+                } else{
                     delegate?.handleOutputs(.alreadyLogisAsBaby)
                     delegate?.handleOutputs(.isLoading(false))
                     return
                 }
-            case.failure(let error):
-                //todo
+            case.failure:
                 delegate?.handleOutputs(.isLoading(false))
+                delegate?.handleOutputs(.anyErrorOccurred("Unknown error.Please restart application"))
                 return
             }
         }
@@ -148,7 +155,6 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
         }
     }
     
-    
     func returnToSelectPage() {
         stopAudio()
         stopVideo()
@@ -180,6 +186,17 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
     }
     func stopVideo() {
         videoService = nil
+    }
+    func otherDeviceDidUnpair() {
+        let matchService = FirebaseMatchService()
+        matchService.disconnetUsers { [unowned self] results in
+            switch results{
+            case.success:
+                delegate?.handleOutputs(.otherDeviceDidUnpair)
+            default:
+                delegate?.handleOutputs(.anyErrorOccurred("Other user disconnected"))
+            }
+        }
     }
 }
 extension ListenBabyViewModel:SmartListenerDelegate{
@@ -228,6 +245,7 @@ extension ListenBabyViewModel:SmartListenerDelegate{
 }
 
 extension ListenBabyViewModel:AgoraMessageServiceProtocol{
+    
     func listenerOrSpeaker(_ listener: Bool) {
         //if it value is false, smart listener must be stop and agora audio must listen continuously
         if listener{
@@ -246,15 +264,37 @@ extension ListenBabyViewModel:AgoraMessageServiceProtocol{
         case .audio:
             smartListenerProtocol.startToListen()
             source = .audio
-
         }
-    }//todo
-    func testOK() { } // for parent device
-    func whiteSound() { }//todo
+    }
+    
     func didOtherDeviceConnect(_ logic: Bool) {
         isParentDeviceOnline = logic
     }
+    func turnCamera() {
+        if videoService != nil{
+            videoService.turnCamera()
+        }
+    }
 }
+
+//extension ListenBabyViewModel:SoundPlayerDelegate{
+//    func errorType(_ error: SoundPlayerError) {
+//
+//    }
+//
+//    private func playWhiteSound(){
+//        stopAudio()
+//        player = SoundPlayer()
+//        player.delegate = self
+//        player.playSound()
+//    }
+//
+//    private func stopWhiteSound(){
+//        player.stopSound()
+//        player = nil
+//        startAudio()
+//    }
+//}
 
 
 

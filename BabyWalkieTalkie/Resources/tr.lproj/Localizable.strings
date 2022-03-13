@@ -1,8 +1,9 @@
-/* 
-  Localizable.strings
+
+/*
+  localizable.strings
   BabyWalkieTalkie
 
-  Created by Mehmet fatih DOĞAN on 9.08.2021.
+  Created by Mehmet fatih DOĞAN on 2.03.2022.
   
 */
 
@@ -43,13 +44,11 @@
 "PasswordLocal.FBCancel" = "Facebookla bağlanma iptal edildi";
  "PasswordLocal.sentMessage" = "Link email adresinize gönderildi. Mail adresinizi kontrol edin.";
 "googleSignError" = "google ile bağlantı hatası";
-
-
 "Connect" = "Bağlan";
 "Disconnect" = "Bağlantıyı Kes";
 "Loading" = "Yükleniyor";
 "Purchase" = "Satın Al";
-"Parent" = "Aile Telsizi";
+"Parent" = "Ebevyn Telsizi";
 "Baby" = "Bebek Telsizi";
 "Select" = "Cihazı ayarlayın";
 "Settings" = "Ayarlar";
@@ -62,15 +61,16 @@
 "Alert" = "İkaz";
 "LogOutError" = "Çıkış yapma hatası";
 "TryAgain" = "Tekrar Dene";
-
 "OneDay" = "Demo - 1 gün kaldı";
 "TwoDays" = "Demo - 2 gün kaldı";
 "ThreeDays" = "Demo - 3 gün kaldı";
 "DaysFinished" = "Demo bitti";
 "Buy" = "Satın Al";
-
 "BadConnection" = "Zayıf Bağlantı";
 "BadConnectionDefine" = "Lütfen internet bağlantınızı kontrol edin";
-
 "DemoCaution" = "Demo İkazı";
 "DemoCautionDefine" = "Demo versiyonu sona erdi. Uygulamayı daha fazla kullanabilmek için bir paket satın almalısınız.";
+"IAPLocal.savingError" = "Veri yükleme hatası. Lütfen uygulamayı yeniden başlatın.";
+"IAPLocal.checkTransactionError" = "İşlem kontrol hatası";
+"ConnectTo" = "Bağlanıyor ";
+

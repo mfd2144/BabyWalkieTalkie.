@@ -12,17 +12,14 @@ import UIKit
 final class FirstPageView:UIViewController,FirstPageViewModelDelegate{
     var model :FirstPageViewModelProtocol!
     
-    private let appName :UILabel = {
-        let label = UILabel()
-        label.font = UIFont.init(name: "Cookie-Regular", size: 70)
-        label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
-        label.minimumScaleFactor = 0.5
-        label.adjustsFontSizeToFitWidth = true
-        label.text = Local.appName
-        label.textAlignment = .center
-        return label
+    private let appIcon: UIImageView = {
+        let iView = UIImageView()
+        iView.image = UIImage(named: "icon")
+        iView.contentMode = .scaleAspectFit
+        iView.translatesAutoresizingMaskIntoConstraints = false
+        return iView
     }()
+    
     
     private let emptyLabel :UILabel = {
         let label = UILabel()
@@ -43,15 +40,20 @@ final class FirstPageView:UIViewController,FirstPageViewModelDelegate{
     
     let stack:UIStackView = {
         let stackView = UIStackView()
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
         stackView.axis = .vertical
         return stackView
     }()
     
     //MARK: - Life Cycle
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loginButton.reloadShadow()
+        newAccountButton.reloadShadow()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = MyColor.myBlueColor
+        view.backgroundColor = .white
         setStack()
         addButtonTarget()
     }
@@ -71,9 +73,8 @@ final class FirstPageView:UIViewController,FirstPageViewModelDelegate{
     }
     
     
-//MARK: - Set StackView
+    //MARK: - Set StackView
     private func setStack(){
-        
         switch UIDevice.current.userInterfaceIdiom{
         case.phone:
             setSubviewsForPhones()
@@ -84,17 +85,15 @@ final class FirstPageView:UIViewController,FirstPageViewModelDelegate{
         }
         
     }
-
+    
     
     private func setSubviewsForPhones(){
         
-        let views = [appName, emptyLabel, newAccountButton, loginButton ]
+        let views = [appIcon, emptyLabel, newAccountButton, loginButton ]
         for _view in views{
             stack.addArrangedSubview(_view)
         }
         view.addSubview(stack)
-        
-  
         stack.putSubviewAt(top: nil, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: 0, bottomDis: -60, leadingDis: buttonDistance, trailingDis: buttonDistance*(-1), heightFloat: UIScreen.main.bounds.height/1.3, widthFloat: nil, heightDimension: nil, widthDimension: nil)
         NSLayoutConstraint.activate([
             stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -104,21 +103,22 @@ final class FirstPageView:UIViewController,FirstPageViewModelDelegate{
         stack.spacing = buttonDistance
         
     }
-     
+    
     
     
     private func setSubviewsForPads(){
-
-        let views = [appName, emptyLabel, newAccountButton, loginButton ]
+      
+        let views = [appIcon, emptyLabel, newAccountButton, loginButton ]
         for _view in views{
             stack.addArrangedSubview(_view)
         }
         view.addSubview(stack)
         
-        stack.putSubviewAt(top: nil, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: 0, bottomDis: 0, leadingDis: 200, trailingDis: -200, heightFloat: UIScreen.main.bounds.height/3, widthFloat: nil, heightDimension: nil, widthDimension: nil)
+        stack.putSubviewAt(top: nil, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: 0, bottomDis: 0, leadingDis: 200, trailingDis: -200, heightFloat: UIScreen.main.bounds.height/2, widthFloat: nil, heightDimension: nil, widthDimension: nil)
         NSLayoutConstraint.activate([
-                                        stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                                        stack.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
+            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
+        stack.spacing = buttonSize
     }
     
     
@@ -129,14 +129,19 @@ final class FirstPageView:UIViewController,FirstPageViewModelDelegate{
     }
     
     @objc private func newAccountPushed(){
-        model.goToPage(.createNewUserPage)
+        newAccountButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.goToPage(.createNewUserPage)
+        }
+        
     }
     
-
     @objc private func  logInPushed(){
-        model.goToPage(.logIn)
+        loginButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.goToPage(.logIn)
+        }
     }
-    
 }
 
 

@@ -11,6 +11,7 @@ protocol ParentViewModelProtocol:AnyObject{
     var delegate : ParentViewModelDelegate? {get set}
     func startEverything()
     func setAsWalkieTalkie()
+    func setAgora()
     func testPressed()
     func speakPressed()
     func videoPressed()
@@ -26,8 +27,9 @@ enum ParentViewModelOutputs{
     case alreadyLogisAsParent
     case babyDeviceNotConnect
     case thereNotPairedDevice
-    case listener(Bool)
     case otherDeviceDidUnpair
+    case videoDidNotPurchased
+    case connectionStatus(Bool)
 }
 protocol ParentViewModelDelegate:AnyObject{
     func handleOutputs(outputs:ParentViewModelOutputs)

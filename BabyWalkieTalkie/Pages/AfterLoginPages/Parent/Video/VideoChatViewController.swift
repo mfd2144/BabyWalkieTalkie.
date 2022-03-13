@@ -10,64 +10,38 @@ import UIKit
 import AgoraRtcKit
 
 class VideoChatViewController: UIViewController {
-//    @IBOutlet weak var localContainer: UIView!
-    @IBOutlet weak var remoteContainer: UIView!
-    @IBOutlet weak var remoteVideoMutedIndicator: UIImageView!
-//    @IBOutlet weak var localVideoMutedIndicator: UIView!
-    @IBOutlet weak var micButton: UIButton!
-
     
+    @IBOutlet weak var remoteContainer: UIView!
+    @IBOutlet weak var turnButton: UIButton!
+    @IBOutlet weak var remoteVideoMutedIndicator: UIImageView!
+    @IBOutlet weak var micButton: UIButton!
+    
+    weak var parentView:ParentView!
     weak var logVC: LogViewController?
     var agoraKit: AgoraRtcEngineKit!
     var messageService:AgoraMessageService!
-//    var localVideo: AgoraRtcVideoCanvas?
     var remoteVideo: AgoraRtcVideoCanvas?
     var token:String?
     var channelID:String?
-    let appID:String = "3d3cffb6fa994521b3e0617bb8063577"
+    //let appID:String = "3d3cffb6fa994521b3e0617bb8063577"
     var firebaseService : FirebaseAgoraService!
-//        var isRemoteVideoRender: Bool = true {
-//            didSet {
-//                if let it = localVideo, let view = it.view {
-//                    if view.superview == localContainer {
-//                        remoteVideoMutedIndicator.isHidden = isRemoteVideoRender
-//                        remoteContainer.isHidden = !isRemoteVideoRender
-//                    } else if view.superview == remoteContainer {
-//                        localVideoMutedIndicator.isHidden = isRemoteVideoRender
-//                    }
-//                }
-//            }
-//        }
-//        var isLocalVideoRender: Bool = false {
-//            didSet {
-//                if let it = localVideo, let view = it.view {
-//                    if view.superview == localContainer {
-//                        localVideoMutedIndicator.isHidden = isLocalVideoRender
-//                    } else if view.superview == remoteContainer {
-//                        remoteVideoMutedIndicator.isHidden = isLocalVideoRender
-//                    }
-//                }
-//            }
-//        }
-    var isStartCalling: Bool = true {
-        didSet {
-            if isStartCalling {
-                micButton.isSelected = false
-            }
-            micButton.isHidden = !isStartCalling
-//            cameraButton.isHidden = !isStartCalling
-        }
-    }
+    
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        messageService.sendMessage(.video)
         initializeVideo()
+        
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+       
+        
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         leaveChannel()
         messageService.sendMessage(.audio)
+        parentView.viewModel.setAgora()
     }
     func initializeVideo() {
         firebaseService = FirebaseAgoraService(role: .parent)
@@ -80,7 +54,6 @@ class VideoChatViewController: UIViewController {
                 agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
                 joinChannel()
                 setupVideo()
-                setupLocalVideo()
             case.failure(let error):
                 print(error.localizedDescription)
             }
@@ -109,25 +82,7 @@ class VideoChatViewController: UIViewController {
                                                                          bitrate: AgoraVideoBitrateStandard,
                                                                          orientationMode: .adaptative))
     }
-    
-    func setupLocalVideo() {
-        // This is used to set a local preview.
-        // The steps setting local and remote view are very similar.
-        // But note that if the local user do not have a uid or do
-        // not care what the uid is, he can set his uid as ZERO.
-        // Our server will assign one and return the uid via the block
-        // callback (joinSuccessBlock) after
-        // joining the channel successfully.
-//        let view = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: localContainer.frame.size))
-//        localVideo = AgoraRtcVideoCanvas()
-//        localVideo!.view = view
-//        localVideo!.renderMode = .hidden
-//        localVideo!.uid = 0
-//        localContainer.addSubview(localVideo!.view!)
-//        agoraKit.setupLocalVideo(localVideo)
-//        agoraKit.startPreview()
-    }
-    
+
     func joinChannel() {
         guard let token = token, let channelID = channelID else {
             return
@@ -142,47 +97,37 @@ class VideoChatViewController: UIViewController {
         // you use to generate this token.
         agoraKit.joinChannel(byToken: token, channelId: channelID, info: nil, uid: 1) { [unowned self] (channel, uid, elapsed) -> Void in
             // Did join channel "demoChannel1"
-//            self.isLocalVideoRender = true
             self.logVC?.log(type: .info, content: "did join channel")
         }
-        isStartCalling = true
         UIApplication.shared.isIdleTimerDisabled = true
     }
     
     func leaveChannel() {
         // leave channel and end chat
+        printNew("leave çalıştı")
         agoraKit.leaveChannel(nil)
-        
-//        isRemoteVideoRender = false
-//        isLocalVideoRender = false
-        isStartCalling = false
         UIApplication.shared.isIdleTimerDisabled = false
         self.logVC?.log(type: .info, content: "did leave channel")
-    }
-    
-    @IBAction func didClickHangUpButton(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        if sender.isSelected {
-        }
-      
+        agoraKit = nil
     }
     
     @IBAction func didClickMuteButton(_ sender: UIButton) {
         sender.isSelected.toggle()
         // mute local audio
+        print(sender.isSelected)
+        if sender.isSelected{
+            sender.setImage(UIImage(named: "mute"), for: .normal)
+        }else{
+            sender.setImage(UIImage(named: "mic"), for: .normal)
+        }
         agoraKit.muteLocalAudioStream(sender.isSelected)
-        
     }
     
-//    @IBAction func didClickSwitchCameraButton(_ sender: UIButton) {
-//        sender.isSelected.toggle()
-//        agoraKit.switchCamera()
-//    }
     
-//    @IBAction func didClickLocalContainer(_ sender: Any) {
-//        switchView(localVideo)
-//        switchView(remoteVideo)
-//    }
+    @IBAction func turnButtonClicked(_ sender: UIButton) {
+        printNew("here")
+        messageService.sendMessage(.turnCamera)
+    }
     
     func removeFromParent(_ canvas: AgoraRtcVideoCanvas?) -> UIView? {
         if let it = canvas, let view = it.view {
@@ -195,30 +140,13 @@ class VideoChatViewController: UIViewController {
         return nil
     }
     
-//    func switchView(_ canvas: AgoraRtcVideoCanvas?) {
-//        let parent = removeFromParent(canvas)
-//        if parent == localContainer {
-//            canvas!.view!.frame.size = remoteContainer.frame.size
-//            remoteContainer.addSubview(canvas!.view!)
-//        } else if parent == remoteContainer {
-//            canvas!.view!.frame.size = localContainer.frame.size
-//            localContainer.addSubview(canvas!.view!)
-//        }
-//    }
 }
 
 extension VideoChatViewController: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-//        isRemoteVideoRender = true
-//
+
         var parent: UIView = remoteContainer
-//        if let it = localVideo, let view = it.view {
-//            if view.superview == parent {
-//                parent = localContainer
-//            }
-//        }
-        
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
@@ -263,6 +191,7 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
     ///   - engine: RTC engine instance
     ///   - warningCode: Warning code
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
+        print(warningCode)
         logVC?.log(type: .warning, content: "did occur warning, code: \(warningCode.rawValue)")
     }
     

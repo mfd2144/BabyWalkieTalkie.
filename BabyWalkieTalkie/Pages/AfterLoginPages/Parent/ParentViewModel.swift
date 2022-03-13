@@ -25,25 +25,42 @@ final class ParentViewModel:ParentViewModelProtocol{
     var timer:Timer?
     var connectionStatus:Bool!
     var isBabyDeviceOnline:Bool = false
+    var didVideoPurchased: Bool!
     
+    init(){
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(statusManager),
+                         name: .flagsChanged,
+                         object: nil)
+#if targetEnvironment(simulator)
+        connectionStatus = true
+#else
+        connectionStatus = Network.reachability.status == .unreachable ? false : true
+#endif
+    }
     deinit{
         print("parent deinit")
     }
+    
     func startEverything(){
+        delegate?.handleOutputs(outputs: .connectionStatus(connectionStatus))
         delegate?.handleOutputs(outputs: .isLoading(true))
         // check channel condition,change channel role as parent
         firebaseService.decideAboutChannel(){ [unowned self]result in
             switch result{
             case .success(let response):
                 guard let response = response else {fatalError("empty result")}
-                if response != "parent" {
+                if response == "notConnected"{
+                    delegate?.handleOutputs(outputs: .thereNotPairedDevice)
+                } else if response != "parent" {
                     firebaseService.enterTheChannel(role: .parent)
                     otherWorks()
                 }else{
                     delegate?.handleOutputs(outputs: .alreadyLogisAsParent)
                 }
-            case.failure:
-                delegate?.handleOutputs(outputs: .thereNotPairedDevice)
+            case.failure(let error):
+                delegate?.handleOutputs(outputs: .anyErrorOccurred(error.localizedDescription))
             }
         }
     }
@@ -81,7 +98,7 @@ final class ParentViewModel:ParentViewModelProtocol{
         }
     }
     
-    private func setAgora(){
+    func setAgora(){
         guard let token = token,let rtmToken = rtmToken, let channelID = channelID  else {
             return
         }
@@ -98,6 +115,7 @@ final class ParentViewModel:ParentViewModelProtocol{
             agoraMessageService.sendMessage(.audio)
         }
     }
+ 
     func  testPressed(){
         guard let agoraMessageService = agoraMessageService else {
             delegate?.handleOutputs(outputs: .anyErrorOccurred("Try again"))
@@ -106,6 +124,7 @@ final class ParentViewModel:ParentViewModelProtocol{
         agoraMessageService.sendMessage(.test)
         timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(testTimer), userInfo: nil, repeats: false)
     }
+    
     @objc private func testTimer(){
         delegate?.handleOutputs(outputs: .isLoading(false))
         if !messageLogic{
@@ -114,6 +133,7 @@ final class ParentViewModel:ParentViewModelProtocol{
             messageLogic = false
         }
     }
+    
     func speakPressed(){
         guard let agoraMessageService = agoraMessageService else {
             delegate?.handleOutputs(outputs: .anyErrorOccurred("Try again"))
@@ -121,20 +141,21 @@ final class ParentViewModel:ParentViewModelProtocol{
         if isListener {
             agoraService.makeSpeaker()
             agoraMessageService.sendMessage(.speaker)
-            delegate?.handleOutputs(outputs:.listener(false) )
         }else{
             agoraService.makeListener()
             agoraMessageService.sendMessage(.listener)
-            delegate?.handleOutputs(outputs: .listener(true))
         }
         isListener = !isListener
     }
+    
     func videoPressed(){
-        guard isBabyDeviceOnline else {delegate?.handleOutputs(outputs: .babyDeviceNotConnect); return}
+        guard isBabyDeviceOnline else {delegate?.handleOutputs(outputs: .babyDeviceNotConnect); return}//is baby device coonnected
+        guard didVideoPurchased else {delegate?.handleOutputs(outputs: .videoDidNotPurchased);return}//check video package was purchased
         guard let agoraMessageService = agoraMessageService else {
             delegate?.handleOutputs(outputs: .anyErrorOccurred("Try again")); return }
         agoraMessageService.sendMessage(.video)
         agoraService.stopBroadcast()
+        agoraService = nil
         guard let token = token ,
               let channelID = channelID else {return}
         router.toVideo(channelID: channelID, token: token,messageService: agoraMessageService)
@@ -162,12 +183,12 @@ final class ParentViewModel:ParentViewModelProtocol{
             case.success:
                 delegate?.handleOutputs(outputs: .otherDeviceDidUnpair)
             default:
-                break
+                delegate?.handleOutputs(outputs: .anyErrorOccurred("Other user disconnected"))
             }
-        }    }
+        }
+    }
 }
 extension ParentViewModel: AgoraMessageServiceProtocol{
-    func listenerOrSpeaker(_ listener: Bool) { }//for baby
     func testOK() {
         let time = Date.actualStringTime()
         messageLogic = true
@@ -175,12 +196,26 @@ extension ParentViewModel: AgoraMessageServiceProtocol{
         delegate?.handleOutputs(outputs: .isLoading(false))
         delegate?.handleOutputs(outputs:.testResult(true, time))
     }
-    func whiteSound() { }//todo
     func didOtherDeviceConnect(_ logic: Bool) {
         isBabyDeviceOnline = logic
         delegate?.handleOutputs(outputs: .babyDeviceConnect(logic))
     }
-    func selectConnectionType(type: ConnectionSource) { }//todo
+}
+extension ParentViewModel{
+    //MARK: - Reachability
+    @objc private func statusManager(_ notification: Notification) {
+        updateConnectionStatus()
+    }
+    
+    private func updateConnectionStatus(){
+        switch Network.reachability.status{
+        case.unreachable:
+            connectionStatus = false
+        case.wifi,.wwan:
+            connectionStatus = true
+        }
+    }
+    
 }
 
 

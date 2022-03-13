@@ -10,8 +10,7 @@ import UIKit
 
 final class SelectRoleBuilder{
     static func make()->UIViewController{
-        let layout = UICollectionViewLayout()
-        let view = SelectRoleView(collectionViewLayout: layout)
+        let view = SelectRoleView()
         let router = SelectRoleRouter()
         let viewModel = SelectRoleViewModel()
         let customMC = CustomMultipeerConnectivity()

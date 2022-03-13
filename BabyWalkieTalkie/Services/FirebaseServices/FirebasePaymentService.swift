@@ -8,30 +8,44 @@
 import Foundation
 import FirebaseFunctions
 
+enum PaymentError: Error{
+    case resultError
+    case optinalError
+    case transactionError
+    var localErrorDescription:String{
+        switch self{
+        case .resultError: return "Payment service error 1"
+        case .optinalError: return  "Payment service error 2"
+        case .transactionError: return "Transaction data save error. Please restart application"
+        }
+    }
+}
+
 final class FirebasePaymentService{
     let function = Functions.functions()
-    enum PaymentError:String, Error{
-        case resultError
-        case optinalError
-    }
-    
-    static func setOldPayment(){
-        guard let item = UserDefaults.standard.object(forKey: "personWillSaveToDb") as? SavedPurchaseItem else {return}
-        let data = ["id":item.item.transactionID,"name":item.item.name,"expiresDate":item.item.date,"userID":item.userID]
+        
+    static func setOldPayment(completion: @escaping (Results<String>)->Void){
+        guard let savedData = UserDefaults.standard.data(forKey: "personWillSaveToDb"), let item = SavedPurchaseItem.dataToItem(data: savedData) else {completion(.success(nil)); return}
+        let data = ["id":item.item.transactionID,"name":item.item.name,"purchaseDate":item.item.date,"userID":item.userID]
         let _function = Functions.functions()
         _function.httpsCallable("setOldPayment").call(data) { result, error in
-            UserDefaults.standard.set(nil, forKey: "personWillSaveToDb")
+            if let _ = error {
+                completion(.failure(PaymentError.transactionError))
+            }else{
+                UserDefaults.standard.set(nil, forKey: "personWillSaveToDb")
+                completion(.success(nil))
+            }
         }
     }
     
-    func setPayment(_ items:PurchasedItems,completion:(Results<String>)->Void){
-        var data = [[String:String]]()
-        for item in items.items{
-            let array = ["id":item.transactionID,"name":item.name,"expiresDate":item.date]
-            data.append(array)
-        }
+    func setPayment(_ item:PurchasedItem,completion:@escaping(Results<String>)->Void){
+        let data = ["id":item.transactionID,"name":item.name,"purchaseDate":item.date]
         function.httpsCallable("setPayment").call(data) { result, error in
-            
+            if let error = error {
+                completion(.failure(PaymentError.transactionError))
+            }else{
+                completion(.success(nil))
+            }
         }
     }
     func getPayment(completion:@escaping (Results<PurchasedItems>)->Void){
@@ -45,8 +59,8 @@ final class FirebasePaymentService{
             array.forEach({
                 guard let name = $0["name"],
                       let id = $0["id"],
-                      let expiresDate = $0["expiresDate"] else {completion(.failure(PaymentError.optinalError)); return}
-                 let purchaseItem = PurchasedItem.init(name: name, date:expiresDate  , transactionID:  id)
+                      let purchaseDate = $0["purchaseDate"] else {completion(.failure(PaymentError.optinalError)); return}
+                let purchaseItem = PurchasedItem.init(name: name, date:purchaseDate  , transactionID:  id)
                 purchaseItems == nil ? purchaseItems = PurchasedItems.init(items: [purchaseItem]) : purchaseItems?.addNewItem(purchaseItem)
                 if purchaseItems?.items.count == array.count{
                     completion(.success(purchaseItems))
@@ -54,4 +68,19 @@ final class FirebasePaymentService{
             })
         }
     }
+    
+    func checkTransactionDidSavedBefore(_ transactionID:String, completion:@escaping (Results<TransactionCondition>)->Void) {
+        let data = ["transactionID":transactionID]
+        function.httpsCallable("checkTransactionDidSavedBefore").call(data) { response, error in
+            if let error = error {
+                completion(.failure(error))
+            }else{
+                guard let respondData = response?.data as? NSDictionary,
+                      let result = respondData["result"] as? String else {completion(.failure(TransactionError.respondConvertError));return}
+                let condition = TransactionCondition.init(rawValue: result)
+                completion(.success(condition))
+            }
+        }
+    }
+    
 }

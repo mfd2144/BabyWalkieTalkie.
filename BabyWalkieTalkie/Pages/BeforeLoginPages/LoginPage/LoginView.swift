@@ -14,7 +14,6 @@ final class LoginView:UIViewController{
     let topStack:UIStackView = {
         let stack = UIStackView()
         stack.distribution = .fillEqually
-        stack.spacing = buttonDistance
         stack.axis = .vertical
         stack.alignment = .fill
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +32,7 @@ final class LoginView:UIViewController{
    
     lazy var nameField:UITextField = {
         let field = UITextField()
-        field.backgroundColor = .white
+        field.backgroundColor = MyColor.buttonColor
         field.textColor = .black
         field.borderStyle = .roundedRect
         field.layer.cornerRadius = 10
@@ -53,7 +52,7 @@ final class LoginView:UIViewController{
         field.textColor = .black
         field.borderStyle = .roundedRect
         field.layer.cornerRadius = 10
-        field.backgroundColor = .white
+        field.backgroundColor = MyColor.buttonColor
         let phString = Local.passwordPlaceHolder
         field.attributedPlaceholder = NSAttributedString.init(string: phString, attributes: [NSAttributedString.Key.foregroundColor:UIColor.gray,NSAttributedString.Key.font:UIFont.preferredFont(forTextStyle: .title3)])
         field.translatesAutoresizingMaskIntoConstraints = false
@@ -126,7 +125,6 @@ final class LoginView:UIViewController{
         stack.distribution = .fill
         stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.layer.addBorder(edge: .top, color: .gray, thickness: 2)
         return stack
     }()
     
@@ -141,7 +139,7 @@ final class LoginView:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = MyColor.myBlueColor
+        view.backgroundColor = .white
         setSubviews()
         setTargets()
         nameField.delegate = self
@@ -173,8 +171,37 @@ final class LoginView:UIViewController{
         view.addSubview(middleStack)
         view.addSubview(bottomStack)
         
+        
+        bottomInnerStack.addArrangedSubview(cautionLabel)
+        bottomInnerStack.addArrangedSubview(signUpButton)
+        bottomStack.addArrangedSubview(bottomInnerStack)
+
+        NSLayoutConstraint.activate([
+            bottomStack.heightAnchor.constraint(equalToConstant: buttonSize),
+            bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomStack.widthAnchor.constraint(equalTo: view.widthAnchor),
+            orLabel.heightAnchor.constraint(equalToConstant: buttonSize),
+            orLabel.bottomAnchor.constraint(equalTo: middleStack.topAnchor),
+            orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            orLabel.widthAnchor.constraint(equalToConstant: 200),
+            loginButton.heightAnchor.constraint(equalToConstant: buttonSize),
+            loginButton.bottomAnchor.constraint(equalTo: orLabel.topAnchor)
+        ])
+        switch UIDevice.current.userInterfaceIdiom{
+        case.phone:
+            setSubviewsForPhones()
+        case.pad:
+            setSubviewsForPads()
+        default:
+            break
+        }
+    }
+    
+    private func setSubviewsForPhones() {
         let stackHeight = 3*buttonSize+2*buttonDistance
         let bottomStackH = 2*buttonSize+buttonDistance
+        topStack.spacing = buttonDistance
+        bottomStack.spacing = buttonDistance
         NSLayoutConstraint.activate([
             topStack.heightAnchor.constraint(equalToConstant:stackHeight),
             topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
@@ -184,32 +211,30 @@ final class LoginView:UIViewController{
             middleStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
             middleStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
             middleStack.bottomAnchor.constraint(equalTo: bottomStack.topAnchor,constant: buttonDistance*(-1)),
-            orLabel.heightAnchor.constraint(equalToConstant: 60),
-            orLabel.bottomAnchor.constraint(equalTo: middleStack.topAnchor),
-            orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            orLabel.widthAnchor.constraint(equalToConstant: 200),
-            loginButton.heightAnchor.constraint(equalToConstant: buttonSize),
             loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: buttonDistance),
             loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: buttonDistance*(-1)),
-            loginButton.bottomAnchor.constraint(equalTo: orLabel.topAnchor)
+            bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: buttonDistance*(-1)),
         ])
-        
-        bottomInnerStack.addArrangedSubview(cautionLabel)
-        bottomInnerStack.addArrangedSubview(signUpButton)
-        bottomStack.addArrangedSubview(bottomInnerStack)
-     
-        
-        
-        NSLayoutConstraint.activate([
-            bottomStack.heightAnchor.constraint(equalToConstant: buttonSize),
-            bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bottomStack.widthAnchor.constraint(equalTo: view.widthAnchor),
-        ])
-
-    
     }
-    
+    private func setSubviewsForPads() {
+        let stackHeight = 5*buttonSize
+        let bottomStackH = 3*buttonSize
+        topStack.spacing = buttonSize
+        middleStack.spacing = buttonSize
+        NSLayoutConstraint.activate([
+            topStack.heightAnchor.constraint(equalToConstant:stackHeight),
+            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            topStack.bottomAnchor.constraint(equalTo: loginButton.topAnchor,constant: -1*buttonSize),
+            middleStack.heightAnchor.constraint(equalToConstant:bottomStackH),
+            middleStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            middleStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            middleStack.bottomAnchor.constraint(equalTo: bottomStack.topAnchor,constant: buttonSize*(-1)),
+            loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 200),
+            loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -200),
+            bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: buttonDistance*(-1)),
+            ])
+    }
     
     //MARK: - Add button target
     private func setTargets(){
@@ -223,14 +248,21 @@ final class LoginView:UIViewController{
     }
     
     @objc private func loginButtonPressed(_ sender: UIButton){
-        model.logIn(nameField.text!, passwordField.text!)
-        nameField.endEditing(true)
-        passwordField.endEditing(true)
+        loginButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.logIn(nameField.text!, passwordField.text!)
+            nameField.endEditing(true)
+            passwordField.endEditing(true)
+        }
+       
     }
     
     @objc private func googlePressed(){
-        model.googlePressed()
+        googleButton.pressAnimation()
         googleButton.reloadShadow()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.googlePressed()
+        }
     }
  
     
@@ -245,8 +277,11 @@ final class LoginView:UIViewController{
         model.forgetPassword(nameField.text)
     }
     @objc func getFacebookUserInfo(){
-        model.fbButtonPressed()
-        fBButton.reloadShadow()
+        fBButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.fbButtonPressed()
+            fBButton.reloadShadow()
+        }
     }
 }
 

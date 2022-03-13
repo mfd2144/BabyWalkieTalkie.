@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
+
+    
     //MARK: - Variables
     weak var delegate: SelectRoleViewModelDelegate?
     var router:SelectRoleRouter!
@@ -47,7 +49,7 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
     //MARK: - Data Check
     ///If phone lost internet connection before, this part will change revelant part of user data on net
     func checkDidConnetionLostBefore() {
-        
+        //todo
     }
     
     func otherDeviceDidUnpair() {
@@ -102,13 +104,24 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
     func disconnectRequest() {
         guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
         delegate?.handleOutputs(.isLoading(true))
-        matchService.disconnetUsers { [unowned self] results in
-            delegate?.handleOutputs(.isLoading(false))
-            switch results{
-            case .failure(let error):
-                delegate?.handleOutputs(.showAnyAlert(error.localizedDescription))
-            case.success:
-                delegate?.handleOutputs(.matchStatus(.readyToConnect))
+        let service = FirebaseAgoraService(role: .baby)
+        service.decideAboutChannel {[unowned self] result in
+            switch result{
+            case.success(let string):
+                guard let string = string,string != "baby" else{
+                    delegate?.handleOutputs(.isLoading(false))
+                    return }
+                matchService.disconnetUsers { results in
+                    delegate?.handleOutputs(.isLoading(false))
+                    switch results{
+                    case .failure(let error):
+                        delegate?.handleOutputs(.showAnyAlert(error.localizedDescription))
+                    case.success:
+                        delegate?.handleOutputs(.matchStatus(.readyToConnect))
+                    }
+                }
+            default:
+                break
             }
         }
     }
@@ -118,7 +131,12 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
         //first check connection-done
         guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
         guard iAPCondition != .finished && iAPCondition != nil else {delegate?.handleOutputs(.membershipCaution);return}
-        router.routeToPage(.toParentControl)
+        //check did user purchase video 
+        if iAPCondition == .alreadyMember(.videoAudio){
+            router.routeToPage(.toParentControl(true))
+        }else{
+            router.routeToPage(.toParentControl(false))
+        }
     }
     
     func toListenBaby() {
@@ -132,12 +150,17 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
     }
 }
 extension SelectRoleViewModel:CustomMCDelegate{
+    func sameUser() {
+        delegate?.handleOutputs(.sameUser)
+    }
+    
+    func requestError(_ error: String) {
+        delegate?.handleOutputs(.showAnyAlert(error))
+    }
+    
     func decideToInvitation(by invitionOwner: String, completionHandler: (Bool) -> ()) {
         guard let result = delegate?.invitationArrived(by: invitionOwner) else {return}
         completionHandler(result)
-    }
-    func requestError(_ error: Error) {
-        
     }
     
     func showNearbyDevice(_ peerName: String) {
@@ -158,10 +181,12 @@ extension SelectRoleViewModel:CustomMCDelegate{
 //MARK: - Purchase
 extension SelectRoleViewModel{
     private func checkPuchaseCondition(completion:@escaping(Bool,PurchaseType?)->Void){
-        if iAPHelper.isProductPurchased(ProductIdentifier.init(PurchaseType.audio.rawValue)){
-            completion(true,.audio)
-        }else if iAPHelper.isProductPurchased(ProductIdentifier.init(PurchaseType.videoAudio.rawValue)){
+        if iAPHelper.isProductPurchased(ProductIdentifier.init(PurchaseType.video.rawValue)){
             completion(true,.videoAudio)
+        } else if iAPHelper.isProductPurchased(ProductIdentifier.init(PurchaseType.videoAudio.rawValue)){
+            completion(true,.videoAudio)
+        }else if iAPHelper.isProductPurchased(ProductIdentifier.init(PurchaseType.audio.rawValue)){
+            completion(true,.audio)
         }else{
             completion(false,nil)
         }
@@ -172,11 +197,12 @@ extension SelectRoleViewModel{
         guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
         delegate?.handleOutputs(.isLoading(true))
         checkPuchaseCondition{[unowned self] purchaseResult,purchaseType in
-            print(purchaseType)
             switch purchaseResult{
             case true:
+                delegate?.handleOutputs(.isLoading(false))
                 guard let purchaseType = purchaseType else {return}
-                delegate?.handleOutputs(.remainingDay(.alreadyMember))
+                iAPCondition = .alreadyMember(purchaseType)
+                delegate?.handleOutputs(.remainingDay(iAPCondition!))
             case false:
                 checkRemainingDemo()
             }
@@ -235,18 +261,16 @@ extension SelectRoleViewModel{
     }
 }
 extension SelectRoleViewModel:IAPHelperDelegate{
-    func errorBeforeTransactionSave(_ transactionID: String) {
-        printNew("errorBeforeTransactionSave \(transactionID)")
+    func throwError(error: String) {
+        delegate?.handleOutputs(.showAnyAlert(error))
     }
     
     func loadProduct() {
         checkDemo()
     }
     
+    
     func busy(){
         delegate?.handleOutputs(.isLoading(true))
-    }
-    func purchaseCompleted(){
-        delegate?.handleOutputs(.remainingDay(IAPCondition.alreadyMember))
     }
 }

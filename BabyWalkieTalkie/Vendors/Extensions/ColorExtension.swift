@@ -23,8 +23,11 @@ extension UIColor{
 }
 
 struct MyColor{
-    static let myBlueColor:UIColor = returnColor(r: 255, g: 213, b: 36)
+    static let green:UIColor = returnColor(r: 231, g: 251, b: 190)
     static let secondColor = returnColor(r: 50, g: 80, b: 229)
+    static let buttonColor = returnColor(r: 234, g: 234, b: 234)
+    static let pink = returnColor(r: 255, g: 203, b: 203)
+    static let purple = returnColor(r: 217, g: 215, b: 241)
     
     static func returnColor(r:CGFloat,g:CGFloat,b:CGFloat)->UIColor{
         return UIColor.init(red: r/255, green: g/255, blue: b/255, alpha: 1.0)

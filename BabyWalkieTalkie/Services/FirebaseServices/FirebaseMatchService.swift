@@ -39,7 +39,6 @@ class FirebaseMatchService{
             }else{
                 guard let resultData = result?.data as? NSDictionary, let response = resultData["result"] as? String else {return}
                 completion(.success(response))
-                
             }
         }
     }

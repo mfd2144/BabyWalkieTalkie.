@@ -8,17 +8,18 @@
 import Foundation
 import AgoraRtmKit
 
-protocol AgoraMessageServiceProtocol{
-    func testOK()
-    func whiteSound()
+@objc protocol AgoraMessageServiceProtocol{
+    @objc optional func testOK()
+    @objc optional func whiteSound()
+    @objc optional func turnCamera()
     func didOtherDeviceConnect(_ logic:Bool)
-    func selectConnectionType(type:ConnectionSource)
-    func listenerOrSpeaker(_ listener:Bool)
+    @objc optional func selectConnectionType(type:ConnectionSource)
+    @objc optional func listenerOrSpeaker(_ listener:Bool)
 }
 
 class AgoraMessageService: NSObject{
     var channel: String
-    var appId = "3d3cffb6fa994521b3e0617bb8063577"
+    //var appId = "3d3cffb6fa994521b3e0617bb8063577"
     var rtmToken:String?
     var username: String
     var delegate:AgoraMessageServiceProtocol?
@@ -43,7 +44,7 @@ class AgoraMessageService: NSObject{
     
     private func connectAgora() {
         // Create connection to RTM
-        rtmkit = AgoraRtmKit(appId: self.appId, delegate: self)
+        rtmkit = AgoraRtmKit(appId: appID, delegate: self)
         rtmkit?.login(byToken: self.rtmToken, user: self.username)
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {[unowned self] in
             rtmChannel = rtmkit?.createChannel(withId: channel, delegate: self)
@@ -100,17 +101,19 @@ extension AgoraMessageService:AgoraRtmDelegate,AgoraRtmChannelDelegate{
         case .test:
             shareUserComment(comment: .testOK, to: nil)//done
         case .video:
-            delegate?.selectConnectionType(type: .video)//done
+            delegate?.selectConnectionType?(type: .video)//done
         case .audio:
-            delegate?.selectConnectionType(type: .audio)//done
+            delegate?.selectConnectionType?(type: .audio)//done
         case .whiteSound:
-            delegate?.whiteSound()
-        case.testOK:
-            delegate?.testOK()//done
+            delegate?.whiteSound?()
+             case.testOK:
+            delegate?.testOK?()//done
         case .speaker:
-            delegate?.listenerOrSpeaker(false)//done
+            delegate?.listenerOrSpeaker?(false)//done
         case .listener:
-            delegate?.listenerOrSpeaker(true)//done
+            delegate?.listenerOrSpeaker?(true)//done
+        case .turnCamera:
+            delegate?.turnCamera?()
         }
     }
 

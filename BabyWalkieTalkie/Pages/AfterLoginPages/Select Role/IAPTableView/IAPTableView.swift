@@ -11,7 +11,8 @@ import StoreKit
 
 final class IAPTableView:UIViewController{
     var products:[SKProduct] = []
-    private var logic:Bool = true
+    private var audioLogic:Bool = false
+    private var audioVideoLogic: Bool = false
     var helper:IAPHelper!{
         didSet{
             helper.requestProducts {[weak self] success, _products in
@@ -23,6 +24,9 @@ final class IAPTableView:UIViewController{
                         self.setTableView()
                     }
                 }
+                if self.helper.isProductPurchased(PurchaseType.videoAudio.rawValue){
+                    self.audioVideoLogic = true
+                }
             }
         }
     }
@@ -31,7 +35,7 @@ final class IAPTableView:UIViewController{
         let table = UITableView()
         table.register(PurchaseCell.self, forCellReuseIdentifier: PurchaseCell.cellID)
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.backgroundColor = MyColor.myBlueColor
+        table.backgroundColor = MyColor.green
         table.allowsSelection = false
         table.isScrollEnabled = false
         table.rowHeight = 70
@@ -71,16 +75,18 @@ extension IAPTableView:UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PurchaseCell.cellID, for: indexPath) as? PurchaseCell else {return UITableViewCell()}
         let product = products[indexPath.row]
+        cell.accessoryLogic = audioVideoLogic
         cell.helper = helper
         cell.product = product
-        if (product.localizedTitle == "Audio" || product.localizedTitle == "Ses") && cell.accessoryType == .checkmark{
-            logic = false
+        if product.productIdentifier == PurchaseType.audio.rawValue && cell.accessoryType == .checkmark{
+            audioLogic = true
         }
-        if logic == false && product.localizedTitle == "Ses ve/veya Video"{
+        if (audioVideoLogic || audioLogic) && product.productIdentifier == PurchaseType.videoAudio.rawValue{
             cell.product = products[indexPath.row+1]
         }
         cell.buyButtonHandler = { [unowned self] product in
           helper.buyProduct(product)
+            self.dismiss(animated: true, completion: nil)
         }
         return cell
     }

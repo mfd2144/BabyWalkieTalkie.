@@ -3,7 +3,7 @@ import UIKit
 
 class AgoraVideoService:NSObject{
     var channel: String
-    var appId = "3d3cffb6fa994521b3e0617bb8063577"
+    //var appId = "3d3cffb6fa994521b3e0617bb8063577"
     var token: String?
     var username: String
     var role: AgoraClientRole = .broadcaster
@@ -51,7 +51,7 @@ class AgoraVideoService:NSObject{
 
     func initializeAgoraEngine() {
         // init AgoraRtcEngineKit
-        agkit = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: self)
+        agkit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
     }
 
     func setupVideo() {
@@ -97,6 +97,9 @@ class AgoraVideoService:NSObject{
 
     func startVideo(){
         connectAgoraVideo()
+    }
+    func turnCamera() {
+        agkit?.switchCamera()
     }
 
 

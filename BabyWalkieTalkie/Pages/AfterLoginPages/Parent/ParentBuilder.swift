@@ -8,7 +8,7 @@
 import class UIKit.UIViewController
 
 final class ParentBuilder{
-    static func make()->UIViewController{
+    static func make(_ videoCondition:Bool)->UIViewController{
         let view = ParentView()
         let viewModel = ParentViewModel()
         let firebaseAgoraService = FirebaseAgoraService(role: .parent)
@@ -17,6 +17,7 @@ final class ParentBuilder{
     
         router.view = view
         view.viewModel = viewModel
+        viewModel.didVideoPurchased = videoCondition
         viewModel.delegate = view
         viewModel.router = router
         viewModel.firebaseService = firebaseAgoraService

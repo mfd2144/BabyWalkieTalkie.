@@ -19,6 +19,7 @@ final class ListenBabyBuilder{
         
         viewModel.tokenDelegate = tokenGeneratorService
         viewModel.smartListenerProtocol = smartListener
+        
         smartListener.delegate = viewModel
         view.viewModel = viewModel
         viewModel.delegate = view

@@ -7,7 +7,13 @@
 
 import Foundation
 
-enum ConnectionSource:String{
+@objc enum ConnectionSource:Int{
     case video
     case audio
+    var sourceString:String{
+        switch self{
+        case.audio:return "audio"
+        case.video:return "video"
+        }
+    }
 }

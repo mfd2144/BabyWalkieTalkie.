@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Local_A{
+struct LocalAfterPages{
     static let connect = NSLocalizedString("Connect", comment: "")
     static let disconnect = NSLocalizedString("Disconnect", comment: "")
     static let loading = NSLocalizedString("Loading", comment: "")
@@ -34,10 +34,8 @@ struct Local_A{
     static let threeDays = NSLocalizedString( "ThreeDays", comment: "")
     static let daysFinished = NSLocalizedString("DaysFinished", comment: "")
     static let buy = NSLocalizedString("Buy", comment: "")
-    
     static let badConnection = NSLocalizedString("BadConnection", comment: "")
     static let badConDefine = NSLocalizedString("BadConnectionDefine", comment: "")
-    
     static let demoCaution = NSLocalizedString("DemoCaution", comment: "")
     static let demoCautionDefine = NSLocalizedString("DemoCautionDefine", comment: "")
     

@@ -12,7 +12,7 @@ final class SmartListener:NSObject{
     weak var delegate : SmartListenerDelegate?
     private let fileManager = FileManager.default
     private let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    private lazy var tresholdLevel:Float = -27
+    private lazy var tresholdLevel:Float = -30
     private var recorder : AVAudioRecorder!
     private var resultTimer:Timer?
     private var isActive:Bool = false

@@ -17,8 +17,8 @@ final class SelectRoleRouter:SelectRoleRouterProtocol{
         case.toListenBaby:
             let listenBabyView = ListenBabyBuilder.make()
             view.present(listenBabyView, animated: false)
-        case .toParentControl:
-            let parent = ParentBuilder.make()
+        case .toParentControl(let videoCondition):
+            let parent = ParentBuilder.make(videoCondition)
             view.present(parent, animated: true, completion: nil)
         case .toPurchaseTable(let helper):
             let iAPTable = IAPTableBuilder.make(iAPHelper: helper)

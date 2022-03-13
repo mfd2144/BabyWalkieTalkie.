@@ -11,6 +11,7 @@ import FirebaseFunctions
 enum FamilyMemberRole:String{
     case baby
     case parent
+    case purchase
 }
 
 
@@ -63,15 +64,8 @@ final class FirebaseAgoraService{
         }else{
             data = ["role":"parent"]
         }
-        function.httpsCallable("enterTheChannel").call(data) {result,error in
-            if let error = error {
-                print(error)
-            }else{
-                //todo
-            }
+        function.httpsCallable("enterTheChannel").call(data) {_,_ in}
         }
-    }
-
 
     public func decideAboutChannel(completion:@escaping (Results<String>)->Void) {
         function.httpsCallable("decideAboutChannel").call{result, error in
@@ -106,26 +100,26 @@ final class FirebaseAgoraService{
         }
     }
     
-    func sendConnectionStatusRequest(_ connectionSource: ConnectionSource,completion:@escaping stringResult){
-        let data:NSDictionary = ["source":connectionSource.rawValue]
-        function.httpsCallable("sendConnectionStatusChangeRequest").call(data) {result, error in
-            if let error = error {
-                completion(.failure(error))
-            }else{
-                let successString = (result?.data as? NSDictionary)?["result"] as? String
-                completion(.success(successString))
-            }
-        }
-    }
+//    func sendConnectionStatusRequest(_ connectionSource: ConnectionSource,completion:@escaping stringResult){
+//        let data:NSDictionary = ["source":connectionSource.sourceString]
+//        function.httpsCallable("sendConnectionStatusChangeRequest").call(data) {result, error in
+//            if let error = error {
+//                completion(.failure(error))
+//            }else{
+//                let successString = (result?.data as? NSDictionary)?["result"] as? String
+//                completion(.success(successString))
+//            }
+//        }
+//    }
     
     func iAmCrying(){
         let timeString = Date.actualStringTime()
         let data:NSDictionary = ["timeData":timeString]
         function.httpsCallable("babyIsCrying").call(data){result, error in
             if let error = error {
-               
+//               todo
             }else{
-                //
+                // todo
             }
         }    }
 }

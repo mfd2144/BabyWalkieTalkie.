@@ -155,20 +155,9 @@ final class FirebaseAuthenticationService{
                 
             }
         }
-        
-        guard let fcmToken = UserDefaults.standard.string(forKey: Cons.fcmToken) else {return}
         guard let fcmToken = UserDefaults.standard.string(forKey: Cons.fcmToken) else {return}
         let data :Dictionary<String,String> = ["fcm":fcmToken]
-        
-        functions.httpsCallable("removeFCM").call(data) { result, error in
-            if let error = error{
-                //todo
-            }else{
-                if let resultText = (result?.data as? [String: Any])?["result"] as? String{
-                    print(resultText)
-                }
-            }
-        }
+        functions.httpsCallable("removeFCM").call(data) { _, _ in }
     }
     
     
@@ -180,12 +169,7 @@ final class FirebaseAuthenticationService{
     func checkFCM(){
         guard let fcmToken = UserDefaults.standard.string(forKey: Cons.fcmToken) else {return}
         let data :Dictionary<String,String> = ["fcm":fcmToken]
-        
-        functions.httpsCallable("checkFCM").call(data) { result, error in
-            if let resultText = (result?.data as? [String: Any])?["result"] as? String{
-                //todo
-            }
-        }
+        functions.httpsCallable("checkFCM").call(data) { _,_ in  }
     }
     
 }

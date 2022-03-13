@@ -1,8 +1,8 @@
-/* 
-  Localizable.strings
+/*
+  localizable.strings
   BabyWalkieTalkie
 
-  Created by Mehmet fatih DOĞAN on 9.08.2021.
+  Created by Mehmet fatih DOĞAN on 2.03.2022.
   
 */
 
@@ -43,7 +43,6 @@
 "PasswordLocal.FBCancel" = "Facebook login cancelled";
  "PasswordLocal.sentMessage" = "Link will sent your email address.Check your mails.";
 "googleSignError" = "google sign in error";
-
 "Connect" = "Connect";
 "Disconnect" = "Disconnect";
 "Loading" = "Loading";
@@ -61,17 +60,15 @@
 "Alert" = "Alert";
 "LogOutError" = "Log Out Error";
 "TryAgain" = "Try Again";
-
 "OneDay" = "Demo - One day left";
 "TwoDays" = "Demo - Two days left";
 "ThreeDays" = "Demo - Three days left";
 "DaysFinished" = "Demo finished";
 "Buy" = "Buy";
-
 "BadConnection" = "Bad Connection";
 "BadConnectionDefine" = "Check your internet connection";
-
 "DemoCaution" = "Demo Caution";
 "DemoCautionDefine" = "Demo version finished. For using application more you need to purchase one packet.";
-
-
+"IAPLocal.savingError" = "Data saving error. Please restart application";
+"IAPLocal.checkTransactionError" = "Transaction checking error";
+"ConnectTo" = "Connect to";

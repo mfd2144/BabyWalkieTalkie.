@@ -29,6 +29,7 @@ enum SelectRoleViewModelOutputs{
     case remainingDay(IAPCondition)
     case badConnection
     case membershipCaution
+    case sameUser
 }
 
 protocol SelectRoleViewModelDelegate:AnyObject {
@@ -38,7 +39,7 @@ protocol SelectRoleViewModelDelegate:AnyObject {
 
 
 enum SelectRoleRoutes{
-    case toParentControl
+    case toParentControl(_ videoCondition: Bool)
     case toListenBaby
     case toPurchaseTable(helper:IAPHelper)
 }

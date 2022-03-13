@@ -8,7 +8,7 @@
 import Foundation
 
 enum PurchaseType:String{
-    case videoAudio = "com.mfd.BabyWalkieTalkie.openAudio"
-    case audio = "com.mfd.BabyWalkieTalkie.openVideoAudio"
-    case video = "com.mfd.BabyWalkieTalkie.justVideo"
+    case videoAudio = "com.mfd.BabyWalkieTalkie.OpenVideoAudio"
+    case video = "com.mfd.BabyWalkieTalkie.OpenVideo"
+    case audio = "com.mfd.BabyWalkieTalkie.OpenAudio"
 }

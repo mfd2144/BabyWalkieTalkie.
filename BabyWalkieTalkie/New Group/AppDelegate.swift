@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+      
         //Firebase configuration
         FirebaseApp.configure()
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -46,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         return true
     }
+    
     private func setRemoteNotification(_ application:UIApplication){
         if #available(iOS 10.0, *){
             UNUserNotificationCenter.current().delegate = self
@@ -91,8 +93,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             }else if let parentView = actualController as? ParentView{
                 // automatically go back and show caution
                 parentView.viewModel.otherDeviceDidUnpair()
-            }else if  let babyView = actualController as? ListenBabyView{
+            }else if let babyView = actualController as? ListenBabyView{
                 // automatically go back and show caution
+                babyView.viewModel.otherDeviceDidUnpair()
             }
         }else{
             UIApplication.shared.applicationIconBadgeNumber += 1
@@ -103,11 +106,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 extension AppDelegate:MessagingDelegate{
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        Messaging.messaging().token { token, error in
-            if let error = error {
-                //???? TODO
-                print("Error fetching FCM registration token: \(error)")
-            } else if let token = token {
+        Messaging.messaging().token { token, _ in
+            if let token = token {
                 UserDefaults.standard.set(token, forKey: Cons.fcmToken)
             }
         }

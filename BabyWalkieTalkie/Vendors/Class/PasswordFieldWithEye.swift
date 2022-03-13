@@ -6,13 +6,12 @@
 //
 
 import Foundation
-
 import UIKit
 
 
 final class PasswordFieldWithEye:UITextField{
     private var eyeCondition:EyeCondition = .unseen
-    
+    private var seenText:String = ""
     private let eyeImage:UIImageView = {
         let imageV = UIImageView()
         imageV.contentMode = .scaleAspectFit
@@ -25,17 +24,14 @@ final class PasswordFieldWithEye:UITextField{
     override init(frame: CGRect) {
         super.init(frame: frame)
         borderStyle = .line
+        delegate = self
         setEye()
-        isSecureTextEntry = true
         isUserInteractionEnabled = true
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
     enum EyeCondition:Equatable{
         case seen
         case unseen
@@ -76,13 +72,14 @@ final class PasswordFieldWithEye:UITextField{
         case .seen:
             eyeCondition = .unseen
             eyeImage.image = EyeCondition.unseen.eyeImage
-            isSecureTextEntry = true
+            let unseenText = String(repeating: "*", count: (text?.count ?? 0))
+            text = unseenText
             eyeImage.tintColor = .lightGray
         case .unseen:
             eyeCondition = .seen
             eyeImage.image = EyeCondition.seen.eyeImage
-            isSecureTextEntry = false
-            eyeImage.tintColor = MyColor.myBlueColor
+            text = seenText
+            eyeImage.tintColor = MyColor.secondColor
         }
     }
     
@@ -90,4 +87,20 @@ final class PasswordFieldWithEye:UITextField{
         resignFirstResponder()
     }
 }
-
+extension PasswordFieldWithEye:UITextFieldDelegate{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if eyeCondition == .unseen{
+            let unseenText = String(repeating: "*", count: (textField.text?.count ?? 0))
+            textField.text = unseenText
+        }
+        if let char = string.cString(using: String.Encoding.utf8) {
+              let isBackSpace = strcmp(char, "\\b")
+              if (isBackSpace == -92) {
+                  seenText.removeLast()
+              }else{
+                  seenText += string
+              }
+          }
+        return true
+    }
+}

@@ -6,8 +6,6 @@
 //
 
 import Foundation
-
-
 import MultipeerConnectivity
 
 
@@ -54,7 +52,7 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         if state == .connected && advertiser != nil{
             sendRequest { _ in
-                
+                //todo
             }
         }
     }
@@ -69,15 +67,31 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
                     matchService = FirebaseMatchService()
                     let channelID = request.mutualChannel
                     let requestOwnerID = request.requestOwnerId
+                    guard let currentUser = appContainer.authService.getUserdNameAndId() else {return}
+                    let currentUserName = currentUser.name
+                    let currentUserId = currentUser.ID
+                    guard currentUserId != requestOwnerID else {
+                        sendSameUserError()
+                        delegate?.sameUser()
+                        delegate?.pairStatus(.notConnected)
+                        
+                        return
+                    }
                     matchService.saveChannelToUser(channelID: channelID, partnerID: requestOwnerID){ result in
                         switch result{
-                        case .failure(let error):
-                            //todo maybe clear when sending process fail
-                            printNew(error.localizedDescription)
-                        case .success(let response):
-                            sendRequest2(channelID: channelID) { sendingResult in
+                        case .failure:
+                            delegate?.requestError("Saving error.Please try again to pair device")
+                        case .success:
+                            sendRequest2(channelID: channelID, userID: currentUserId, userName: currentUserName) { sendingResult in
                                 delegate?.pairStatus(.paired)
-                                //todo maybe clear when sending process fail
+                                switch sendingResult{
+                                case.success:
+                                    break
+//                                 todo
+                                case .failure:
+                                    break
+//                                    todo
+                                }
                             }
                         }
                     }
@@ -92,6 +106,11 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
                         delegate?.pairStatus(.paired)
                     }
                 }
+            }
+        }else{
+            guard let string = String.init(data: data, encoding:.utf8) else {return}
+            if string == "sameUser"{
+                delegate?.sameUser()
             }
         }
     }
@@ -159,7 +178,7 @@ extension CustomMultipeerConnectivity:CustomMCProtocol{
         session = nil
     }
     
-    func sendRequest(completion:@escaping (Results<String>)->Void) {
+    internal func sendRequest(completion:@escaping (Results<String>)->Void) {
         guard let currentUser = appContainer.authService.getUserdNameAndId() else {return}
         channelID = UUID().uuidString
         request = MatchingRequest(requestOwnerId: currentUser.ID, requestOwnerName: currentUser.name, mutualChannel: channelID)
@@ -168,29 +187,36 @@ extension CustomMultipeerConnectivity:CustomMCProtocol{
             do {
                 try session?.send(data, toPeers: session!.connectedPeers, with: .reliable)
                 completion(.success(nil))
-            } catch let error {
-                delegate?.requestError(error)
+            } catch  {
+                delegate?.requestError("Error. Data wasn't sent")
                 completion(.failure(error))
             }
         }
     }
     
-    func sendRequest2(channelID:String, completion:@escaping (Results<String>)->Void) {
-        guard let currentUser = appContainer.authService.getUserdNameAndId() else {return}
-        request = MatchingRequest(requestOwnerId: currentUser.ID, requestOwnerName: currentUser.name, mutualChannel: channelID)
+   private  func sendRequest2(channelID:String,userID:String,userName:String, completion:@escaping (Results<String>)->Void) {
+        request = MatchingRequest(requestOwnerId: userID, requestOwnerName: userName, mutualChannel: channelID)
         if let count = session?.connectedPeers.count, count == 1 {
             guard  let data = MatchingRequest.getDataFromPacket(request: request) else { return }
             do {
                 try session?.send(data, toPeers: session!.connectedPeers, with: .reliable)
                 completion(.success(nil))
             } catch let error {
-                delegate?.requestError(error)
+                delegate?.requestError("Error. Data wasn't sent")
                 completion(.failure(error))
             }
         }
     }
+    private func sendSameUserError(){
+        guard let requestData = "sameUser".data(using: .utf8) else {return}
+        
+        do {
+            try session?.send(requestData, toPeers: session!.connectedPeers, with: .reliable)
+        } catch  {
+            //to do
+        }
+    }
 }
-
 
 protocol CustomMCProtocol:NSObject{
     var delegate: CustomMCDelegate?{get set}
@@ -204,7 +230,8 @@ protocol CustomMCDelegate:NSObject{
     func pairStatus(_ status:Status)
     func decideToInvitation(by invitationOwner:String,completionHandler: (Bool) -> ())
     func showNearbyDevice(_ peerName:String)
-    func requestError(_ error:Error)
+    func requestError(_ error:String)
+    func sameUser()
     
 }
 

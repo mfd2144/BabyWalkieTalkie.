@@ -64,6 +64,16 @@ extension UIView{
         layer.rasterizationScale = UIScreen.main.scale
         reloadShadow()
     }
+    public func addShadow2(){
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+        layer.shadowOpacity = 1.0
+        layer.shadowOffset = CGSize(width: 0, height: 3)
+        layer.shadowRadius = 20
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
+        reloadShadow()
+    }
     
     public func reloadShadow(){
         layer.shadowPath = UIBezierPath(rect: self.layer.bounds).cgPath
@@ -87,7 +97,6 @@ extension UIView{
         let curve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt),
               let timeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double)  else {return}
         let diffence = frameAtEnding.origin.y-frameAtStarting.origin.y
-       
         UIView.animate(withDuration: timeInterval, delay: 0, options: .init(rawValue: curve), animations: {[unowned self] in
             self.frame.origin.y += diffence
         }, completion: nil)

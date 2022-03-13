@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		75D21B7F9255D965E0E150AA /* Pods_BabyWalkieTalkie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D176B3312176F19C678C662 /* Pods_BabyWalkieTalkie.framework */; };
+		272513FBEC004691787F86C4 /* Pods_BabyWalkieTalkie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD2825B5EE58BB86D3F0B5B /* Pods_BabyWalkieTalkie.framework */; };
+		BA055B9927DA8B0500764706 /* TransitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA055B9827DA8B0500764706 /* TransitionView.swift */; };
 		BA0A287A27629F7A00F8A6B7 /* AgoraMessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0A287927629F7A00F8A6B7 /* AgoraMessageService.swift */; };
 		BA12037E27B8436B00EEDA92 /* PurchasedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA12037D27B8436B00EEDA92 /* PurchasedItem.swift */; };
 		BA17DABD274ADCCD00B94B6C /* IAPTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA17DABC274ADCCD00B94B6C /* IAPTableView.swift */; };
 		BA17DABF274ADD2E00B94B6C /* IAPTableBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA17DABE274ADD2E00B94B6C /* IAPTableBuilder.swift */; };
 		BA1C32BB2714CEA300F19FF1 /* ParentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C32BA2714CEA300F19FF1 /* ParentRouter.swift */; };
+		BA22083727D0100C0036E9CE /* WhiteNoise.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BA22083627D0100C0036E9CE /* WhiteNoise.mp3 */; };
 		BA5EC4A0272A9B27004A4FFB /* SourceEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5EC49F272A9B27004A4FFB /* SourceEnum.swift */; };
 		BA712FE927ABCC7E00881BFE /* IdentityData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA712FE827ABCC7E00881BFE /* IdentityData.swift */; };
 		BA7248B9273D1EF100B98295 /* Local.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7248B8273D1EF100B98295 /* Local.swift */; };
@@ -23,10 +25,7 @@
 		BA754F6B26C262E1006E3821 /* LogOutAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA754F6A26C262E1006E3821 /* LogOutAlert.swift */; };
 		BA754F6D26C29578006E3821 /* GoogleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA754F6C26C29578006E3821 /* GoogleProvider.swift */; };
 		BA78DF8B26D0249A0096F3C3 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA78DF8A26D0249A0096F3C3 /* Notification.swift */; };
-		BA7D5EEB26CFBB3800CF9EAF /* SelectReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EEA26CFBB3800CF9EAF /* SelectReusableView.swift */; };
-		BA7D5EEE26CFBB6000CF9EAF /* SelectCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EED26CFBB6000CF9EAF /* SelectCollectionCell.swift */; };
 		BA7D5EF226CFD82900CF9EAF /* ListenBabyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EF126CFD82900CF9EAF /* ListenBabyRouter.swift */; };
-		BA7D5EF626CFDA0B00CF9EAF /* SelectRoleSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EF526CFDA0B00CF9EAF /* SelectRoleSections.swift */; };
 		BA7D5EF826CFE0EC00CF9EAF /* MyPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7D5EF726CFE0EC00CF9EAF /* MyPrint.swift */; };
 		BA8378212791719B00C7DA5C /* CustomViewColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8378202791719B00C7DA5C /* CustomViewColor.swift */; };
 		BA837824279171CB00C7DA5C /* CustomViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA837823279171CB00C7DA5C /* CustomViewProtocol.swift */; };
@@ -39,9 +38,7 @@
 		BA88AEB926C57B5A002C2214 /* ListenBabyBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA88AEB826C57B5A002C2214 /* ListenBabyBuilder.swift */; };
 		BA88FBC526CD8ACA004C99BE /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA88FBC426CD8ACA004C99BE /* CustomView.swift */; };
 		BA88FBC726CD8C90004C99BE /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA88FBC626CD8C90004C99BE /* ColorExtension.swift */; };
-		BA8B6F7426C6543C00C7566E /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8B6F7326C6543C00C7566E /* FirebaseError.swift */; };
 		BA8B814C2728A50A0007A7F4 /* VideoChatBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8B814B2728A50A0007A7F4 /* VideoChatBuilder.swift */; };
-		BA8C62EB26C11C72006ED350 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BA8C62ED26C11C72006ED350 /* Localizable.strings */; };
 		BA8C630026C15F60006ED350 /* SelectRoleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8C62FB26C15F5C006ED350 /* SelectRoleBuilder.swift */; };
 		BA8C630126C15F60006ED350 /* SelectRoleRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8C62FC26C15F5D006ED350 /* SelectRoleRouter.swift */; };
 		BA8C630326C15F60006ED350 /* SelectRoleContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8C62FE26C15F5F006ED350 /* SelectRoleContracts.swift */; };
@@ -90,11 +87,13 @@
 		BA9ACA2F26C0798100DEEB58 /* AddAnySimpleCaution.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA2E26C0798100DEEB58 /* AddAnySimpleCaution.swift */; };
 		BA9ACA3126C079A600DEEB58 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA3026C079A600DEEB58 /* Animator.swift */; };
 		BA9ACA3326C079B200DEEB58 /* GeneralErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA3226C079B200DEEB58 /* GeneralErrors.swift */; };
-		BA9ACA3526C079B600DEEB58 /* DecoderErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA3426C079B600DEEB58 /* DecoderErrors.swift */; };
+		BA9ACA3526C079B600DEEB58 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA3426C079B600DEEB58 /* Errors.swift */; };
 		BA9ACA3726C079D100DEEB58 /* FBLogOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA3626C079D100DEEB58 /* FBLogOut.swift */; };
 		BA9ACA3A26C07A0E00DEEB58 /* Cookie-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA9ACA3926C07A0E00DEEB58 /* Cookie-Regular.ttf */; };
 		BA9ACA3C26C07DCB00DEEB58 /* PasswordFieldWithEye.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9ACA3B26C07DCB00DEEB58 /* PasswordFieldWithEye.swift */; };
 		BA9D7658274C346400B23F15 /* Local_After.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9D7657274C346400B23F15 /* Local_After.swift */; };
+		BA9FDDEF27CD6406003A5A20 /* IAHelperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9FDDEE27CD6406003A5A20 /* IAHelperDelegate.swift */; };
+		BA9FDDF127CD641F003A5A20 /* IAPLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9FDDF027CD641F003A5A20 /* IAPLocal.swift */; };
 		BAA226DB272EBB73001B449F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAA226DA272EBB73001B449F /* StoreKit.framework */; };
 		BAA226DD272EBDDA001B449F /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA226DC272EBDDA001B449F /* IAPHelper.swift */; };
 		BAB11249274D6F4C0046FD2B /* IAPCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB11248274D6F4C0046FD2B /* IAPCondition.swift */; };
@@ -102,6 +101,7 @@
 		BAB9B8AB27C01E31004C76D1 /* SavedPurchaseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB9B8AA27C01E31004C76D1 /* SavedPurchaseItem.swift */; };
 		BABDE160274E7F49009930EF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABDE15F274E7F49009930EF /* Reachability.swift */; };
 		BABFAA4726DC298800965954 /* FirebaseMatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABFAA4626DC298800965954 /* FirebaseMatchService.swift */; };
+		BAC05C4A27C4296600E17C02 /* TransactionCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC05C4927C4296600E17C02 /* TransactionCondition.swift */; };
 		BAC137A427BA2D6600073DDA /* PurchaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC137A327BA2D6600073DDA /* PurchaseCell.swift */; };
 		BAC28BC12733CF3E0021ACCA /* FBLoginHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC28BC02733CF3E0021ACCA /* FBLoginHelper.swift */; };
 		BAC7274B274CDBA600D1A6A0 /* ConnectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC7274A274CDBA600D1A6A0 /* ConnectionType.swift */; };
@@ -109,6 +109,7 @@
 		BACF767826C5123F00A3FAD5 /* ShortUserPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACF767726C5123F00A3FAD5 /* ShortUserPresentation.swift */; };
 		BAD0F2B22771DD8200512ECD /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD0F2B12771DD8200512ECD /* Date.swift */; };
 		BAD0F2B62771FF7900512ECD /* MessageResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD0F2B52771FF7900512ECD /* MessageResults.swift */; };
+		BADE310F27D812BC00299758 /* PatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADE310E27D812BC00299758 /* PatternView.swift */; };
 		BAE0DBCA26C3E09F00E82AE3 /* AppSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE0DBC926C3E09F00E82AE3 /* AppSingleton.swift */; };
 		BAE1B6A3277C6ED700D02A2F /* MessageComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE1B6A2277C6ED700D02A2F /* MessageComment.swift */; };
 		BAE7CD8126D14A39009665F5 /* SmartListenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE7CD8026D14A39009665F5 /* SmartListenerDelegate.swift */; };
@@ -117,6 +118,8 @@
 		BAF08F7F26CD180200974F38 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F7E26CD180200974F38 /* ParentView.swift */; };
 		BAF08F8126CD181100974F38 /* ParentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F8026CD181100974F38 /* ParentBuilder.swift */; };
 		BAF08F8326CD182B00974F38 /* ParentContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF08F8226CD182B00974F38 /* ParentContracts.swift */; };
+		BAF1E53827CF7DD80078E36F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BAF1E53A27CF7DD80078E36F /* Localizable.strings */; };
+		BAF1E54027CF82830078E36F /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF1E53F27CF82830078E36F /* SoundPlayer.swift */; };
 		BAF55BE627BD798100A64078 /* FirebasePaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF55BE527BD798100A64078 /* FirebasePaymentService.swift */; };
 		BAF9FD50279F36EC00D413BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAF9FD4F279F36EC00D413BD /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -135,14 +138,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3D176B3312176F19C678C662 /* Pods_BabyWalkieTalkie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BabyWalkieTalkie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		62E22EC9E423CBB1765E2513 /* Pods-BabyWalkieTalkie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.release.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.release.xcconfig"; sourceTree = "<group>"; };
-		9F2B5F44ED95BC091571203C /* Pods-BabyWalkieTalkie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.debug.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.debug.xcconfig"; sourceTree = "<group>"; };
+		6994CF4F12B321A6CCB4BBE8 /* Pods-BabyWalkieTalkie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.release.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.release.xcconfig"; sourceTree = "<group>"; };
+		9AD2825B5EE58BB86D3F0B5B /* Pods_BabyWalkieTalkie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BabyWalkieTalkie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA055B9827DA8B0500764706 /* TransitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionView.swift; sourceTree = "<group>"; };
 		BA0A287927629F7A00F8A6B7 /* AgoraMessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraMessageService.swift; sourceTree = "<group>"; };
 		BA12037D27B8436B00EEDA92 /* PurchasedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedItem.swift; sourceTree = "<group>"; };
 		BA17DABC274ADCCD00B94B6C /* IAPTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTableView.swift; sourceTree = "<group>"; };
 		BA17DABE274ADD2E00B94B6C /* IAPTableBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPTableBuilder.swift; sourceTree = "<group>"; };
 		BA1C32BA2714CEA300F19FF1 /* ParentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentRouter.swift; sourceTree = "<group>"; };
+		BA22083627D0100C0036E9CE /* WhiteNoise.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = WhiteNoise.mp3; sourceTree = "<group>"; };
 		BA5EC49F272A9B27004A4FFB /* SourceEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceEnum.swift; sourceTree = "<group>"; };
 		BA712FE827ABCC7E00881BFE /* IdentityData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityData.swift; sourceTree = "<group>"; };
 		BA7248B8273D1EF100B98295 /* Local.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Local.swift; sourceTree = "<group>"; };
@@ -150,15 +154,11 @@
 		BA74498526C0437B009D4E40 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "../New Group/AppDelegate.swift"; sourceTree = "<group>"; };
 		BA74498726C0437B009D4E40 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BA74498E26C0437E009D4E40 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		BA74499326C0437E009D4E40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA74C40D26C55A68007FEF65 /* ListenBabyContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenBabyContracts.swift; sourceTree = "<group>"; };
 		BA754F6A26C262E1006E3821 /* LogOutAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutAlert.swift; sourceTree = "<group>"; };
 		BA754F6C26C29578006E3821 /* GoogleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleProvider.swift; sourceTree = "<group>"; };
 		BA78DF8A26D0249A0096F3C3 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		BA7D5EEA26CFBB3800CF9EAF /* SelectReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectReusableView.swift; sourceTree = "<group>"; };
-		BA7D5EED26CFBB6000CF9EAF /* SelectCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollectionCell.swift; sourceTree = "<group>"; };
 		BA7D5EF126CFD82900CF9EAF /* ListenBabyRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenBabyRouter.swift; sourceTree = "<group>"; };
-		BA7D5EF526CFDA0B00CF9EAF /* SelectRoleSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoleSections.swift; sourceTree = "<group>"; };
 		BA7D5EF726CFE0EC00CF9EAF /* MyPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPrint.swift; sourceTree = "<group>"; };
 		BA8378202791719B00C7DA5C /* CustomViewColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewColor.swift; sourceTree = "<group>"; };
 		BA837823279171CB00C7DA5C /* CustomViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewProtocol.swift; sourceTree = "<group>"; };
@@ -171,10 +171,7 @@
 		BA88AEB826C57B5A002C2214 /* ListenBabyBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenBabyBuilder.swift; sourceTree = "<group>"; };
 		BA88FBC426CD8ACA004C99BE /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
 		BA88FBC626CD8C90004C99BE /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		BA8B6F7326C6543C00C7566E /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		BA8B814B2728A50A0007A7F4 /* VideoChatBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChatBuilder.swift; sourceTree = "<group>"; };
-		BA8C62EC26C11C72006ED350 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		BA8C62EE26C11C86006ED350 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BA8C62FB26C15F5C006ED350 /* SelectRoleBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectRoleBuilder.swift; sourceTree = "<group>"; };
 		BA8C62FC26C15F5D006ED350 /* SelectRoleRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectRoleRouter.swift; sourceTree = "<group>"; };
 		BA8C62FE26C15F5F006ED350 /* SelectRoleContracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectRoleContracts.swift; sourceTree = "<group>"; };
@@ -223,25 +220,31 @@
 		BA9ACA2E26C0798100DEEB58 /* AddAnySimpleCaution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAnySimpleCaution.swift; sourceTree = "<group>"; };
 		BA9ACA3026C079A600DEEB58 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		BA9ACA3226C079B200DEEB58 /* GeneralErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralErrors.swift; sourceTree = "<group>"; };
-		BA9ACA3426C079B600DEEB58 /* DecoderErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecoderErrors.swift; sourceTree = "<group>"; };
+		BA9ACA3426C079B600DEEB58 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		BA9ACA3626C079D100DEEB58 /* FBLogOut.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBLogOut.swift; sourceTree = "<group>"; };
 		BA9ACA3926C07A0E00DEEB58 /* Cookie-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Cookie-Regular.ttf"; sourceTree = "<group>"; };
 		BA9ACA3B26C07DCB00DEEB58 /* PasswordFieldWithEye.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordFieldWithEye.swift; sourceTree = "<group>"; };
 		BA9D7657274C346400B23F15 /* Local_After.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Local_After.swift; sourceTree = "<group>"; };
+		BA9FDDEE27CD6406003A5A20 /* IAHelperDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAHelperDelegate.swift; sourceTree = "<group>"; };
+		BA9FDDF027CD641F003A5A20 /* IAPLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPLocal.swift; sourceTree = "<group>"; };
 		BAA226DA272EBB73001B449F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		BAA226DC272EBDDA001B449F /* IAPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
+		BAB0764427CE237A0009E4A5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BAB11248274D6F4C0046FD2B /* IAPCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPCondition.swift; sourceTree = "<group>"; };
 		BAB80B2627313E0A004E3EC1 /* UIButton extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton extension.swift"; sourceTree = "<group>"; };
 		BAB9B8AA27C01E31004C76D1 /* SavedPurchaseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedPurchaseItem.swift; sourceTree = "<group>"; };
 		BABDE15F274E7F49009930EF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		BABFAA4626DC298800965954 /* FirebaseMatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMatchService.swift; sourceTree = "<group>"; };
+		BAC05C4927C4296600E17C02 /* TransactionCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCondition.swift; sourceTree = "<group>"; };
 		BAC137A327BA2D6600073DDA /* PurchaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseCell.swift; sourceTree = "<group>"; };
+		BAC2205FC90F1810AB72B5EA /* Pods-BabyWalkieTalkie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BabyWalkieTalkie.debug.xcconfig"; path = "Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie.debug.xcconfig"; sourceTree = "<group>"; };
 		BAC28BC02733CF3E0021ACCA /* FBLoginHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBLoginHelper.swift; sourceTree = "<group>"; };
 		BAC7274A274CDBA600D1A6A0 /* ConnectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionType.swift; sourceTree = "<group>"; };
 		BAC7274C274CDBC000D1A6A0 /* PurchaseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseType.swift; sourceTree = "<group>"; };
 		BACF767726C5123F00A3FAD5 /* ShortUserPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortUserPresentation.swift; sourceTree = "<group>"; };
 		BAD0F2B12771DD8200512ECD /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		BAD0F2B52771FF7900512ECD /* MessageResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageResults.swift; sourceTree = "<group>"; };
+		BADE310E27D812BC00299758 /* PatternView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternView.swift; sourceTree = "<group>"; };
 		BAE0DBC926C3E09F00E82AE3 /* AppSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSingleton.swift; sourceTree = "<group>"; };
 		BAE1B6A2277C6ED700D02A2F /* MessageComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComment.swift; sourceTree = "<group>"; };
 		BAE7CD8026D14A39009665F5 /* SmartListenerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartListenerDelegate.swift; sourceTree = "<group>"; };
@@ -250,6 +253,9 @@
 		BAF08F7E26CD180200974F38 /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
 		BAF08F8026CD181100974F38 /* ParentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentBuilder.swift; sourceTree = "<group>"; };
 		BAF08F8226CD182B00974F38 /* ParentContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentContracts.swift; sourceTree = "<group>"; };
+		BAF1E53927CF7DD80078E36F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BAF1E53B27CF7DDB0078E36F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		BAF1E53F27CF82830078E36F /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		BAF55BE527BD798100A64078 /* FirebasePaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePaymentService.swift; sourceTree = "<group>"; };
 		BAF9FD4F279F36EC00D413BD /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -260,7 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAA226DB272EBB73001B449F /* StoreKit.framework in Frameworks */,
-				75D21B7F9255D965E0E150AA /* Pods_BabyWalkieTalkie.framework in Frameworks */,
+				272513FBEC004691787F86C4 /* Pods_BabyWalkieTalkie.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,8 +276,8 @@
 		12D665867D0CE1BC61C4F57A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9F2B5F44ED95BC091571203C /* Pods-BabyWalkieTalkie.debug.xcconfig */,
-				62E22EC9E423CBB1765E2513 /* Pods-BabyWalkieTalkie.release.xcconfig */,
+				BAC2205FC90F1810AB72B5EA /* Pods-BabyWalkieTalkie.debug.xcconfig */,
+				6994CF4F12B321A6CCB4BBE8 /* Pods-BabyWalkieTalkie.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -280,7 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				BAA226DA272EBB73001B449F /* StoreKit.framework */,
-				3D176B3312176F19C678C662 /* Pods_BabyWalkieTalkie.framework */,
+				9AD2825B5EE58BB86D3F0B5B /* Pods_BabyWalkieTalkie.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -351,12 +357,10 @@
 		BA7D5EEC26CFBB4400CF9EAF /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
-				BA7D5EEA26CFBB3800CF9EAF /* SelectReusableView.swift */,
-				BA7D5EED26CFBB6000CF9EAF /* SelectCollectionCell.swift */,
-				BA7D5EF526CFDA0B00CF9EAF /* SelectRoleSections.swift */,
 				BA8D199C26DEE7AD00D95570 /* MultipeerConnectivty.swift */,
 				BA8D199E26DEE93800D95570 /* MatchingRequest.swift */,
 				BA712FE827ABCC7E00881BFE /* IdentityData.swift */,
+				BA055B9827DA8B0500764706 /* TransitionView.swift */,
 			);
 			path = Vendors;
 			sourceTree = "<group>";
@@ -516,6 +520,17 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		BA9FDDED27CD6067003A5A20 /* In App Purchase */ = {
+			isa = PBXGroup;
+			children = (
+				BAA226DC272EBDDA001B449F /* IAPHelper.swift */,
+				BAB11248274D6F4C0046FD2B /* IAPCondition.swift */,
+				BA9FDDEE27CD6406003A5A20 /* IAHelperDelegate.swift */,
+				BA9FDDF027CD641F003A5A20 /* IAPLocal.swift */,
+			);
+			path = "In App Purchase";
+			sourceTree = "<group>";
+		};
 		BAB5C03B26C05E3400607E52 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,12 +579,13 @@
 		BAB5C03F26C05E5F00607E52 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BAF1E53C27CF82100078E36F /* Sound */,
 				BA9AC9B926C0748600DEEB58 /* GoogleService-Info.plist */,
+				BAB0764427CE237A0009E4A5 /* Info.plist */,
+				BAF1E53A27CF7DD80078E36F /* Localizable.strings */,
 				BA74498E26C0437E009D4E40 /* Assets.xcassets */,
-				BA74499326C0437E009D4E40 /* Info.plist */,
 				BAF9FD4F279F36EC00D413BD /* LaunchScreen.storyboard */,
 				BA9ACA3826C07A0E00DEEB58 /* Fonts */,
-				BA8C62ED26C11C72006ED350 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -592,16 +608,15 @@
 		BABC05C2273D4170000C4B18 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
-				BA9ACA3426C079B600DEEB58 /* DecoderErrors.swift */,
+				BA9ACA3426C079B600DEEB58 /* Errors.swift */,
 				BA9AC9B326C06DD300DEEB58 /* Decoder.swift */,
 				BA5EC49F272A9B27004A4FFB /* SourceEnum.swift */,
-				BA8B6F7326C6543C00C7566E /* FirebaseError.swift */,
 				BA9AC9B126C06DB800DEEB58 /* Results.swift */,
-				BAB11248274D6F4C0046FD2B /* IAPCondition.swift */,
 				BA9ACA3226C079B200DEEB58 /* GeneralErrors.swift */,
 				BAC7274A274CDBA600D1A6A0 /* ConnectionType.swift */,
 				BAC7274C274CDBC000D1A6A0 /* PurchaseType.swift */,
 				BAE1B6A2277C6ED700D02A2F /* MessageComment.swift */,
+				BAC05C4927C4296600E17C02 /* TransactionCondition.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -609,15 +624,17 @@
 		BABC05C3273D4183000C4B18 /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				BA9FDDED27CD6067003A5A20 /* In App Purchase */,
 				BA837822279171A400C7DA5C /* CustomView */,
 				BA9ACA2E26C0798100DEEB58 /* AddAnySimpleCaution.swift */,
 				BA9ACA3B26C07DCB00DEEB58 /* PasswordFieldWithEye.swift */,
 				BA9ACA3626C079D100DEEB58 /* FBLogOut.swift */,
 				BA9ACA3026C079A600DEEB58 /* Animator.swift */,
-				BAA226DC272EBDDA001B449F /* IAPHelper.swift */,
 				BA754F6A26C262E1006E3821 /* LogOutAlert.swift */,
 				BAE0DBC926C3E09F00E82AE3 /* AppSingleton.swift */,
 				BA754F6C26C29578006E3821 /* GoogleProvider.swift */,
+				BAF1E53F27CF82830078E36F /* SoundPlayer.swift */,
+				BADE310E27D812BC00299758 /* PatternView.swift */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -662,6 +679,14 @@
 			path = Parent;
 			sourceTree = "<group>";
 		};
+		BAF1E53C27CF82100078E36F /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				BA22083627D0100C0036E9CE /* WhiteNoise.mp3 */,
+			);
+			path = Sound;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -669,7 +694,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BA7449AC26C0437E009D4E40 /* Build configuration list for PBXNativeTarget "BabyWalkieTalkie" */;
 			buildPhases = (
-				6F47B00A67850B725528464F /* [CP] Check Pods Manifest.lock */,
+				B2F6EEFBF3B5C23D237B997C /* [CP] Check Pods Manifest.lock */,
 				BA74497E26C0437B009D4E40 /* Sources */,
 				BA74497F26C0437B009D4E40 /* Frameworks */,
 				BA74498026C0437B009D4E40 /* Resources */,
@@ -677,7 +702,7 @@
  */,
 				BAF0AA8C276CCDE8003258FC /* ShellScript */,
 				BA42D1AA277B3C48006B7583 /* Embed Frameworks */,
-				52F23891A7C5F5598D238DE1 /* [CP] Embed Pods Frameworks */,
+				1247672B04CA97FAADF8BA7D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -708,8 +733,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				tr,
 				Base,
+				tr,
 			);
 			mainGroup = BA74497926C0437B009D4E40;
 			productRefGroup = BA74498326C0437B009D4E40 /* Products */;
@@ -728,8 +753,9 @@
 			files = (
 				BA8869462728328700347ABB /* Main.storyboard in Resources */,
 				BA9AC9BA26C0748600DEEB58 /* GoogleService-Info.plist in Resources */,
-				BA8C62EB26C11C72006ED350 /* Localizable.strings in Resources */,
 				BA74498F26C0437E009D4E40 /* Assets.xcassets in Resources */,
+				BA22083727D0100C0036E9CE /* WhiteNoise.mp3 in Resources */,
+				BAF1E53827CF7DD80078E36F /* Localizable.strings in Resources */,
 				BAF9FD50279F36EC00D413BD /* LaunchScreen.storyboard in Resources */,
 				BA9ACA3A26C07A0E00DEEB58 /* Cookie-Regular.ttf in Resources */,
 				BA967CA82725EA2000E0BF21 /* Log.storyboard in Resources */,
@@ -739,7 +765,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		52F23891A7C5F5598D238DE1 /* [CP] Embed Pods Frameworks */ = {
+		1247672B04CA97FAADF8BA7D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -756,7 +782,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BabyWalkieTalkie/Pods-BabyWalkieTalkie-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6F47B00A67850B725528464F /* [CP] Check Pods Manifest.lock */ = {
+		B2F6EEFBF3B5C23D237B997C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -832,10 +858,12 @@
 				BA8C630326C15F60006ED350 /* SelectRoleContracts.swift in Sources */,
 				BA8D199F26DEE93800D95570 /* MatchingRequest.swift in Sources */,
 				BA8C630626C1D15B006ED350 /* Smart Listener.swift in Sources */,
+				BA9FDDF127CD641F003A5A20 /* IAPLocal.swift in Sources */,
 				BA9ACA3326C079B200DEEB58 /* GeneralErrors.swift in Sources */,
 				BA9ACA3126C079A600DEEB58 /* Animator.swift in Sources */,
 				BA8B814C2728A50A0007A7F4 /* VideoChatBuilder.swift in Sources */,
 				BA9ACA0226C074FB00DEEB58 /* SignUpMethodRouter.swift in Sources */,
+				BAC05C4A27C4296600E17C02 /* TransactionCondition.swift in Sources */,
 				BA9AC9AE26C06B1D00DEEB58 /* Token Generator.swift in Sources */,
 				BA9ACA2526C0791D00DEEB58 /* CALayer.swift in Sources */,
 				BA9AC9B626C06DF800DEEB58 /* Token Generator Response.swift in Sources */,
@@ -846,21 +874,22 @@
 				BA9AC9FF26C074FB00DEEB58 /* SignUpMethodView.swift in Sources */,
 				BA712FE927ABCC7E00881BFE /* IdentityData.swift in Sources */,
 				BA8C630426C15F60006ED350 /* SelectRoleView.swift in Sources */,
+				BADE310F27D812BC00299758 /* PatternView.swift in Sources */,
 				BA9ACA2B26C0796500DEEB58 /* UIViewController.swift in Sources */,
 				BAF08F8326CD182B00974F38 /* ParentContracts.swift in Sources */,
 				BA9AC9FD26C074FB00DEEB58 /* FirstPageRouter.swift in Sources */,
 				BA9ACA2926C0794C00DEEB58 /* TextField.swift in Sources */,
 				BAD0F2B62771FF7900512ECD /* MessageResults.swift in Sources */,
 				BA754F6B26C262E1006E3821 /* LogOutAlert.swift in Sources */,
+				BA9FDDEF27CD6406003A5A20 /* IAHelperDelegate.swift in Sources */,
 				BA88AEB926C57B5A002C2214 /* ListenBabyBuilder.swift in Sources */,
 				BA9AC9F926C074FB00DEEB58 /* LoginRouter.swift in Sources */,
 				BA9AC9F826C074FB00DEEB58 /* LoginContracts.swift in Sources */,
 				BA9AC9F726C074FB00DEEB58 /* LogInBuilder.swift in Sources */,
 				BA754F6D26C29578006E3821 /* GoogleProvider.swift in Sources */,
+				BA055B9927DA8B0500764706 /* TransitionView.swift in Sources */,
 				BA9AC9FB26C074FB00DEEB58 /* FirstPageBuilder.swift in Sources */,
-				BA8B6F7426C6543C00C7566E /* FirebaseError.swift in Sources */,
 				BA9AC9F426C074FB00DEEB58 /* ForgotThePasswordBuilder.swift in Sources */,
-				BA7D5EEB26CFBB3800CF9EAF /* SelectReusableView.swift in Sources */,
 				BA9ACA2726C0793B00DEEB58 /* View.swift in Sources */,
 				BA9ACA0326C074FB00DEEB58 /* SignUpMethodViewModel.swift in Sources */,
 				BA17DABD274ADCCD00B94B6C /* IAPTableView.swift in Sources */,
@@ -887,11 +916,11 @@
 				BA5EC4A0272A9B27004A4FFB /* SourceEnum.swift in Sources */,
 				BAC7274D274CDBC000D1A6A0 /* PurchaseType.swift in Sources */,
 				BA74498626C0437B009D4E40 /* AppDelegate.swift in Sources */,
-				BA9ACA3526C079B600DEEB58 /* DecoderErrors.swift in Sources */,
+				BA9ACA3526C079B600DEEB58 /* Errors.swift in Sources */,
 				BA88FBC726CD8C90004C99BE /* ColorExtension.swift in Sources */,
-				BA7D5EF626CFDA0B00CF9EAF /* SelectRoleSections.swift in Sources */,
 				BAD0F2B22771DD8200512ECD /* Date.swift in Sources */,
 				BA9ACA3C26C07DCB00DEEB58 /* PasswordFieldWithEye.swift in Sources */,
+				BAF1E54027CF82830078E36F /* SoundPlayer.swift in Sources */,
 				BA850D4726CB0DD90039CBEA /* FirebaseLocal.swift in Sources */,
 				BAA226DD272EBDDA001B449F /* IAPHelper.swift in Sources */,
 				BA0A287A27629F7A00F8A6B7 /* AgoraMessageService.swift in Sources */,
@@ -925,18 +954,17 @@
 				BA9AC9FC26C074FB00DEEB58 /* FirstPageView.swift in Sources */,
 				BA74498826C0437B009D4E40 /* SceneDelegate.swift in Sources */,
 				BACF767826C5123F00A3FAD5 /* ShortUserPresentation.swift in Sources */,
-				BA7D5EEE26CFBB6000CF9EAF /* SelectCollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		BA8C62ED26C11C72006ED350 /* Localizable.strings */ = {
+		BAF1E53A27CF7DD80078E36F /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				BA8C62EC26C11C72006ED350 /* en */,
-				BA8C62EE26C11C86006ED350 /* tr */,
+				BAF1E53927CF7DD80078E36F /* en */,
+				BAF1E53B27CF7DDB0078E36F /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1064,7 +1092,7 @@
 		};
 		BA7449AD26C0437E009D4E40 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F2B5F44ED95BC091571203C /* Pods-BabyWalkieTalkie.debug.xcconfig */;
+			baseConfigurationReference = BAC2205FC90F1810AB72B5EA /* Pods-BabyWalkieTalkie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1088,7 +1116,7 @@
 		};
 		BA7449AE26C0437E009D4E40 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 62E22EC9E423CBB1765E2513 /* Pods-BabyWalkieTalkie.release.xcconfig */;
+			baseConfigurationReference = 6994CF4F12B321A6CCB4BBE8 /* Pods-BabyWalkieTalkie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

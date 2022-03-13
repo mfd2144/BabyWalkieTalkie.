@@ -13,4 +13,5 @@ enum MessageComment:String{
     case whiteSound
     case speaker
     case listener
+    case turnCamera
 }

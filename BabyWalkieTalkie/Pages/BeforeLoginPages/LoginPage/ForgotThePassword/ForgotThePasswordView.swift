@@ -39,15 +39,13 @@ final class ForgotThePasswordView:UIViewController{
         label.font = UIFont.systemFont(ofSize: 16, weight: .light)
         return label
     }()
-    
-
-    
+  
     lazy var textField:UITextField = {
         let field = UITextField()
         field.borderStyle = .roundedRect
         field.layer.cornerRadius = 10
         field.textColor = .black
-        field.backgroundColor = .white
+        field.backgroundColor = MyColor.buttonColor
         field.keyboardType = .emailAddress
         let phString = Local.emailPlaceHolder
         field.attributedPlaceholder = NSAttributedString.init(string: phString, attributes: [NSAttributedString.Key.foregroundColor:UIColor.gray,NSAttributedString.Key.font:UIFont.preferredFont(forTextStyle: .title3)])
@@ -55,9 +53,7 @@ final class ForgotThePasswordView:UIViewController{
         field.setRightPaddingPoints(20)
         field.setLeftPaddingPoints(20)
         return field
-        
     }()
-    
     
     let topStackView:UIStackView = {
         let stack = UIStackView()
@@ -68,13 +64,11 @@ final class ForgotThePasswordView:UIViewController{
         return stack
     }()
     
-    
     let bottomStackView_top:UIStackView = {
         let stack = UIStackView()
         stack.distribution = .fillEqually
         stack.alignment = .fill
         stack.axis = .vertical
-        stack.spacing = buttonDistance
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -84,11 +78,9 @@ final class ForgotThePasswordView:UIViewController{
         stack.distribution = .fillEqually
         stack.alignment = .fill
         stack.axis = .vertical
-        stack.spacing = buttonDistance
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
     
     let nextButton:UIButton = {
         let title = Local.sendLink
@@ -131,17 +123,8 @@ final class ForgotThePasswordView:UIViewController{
         stack.distribution = .fill
         stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.layer.addBorder(edge: .top, color: .lightGray, thickness: 2)
         return stack
     }()
-    
-    let bottomInnerStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 0
-        return stack
-    }()
-    
     //MARK: - Life cycle
     
     
@@ -152,7 +135,7 @@ final class ForgotThePasswordView:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = MyColor.myBlueColor
+        view.backgroundColor = .white
         view.scrollViewAccordingToKeyboard()
         textField.delegate = self
         setSubviews()
@@ -171,64 +154,94 @@ final class ForgotThePasswordView:UIViewController{
     }
     
     //MARK: - Set subviews
+    
     private func setSubviews(){
-        
         let topstackViews = [lockImage,titleLabel,descriptionLabel]
         for view in topstackViews{
             topStackView.addArrangedSubview(view)
         }
-        
         let stackViews_top = [textField,nextButton]
         let stackViews_down = [googleButton,fBButton]
         for view in stackViews_top{
             bottomStackView_top.addArrangedSubview(view)
         }
-        
         for view in stackViews_down{
             bottomStackView_down.addArrangedSubview(view)
         }
+        bottomStack.addArrangedSubview(backButton)
         view.addSubview(topStackView)
         view.addSubview(bottomStackView_top)
         view.addSubview(orLabel)
         view.addSubview(bottomStackView_down)
         view.addSubview(bottomStack)
-        
-        
         NSLayoutConstraint.activate([
-            bottomStack.heightAnchor.constraint(equalToConstant: 75),
-            bottomStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bottomStack.widthAnchor.constraint(equalTo: view.widthAnchor)
-        ])
-        
-        bottomInnerStack.addArrangedSubview(backButton)
-        bottomStack.addArrangedSubview(bottomInnerStack)
-        
-        let stackHeight = 2*buttonSize+buttonDistance
-        NSLayoutConstraint.activate([
-            topStackView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
-            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
-            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
-            topStackView.topAnchor.constraint(equalTo: view.topAnchor,constant:view.frame.height/8),
-            bottomStackView_top.heightAnchor.constraint(equalToConstant: stackHeight),
-            bottomStackView_top.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
-            bottomStackView_top.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+            bottomStack.heightAnchor.constraint(equalToConstant: buttonSize),
             bottomStackView_top.bottomAnchor.constraint(equalTo: orLabel.topAnchor),
-            orLabel.heightAnchor.constraint(equalToConstant:60),
-            orLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
-            orLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+            orLabel.heightAnchor.constraint(equalToConstant:buttonSize),
             orLabel.bottomAnchor.constraint(equalTo: bottomStackView_down.topAnchor),
-            bottomStackView_down.heightAnchor.constraint(equalToConstant: stackHeight),
-            bottomStackView_down.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
-            bottomStackView_down.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
             bottomStackView_down.bottomAnchor.constraint(equalTo:bottomStack.topAnchor,constant:  buttonDistance*(-1) ),
             lockImage.heightAnchor.constraint(equalTo: topStackView.heightAnchor, multiplier: 0.5),
             titleLabel.heightAnchor.constraint(equalTo: topStackView.heightAnchor, multiplier: 0.25),
             descriptionLabel.heightAnchor.constraint(equalTo: topStackView.heightAnchor, multiplier: 0.25),
         ])
+        
+        switch UIDevice.current.userInterfaceIdiom{
+        case.phone:
+            setSubviewsForPhones()
+        case.pad:
+            setSubviewsForPads()
+        default:
+            break
+        }
+    }
+    private func setSubviewsForPhones() {
+        bottomStackView_down.spacing = buttonDistance
+        bottomStackView_top.spacing = buttonDistance
+        let stackHeight = 2*buttonSize+buttonDistance
+        NSLayoutConstraint.activate([
+            bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -1*buttonDistance),
+            bottomStackView_top.heightAnchor.constraint(equalToConstant: stackHeight),
+            bottomStackView_down.heightAnchor.constraint(equalToConstant: stackHeight),
+            bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomStack.widthAnchor.constraint(equalTo: view.widthAnchor),
+            topStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant:buttonDistance),
+            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
+            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+            topStackView.bottomAnchor.constraint(equalTo: bottomStackView_top.topAnchor,constant: -1*buttonDistance),
+            bottomStackView_top.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
+            bottomStackView_top.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+            bottomStackView_down.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
+            bottomStackView_down.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
+            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+            orLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
+            orLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
+        ])
     }
     
-    
+    private func setSubviewsForPads(){
+        bottomStackView_down.spacing = buttonSize
+        bottomStackView_top.spacing = buttonSize
+        let stackHeight = 3*buttonSize
+        NSLayoutConstraint.activate([
+            bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -1*buttonSize),
+            bottomStackView_top.heightAnchor.constraint(equalToConstant: stackHeight),
+            bottomStackView_down.heightAnchor.constraint(equalToConstant: stackHeight),
+            orLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            orLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            bottomStackView_top.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            bottomStackView_top.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            bottomStackView_down.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            bottomStackView_down.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            topStackView.heightAnchor.constraint(equalToConstant: 200),
+            topStackView.bottomAnchor.constraint(equalTo: bottomStackView_top.topAnchor, constant: -1*buttonSize),
+            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            bottomStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
+            bottomStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+        ])
+    }
+   
     //MARK: - Add button target
     private func setTargets(){
         nextButton.addTarget(self, action: #selector(nextButtonPressed), for: .touchUpInside)
@@ -238,8 +251,11 @@ final class ForgotThePasswordView:UIViewController{
     }
     
     @objc private func nextButtonPressed(){
-        textField.endEditing(true)
-        model.sendPasswordReset(email: textField.text!)
+        nextButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            textField.endEditing(true)
+            model.sendPasswordReset(email: textField.text!)
+        }
     }
     
     @objc private func backButtonPressed(_ sender: UIButton){
@@ -247,14 +263,18 @@ final class ForgotThePasswordView:UIViewController{
     }
     
     @objc private func googlePressed(){
-        model.googlePressed()
+        googleButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.googlePressed()
+        }
     }
+    
     @objc func getFacebookUserInfo(){
-        model.fbButtonPressed()
+        fBButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.fbButtonPressed()
+        }
     }
-    
-    
- 
 }
 
 //MARK: - Outputs of model
@@ -287,15 +307,30 @@ extension ForgotThePasswordView:ForgotThePasswordViewModelDelegate{
     }
 }
 
-
-
 extension ForgotThePasswordView:UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         nextButtonPressed()
         return true
     }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {[unowned self] in
+            topStackView.isHidden = false
+        } completion: { _ in
+            
+        }
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {[unowned self] in
+            topStackView.isHidden = true
+        } completion: { _ in
+            
+        }
+
+    }
 }
+
 
 
 
