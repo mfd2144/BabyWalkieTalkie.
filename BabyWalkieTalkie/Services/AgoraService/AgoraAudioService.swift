@@ -8,30 +8,38 @@
 import Foundation
 import AgoraRtcKit
 
+protocol AgoraAudioServicePorotocol:AnyObject{
+    func memberCondition(_ bool:Bool)
+}
+
 class AgoraAudioService: NSObject {
     var channel: String
-    //var appId = "3d3cffb6fa994521b3e0617bb8063577"
+    var appId:String?
     var token: String?
     var username: String
     var role: AgoraClientRole = .broadcaster
     var delegate: AgoraAudioServicePorotocol?
     var agkit: AgoraRtcEngineKit?
     var userID: UInt = 0
+    var lastStat:Int = 1
     
     init(token: String?, channel: String, username: String, role: AgoraClientRole) {
-        printNew("agora service init")
         self.token = token
         self.channel = channel
         self.username = username
         self.role = role
+        self.appId = AppSingleton.sharedInstance.appID
         super.init()
     }
-    deinit {
-        print("Agora deinit")
-    }
+
     private func connectAgora() {
+        guard let appId = appId else {
+            //todo
+            //add delegate
+            return
+        }
         // Create connection to RTC
-        agkit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
+        agkit = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: self)
         agkit?.enableAudio()
         agkit?.enableAudioVolumeIndication(1000, smooth: 3, report_vad: true)
         agkit?.setChannelProfile(.liveBroadcasting)
@@ -64,6 +72,13 @@ class AgoraAudioService: NSObject {
 }
 
 extension AgoraAudioService: AgoraRtcEngineDelegate {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        // crying light
+        if stats.userCount != lastStat{
+            lastStat = stats.userCount
+            stats.userCount == 1 ? delegate?.memberCondition(false): delegate?.memberCondition(true)
+        }
+    }
     func rtcEngine(
         _ engine: AgoraRtcEngineKit,
         remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState,

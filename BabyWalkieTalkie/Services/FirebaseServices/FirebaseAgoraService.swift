@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFunctions
+import os.log
 
 enum FamilyMemberRole:String{
     case baby
@@ -30,22 +31,21 @@ final class FirebaseAgoraService{
     typealias conditionResult = (FirebaseResults<AgoraConditions?>)->Void
     var tokenGenerator:TokenGeneratorService!
     var function = Functions.functions()
-
+    
     private let mutualChannelID = "mutualChannel"
     var role:FamilyMemberRole?
     var parentConnection:AgoraConditions = .parentOnline
     var dataType:AgoraConditions = .audio
-
-
+    
+    
     init(role:FamilyMemberRole) {
         self.role = role
     }
-
+    
     deinit {
-        printNew("firebase agora service deinit")
         UserDefaults.standard.removeObject(forKey:mutualChannelID)
     }
-
+    
     public func fetchChannelID(completion:@escaping stringResult){
         function.httpsCallable("fetchChannelID").call { result,error in
             if let error = error {
@@ -65,8 +65,8 @@ final class FirebaseAgoraService{
             data = ["role":"parent"]
         }
         function.httpsCallable("enterTheChannel").call(data) {_,_ in}
-        }
-
+    }
+    
     public func decideAboutChannel(completion:@escaping (Results<String>)->Void) {
         function.httpsCallable("decideAboutChannel").call{result, error in
             if let error = error {
@@ -77,7 +77,7 @@ final class FirebaseAgoraService{
             }
         }
     }
-
+    
     public func exitTheChannel(role:FamilyMemberRole, completion:@escaping (Results<String>)->Void){
         function.httpsCallable("exitTheChannel").call(["role":role.rawValue]){result, error in
             if let error = error {
@@ -89,37 +89,12 @@ final class FirebaseAgoraService{
         }
     }
     
-    func fetchAppID(completion:@escaping stringResult){
-        function.httpsCallable("fetchAgoraAppID").call {result, error in
-            if let error = error {
-                completion(.failure(error))
-            }else{
-                let appID = (result?.data as? NSDictionary)?["appID"] as? String
-                completion(.success(appID))
-            }
-        }
-    }
-    
-//    func sendConnectionStatusRequest(_ connectionSource: ConnectionSource,completion:@escaping stringResult){
-//        let data:NSDictionary = ["source":connectionSource.sourceString]
-//        function.httpsCallable("sendConnectionStatusChangeRequest").call(data) {result, error in
-//            if let error = error {
-//                completion(.failure(error))
-//            }else{
-//                let successString = (result?.data as? NSDictionary)?["result"] as? String
-//                completion(.success(successString))
-//            }
-//        }
-//    }
     
     func iAmCrying(){
         let timeString = Date.actualStringTime()
-        let data:NSDictionary = ["timeData":timeString]
-        function.httpsCallable("babyIsCrying").call(data){result, error in
-            if let error = error {
-//               todo
-            }else{
-                // todo
-            }
-        }    }
+        let lan = Locale.current.languageCode ?? ""
+        let data:NSDictionary = ["timeData":timeString,
+                                 "language":lan]
+        function.httpsCallable("babyIsCrying").call(data){_,_ in }
+    }
 }

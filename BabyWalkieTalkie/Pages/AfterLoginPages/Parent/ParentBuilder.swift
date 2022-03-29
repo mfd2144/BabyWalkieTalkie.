@@ -14,7 +14,6 @@ final class ParentBuilder{
         let firebaseAgoraService = FirebaseAgoraService(role: .parent)
         let tokenGeneratoService = TokenGeneratorService()
         let router = ParentRouter()
-    
         router.view = view
         view.viewModel = viewModel
         viewModel.didVideoPurchased = videoCondition

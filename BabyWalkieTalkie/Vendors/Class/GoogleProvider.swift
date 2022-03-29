@@ -33,7 +33,7 @@ final class GoogleProvider:NSObject{
 
           if let error = error {
               Animator.sharedInstance.hideAnimation()
-              let errorDescription = "\(NSLocalizedString("googleSignError", comment: "")) : \(error.localizedDescription)"
+              let errorDescription = "\(NSLocalizedString(NSLocalizedString("googleSignError", comment: ""), comment: "")) : \(error.localizedDescription)"
               delegate?.googleSignInDidFail(errorDescription)
               return
           }

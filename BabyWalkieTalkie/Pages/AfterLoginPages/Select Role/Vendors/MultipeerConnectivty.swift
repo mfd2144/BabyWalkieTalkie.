@@ -9,7 +9,6 @@ import Foundation
 import MultipeerConnectivity
 
 
-
 class CustomMultipeerConnectivity:NSObject{
     //MARK: - Properties
     var advertiser: MCNearbyServiceAdvertiser?
@@ -22,10 +21,27 @@ class CustomMultipeerConnectivity:NSObject{
     var request:MatchingRequest!
     var channelID:String!
     var matchService: FirebaseMatchService!
-    
+    var foundPeerID = [String]()
     //MARK: - Functions
     
     func becomeAdvertiser() {
+        getLocalNetworkAccessState{[unowned self] granted in
+            if granted{
+                stop()
+                let discoveryInfo = [
+                    "Device Type": UIDevice.current.model,
+                    "OS": UIDevice.current.systemName,
+                    "OS Version": UIDevice.current.systemVersion
+                ]
+                
+                advertiser = MCNearbyServiceAdvertiser(peer: myId, discoveryInfo: discoveryInfo, serviceType: serviceType)
+                advertiser?.delegate = self
+                advertiser?.startAdvertisingPeer()
+            }else{
+                delegate?.userDidNotAllowLocalNW()
+            }
+            
+        }
         stop()
         let discoveryInfo = [
             "Device Type": UIDevice.current.model,
@@ -38,17 +54,25 @@ class CustomMultipeerConnectivity:NSObject{
         advertiser?.startAdvertisingPeer()
     }
     
+
     func searchForDevices() {
-        stop()
-        browser = MCNearbyServiceBrowser(peer: myId, serviceType: serviceType)
-        browser?.delegate = self
-        browser?.startBrowsingForPeers()
+        getLocalNetworkAccessState{[unowned self] granted in
+            if granted{
+                stop()
+                browser = MCNearbyServiceBrowser(peer: myId, serviceType: serviceType)
+                browser?.delegate = self
+                browser?.startBrowsingForPeers()
+            }else{
+                delegate?.userDidNotAllowLocalNW()
+            }
+            
+        }
+      
     }
     
 }
 
 extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCNearbyServiceBrowserDelegate{
-    
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         if state == .connected && advertiser != nil{
             sendRequest { _ in
@@ -77,12 +101,12 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
                         
                         return
                     }
-                    matchService.saveChannelToUser(channelID: channelID, partnerID: requestOwnerID){ result in
+                    matchService.saveChannelToUser(channelID: channelID, partnerID: requestOwnerID){[unowned self] result in
                         switch result{
                         case .failure:
                             delegate?.requestError("Saving error.Please try again to pair device")
                         case .success:
-                            sendRequest2(channelID: channelID, userID: currentUserId, userName: currentUserName) { sendingResult in
+                            sendRequest2(channelID: channelID, userID: currentUserId, userName: currentUserName) {  [unowned self] sendingResult in
                                 delegate?.pairStatus(.paired)
                                 switch sendingResult{
                                 case.success:
@@ -102,7 +126,8 @@ extension CustomMultipeerConnectivity:MCSessionDelegate, MCNearbyServiceAdvertis
                     matchService = FirebaseMatchService()
                     let channelID = request.mutualChannel
                     let requestOwnerID = request.requestOwnerId
-                    matchService.saveChannelToUser(channelID: channelID, partnerID: requestOwnerID){ result in
+                    matchService.saveChannelToUser(channelID: channelID,
+                                                   partnerID: requestOwnerID){[unowned self] result in
                         delegate?.pairStatus(.paired)
                     }
                 }
@@ -232,6 +257,7 @@ protocol CustomMCDelegate:NSObject{
     func showNearbyDevice(_ peerName:String)
     func requestError(_ error:String)
     func sameUser()
+    func userDidNotAllowLocalNW()
     
 }
 

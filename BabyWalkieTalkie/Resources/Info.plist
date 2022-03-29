@@ -77,6 +77,7 @@
 	<true/>
 	<key>NSBonjourServices</key>
 	<array>
+		<string>_lnp._tcp.</string>
 		<string>_MatchDevice._tcp</string>
 		<string>_MatchDevice._udp</string>
 	</array>
@@ -111,8 +112,6 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
-		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

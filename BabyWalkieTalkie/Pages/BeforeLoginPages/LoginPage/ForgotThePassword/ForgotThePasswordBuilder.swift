@@ -13,14 +13,11 @@ final class ForgotThePasswordBuilder{
         let view = ForgotThePasswordView()
         let viewModel = ForgotThePasswordViewModel()
         let router = ForgotThePasswordRouter()
-    
-        
         view.model = viewModel
         viewModel.delegate = view
         viewModel.authService = appContainer.authService
         viewModel.router = router
         router.view = view
-        
         return view
     }
 }

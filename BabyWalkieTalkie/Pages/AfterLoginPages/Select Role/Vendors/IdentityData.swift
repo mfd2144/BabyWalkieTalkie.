@@ -19,9 +19,9 @@ extension IdentityData{
             let data = try PropertyListEncoder.init().encode(id)
             return data
         } catch  let error as NSError{
-            print(error.localizedDescription)
+            return nil
         }
-        return nil
+       
     }
     
     static func getId(data:Data)->IdentityData?{
@@ -29,9 +29,7 @@ extension IdentityData{
             let id = try PropertyListDecoder.init().decode(IdentityData.self, from: data)
             return id
         }catch let error as NSError{
-            print(error.localizedDescription)
+            return nil
         }
-        return nil
-
     }
 }

@@ -14,9 +14,11 @@ final class ForgotThePasswordViewModel:ForgotThePasswordViewModelProtocol{
     var authService: FirebaseAuthenticationService!
     var googleProvider:GoogleProvider?
     var fbhelper:FBLoginHelper!
+    var appleSingIn:AppleSignIn!
     
     func googlePressed(){
         guard let forgotPasswordView = delegate as? ForgotThePasswordView else {return}
+        delegate?.handleOutput(.isLoading(true))
         googleProvider = GoogleProvider(forgotPasswordView)
         googleProvider?.delegate = self
     }
@@ -40,23 +42,28 @@ final class ForgotThePasswordViewModel:ForgotThePasswordViewModelProtocol{
             }
         }
     }
-
-
+    
+    func appleButtonPressed() {
+        appleSingIn = AppleSignIn()
+        appleSingIn?.delegate = self
     }
+    
+}
     
 //MARK: - Google
 extension ForgotThePasswordViewModel:GoogleProviderDelegate{
     func googleSignInDidFail(_ errorString: String) {
+        delegate?.handleOutput(.isLoading(false))
         delegate?.handleOutput(.showAnyAlert(errorString))
     }
     
     func googleSignInAccomplish() {
+        delegate?.handleOutput(.isLoading(true))
         router.routeToPage(.toUserPage)
     }
     
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
@@ -82,12 +89,25 @@ extension ForgotThePasswordViewModel:FBLoginDelegate{
     }
     
     func error() {
-        
+        delegate?.handleOutput(.isLoading(false))
+        let fbErrorString = Local.faceError
+        delegate?.handleOutput(.showAnyAlert(fbErrorString))
     }
-    
 }
 
+extension ForgotThePasswordViewModel:AppleSignInDelegate {
+    func appleSignInAccomplish() {
+        router.routeToPage(.toUserPage)
+
+    }
     
+    func appleSignInError(error: String) {
+        delegate?.handleOutput(.isLoading(false))
+        delegate?.handleOutput(.showAnyAlert(error))
+    }
+    
+    
+}
     
     
     

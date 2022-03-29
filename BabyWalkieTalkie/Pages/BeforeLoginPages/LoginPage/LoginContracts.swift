@@ -14,14 +14,15 @@ protocol LoginViewModelProtocol:AnyObject{
     func logIn(_ email:String,_ password:String)
     func forgetPassword(_ userName: String?)
     func fbButtonPressed()
+    func appleButtonPressed()
     func singUp()
     func googlePressed()
 }
 
 enum LoginModelOutputs{
-    case loggedIn(Results<Any>)
     case setLoading(Bool)
     case anyErrorOccurred(String)
+    case verificationSent
     
 }
 

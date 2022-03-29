@@ -12,10 +12,6 @@ public protocol TokenServiceProtocol:AnyObject{
 public final class TokenGeneratorService:TokenServiceProtocol{
     
     init() { }
-    deinit{
-        printNew("token deinit")
-    }
-    
     public func fetchRtcToken( channel: String, completion: @escaping (Results<String>) -> Void) {
         let a: UInt = 0
         let urlString = "https://listenmybaby.herokuapp.com/access_token?channel=\(channel)&uid=\(a)"

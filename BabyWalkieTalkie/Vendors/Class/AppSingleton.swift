@@ -10,6 +10,7 @@ import Foundation
 
 class AppSingleton{
     static let sharedInstance = AppSingleton()
+    var appID:String? = nil
     var fcnDidChangelogic: Bool = false
     var safeTopHeight:CGFloat = 0
     var safeBottomHeight:CGFloat = 0

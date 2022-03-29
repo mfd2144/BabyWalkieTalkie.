@@ -13,13 +13,7 @@ final class AddAnySimpleCaution:UIAlertController{
         addAction(handler)
     }
     private func addAction(_ handler :((UIAlertAction) -> Void )?){
-        let action = UIAlertAction(title: "cancel", style: .cancel, handler: handler)
-        popoverPresentationController?.sourceView = self.view
-        let xOrigin = self.view.bounds.width / 2
-        let popoverRect = CGRect(x: xOrigin, y: 0, width: 1, height: 1)
-        popoverPresentationController?.sourceRect = popoverRect
-        popoverPresentationController?.permittedArrowDirections = .up
-
+        let action = UIAlertAction(title: Local.cancel, style: .cancel, handler: handler)
         addAction(action)
     }
 }

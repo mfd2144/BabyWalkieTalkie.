@@ -40,7 +40,6 @@ final class IAPHelper:NSObject{
                 guard let purchasedItems = purchasedItems else {delegate?.loadProduct();return}
                 let items = purchasedItems.items
                     for item in items {
-                        print(item.name)
                         purchasedProductIdentifiers.insert(item.name)
                     }
                 delegate?.loadProduct()
@@ -57,6 +56,10 @@ final class IAPHelper:NSObject{
                 receiptString = receiptData.base64EncodedString(options: [])
             }
             catch {
+                delegate?.throwError(error: IAPLocal.savingError)
+                return
+            }
+            guard let receiptString = receiptString else {
                 delegate?.throwError(error: IAPLocal.savingError)
                 return
             }
@@ -85,10 +88,14 @@ final class IAPHelper:NSObject{
                                           delegate?.throwError(error:IAPLocal.savingError)
                                           return}
                                 let item = PurchasedItem(name: purchaseKind, date: dateString, transactionID: transactionID)
-                                firebasePurchase.setPayment(item) { result in
+                                firebasePurchase.setPayment(item) { [unowned self] result in
                                     switch result{
                                     case .success:
-                                        UserDefaults.standard.set(nil, forKey: "personWillSaveToDb")
+                                        //this part clear purchase information
+                                        //if any error occurs,purchase information go on stying in userdefaults
+                                        //app checks "personWillSaveToDb" key and if it  did not equal nil, app would push this information to db
+                                        //Failsafe
+                                        UserDefaults.standard.set(nil, forKey: personWillSaveToDbKey)
                                         purchasedProductIdentifiers.insert(purchaseKind)
                                         delegate?.loadProduct()
                                     case .failure(let error):
@@ -130,7 +137,7 @@ final class IAPHelper:NSObject{
         guard let user = service.getUserdNameAndId() else {fatalError() }
         let savedItem = SavedPurchaseItem.init(userID: user.ID, item: purchaseItem)
         let data = SavedPurchaseItem.itemToData(item: savedItem)
-        UserDefaults.standard.set(data, forKey: "personWillSaveToDb")
+        UserDefaults.standard.set(data, forKey: personWillSaveToDbKey)
     }
 }
 

@@ -9,7 +9,6 @@ import Foundation
 
 final class SignUpMethodViewModel:SignUpMethodViewModelProtocol{
     weak var delegate: SignUpMethodViewModelDelegate?
-    var router: SignUpMethodRouterProtocol!
     var service:FirebaseAuthenticationService!
     
     func signUp(_ user: UserInfo) {
@@ -21,14 +20,14 @@ final class SignUpMethodViewModel:SignUpMethodViewModelProtocol{
             delegate?.handleOutput(.isLoading(false))
             switch result{
             case.success:
-                router.routeToPage(.toUserPage)
+                delegate?.handleOutput(.signUpCompleted)
             case.failure(let error):
                 let errorDescription = Local.error + error.description
                 delegate?.handleOutput(.showAnyAlert(errorDescription))
             }
         }
-        
     }
+    
     
     private func checkPassword(password:String)->Bool{
         guard password.count > 5 else {return false}
@@ -48,7 +47,6 @@ final class SignUpMethodViewModel:SignUpMethodViewModelProtocol{
     
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }

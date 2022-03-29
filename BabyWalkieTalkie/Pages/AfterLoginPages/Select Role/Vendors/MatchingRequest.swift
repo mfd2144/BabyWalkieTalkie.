@@ -20,20 +20,19 @@ struct MatchingRequest:Codable{
         do{
             let data = try PropertyListEncoder.init().encode(request)
             return data
-        }catch let error as NSError{
-            print(error.localizedDescription)
+        }catch{
+            return nil
         }
-        return nil
     }
     
     static func getPacketFromData(data: Data) -> MatchingRequest?{
         do{
             let packet = try PropertyListDecoder.init().decode(MatchingRequest.self, from: data)
             return packet
-        }catch let error as NSError{
-            print(error.localizedDescription)
+        }catch{
+            return nil
         }
-        return nil
+       
     }
 }
 

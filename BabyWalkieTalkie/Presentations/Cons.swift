@@ -7,7 +7,6 @@
 
 import Foundation
 struct Cons{
-    
     static let otherDeviceID = "other_device_id"
     static let userRef = "User"
     static let pairedAccountRef = "PairedAccounts"
@@ -25,7 +24,6 @@ struct Cons{
     static let parentFCM = "parent_FCM"
     static let testCase = "test_case"
     static let isVideo = "is_video"
-    
 }
 
 

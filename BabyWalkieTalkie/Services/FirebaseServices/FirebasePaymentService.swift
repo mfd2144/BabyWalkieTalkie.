@@ -14,25 +14,24 @@ enum PaymentError: Error{
     case transactionError
     var localErrorDescription:String{
         switch self{
-        case .resultError: return "Payment service error 1"
-        case .optinalError: return  "Payment service error 2"
-        case .transactionError: return "Transaction data save error. Please restart application"
+        case .resultError: return FirebaseLocal.paymentError1
+        case .optinalError: return  FirebaseLocal.paymentError2
+        case .transactionError: return FirebaseLocal.transactionError
         }
     }
 }
 
 final class FirebasePaymentService{
     let function = Functions.functions()
-        
     static func setOldPayment(completion: @escaping (Results<String>)->Void){
-        guard let savedData = UserDefaults.standard.data(forKey: "personWillSaveToDb"), let item = SavedPurchaseItem.dataToItem(data: savedData) else {completion(.success(nil)); return}
+        guard let savedData = UserDefaults.standard.data(forKey:personWillSaveToDbKey), let item = SavedPurchaseItem.dataToItem(data: savedData) else {completion(.success(nil)); return}
         let data = ["id":item.item.transactionID,"name":item.item.name,"purchaseDate":item.item.date,"userID":item.userID]
         let _function = Functions.functions()
         _function.httpsCallable("setOldPayment").call(data) { result, error in
             if let _ = error {
                 completion(.failure(PaymentError.transactionError))
             }else{
-                UserDefaults.standard.set(nil, forKey: "personWillSaveToDb")
+                UserDefaults.standard.set(nil, forKey: personWillSaveToDbKey)
                 completion(.success(nil))
             }
         }
@@ -41,7 +40,7 @@ final class FirebasePaymentService{
     func setPayment(_ item:PurchasedItem,completion:@escaping(Results<String>)->Void){
         let data = ["id":item.transactionID,"name":item.name,"purchaseDate":item.date]
         function.httpsCallable("setPayment").call(data) { result, error in
-            if let error = error {
+            if error != nil {
                 completion(.failure(PaymentError.transactionError))
             }else{
                 completion(.success(nil))

@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 
+protocol PasswordFieldWithEyeProtocol{
+    func callText(completion:(String)->())
+}
 
 final class PasswordFieldWithEye:UITextField{
     private var eyeCondition:EyeCondition = .unseen
@@ -102,5 +105,11 @@ extension PasswordFieldWithEye:UITextFieldDelegate{
               }
           }
         return true
+    }
+}
+
+extension PasswordFieldWithEye:PasswordFieldWithEyeProtocol{
+    func callText(completion:(String)->()) {
+        completion(seenText)
     }
 }

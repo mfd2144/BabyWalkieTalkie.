@@ -13,6 +13,7 @@ protocol ForgotThePasswordViewModelProtocol:AnyObject{
     func fbButtonPressed()
     func googlePressed()
     func sendPasswordReset(email:String)
+    func appleButtonPressed()
 }
 
 enum ForgotThePasswordViewModelOutputs{
@@ -20,7 +21,6 @@ enum ForgotThePasswordViewModelOutputs{
     case loggedIn(Results<Any>)
     case showAnyAlert(String)
     case verificationCodeSend
-   
 }
 
 protocol ForgotThePasswordViewModelDelegate:AnyObject{

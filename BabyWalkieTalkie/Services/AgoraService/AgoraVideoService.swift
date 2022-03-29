@@ -3,7 +3,7 @@ import UIKit
 
 class AgoraVideoService:NSObject{
     var channel: String
-    //var appId = "3d3cffb6fa994521b3e0617bb8063577"
+    var appID:String?
     var token: String?
     var username: String
     var role: AgoraClientRole = .broadcaster
@@ -13,15 +13,14 @@ class AgoraVideoService:NSObject{
     var activeSpeaker: UInt?
     var activeAudience: Set<UInt> = []
     var usernameLookups: [UInt: String] = [:]
-    deinit{
-        printNew("agora video deinit")
-    }
+
     init(token: String, channel: String, username: String, role: AgoraClientRole) {
         self.token = token
         self.channel = channel
         self.username = username
         self.role = role
         super.init()
+        self.appID = AppSingleton.sharedInstance.appID
     }
     func connectAgoraVideo(){
         initializeAgoraEngine()
@@ -51,6 +50,7 @@ class AgoraVideoService:NSObject{
 
     func initializeAgoraEngine() {
         // init AgoraRtcEngineKit
+        guard let appID = appID else {return}
         agkit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
     }
 
@@ -61,7 +61,6 @@ class AgoraVideoService:NSObject{
         agkit?.enableVideo()
 
         // Set video configuration
-
         agkit?.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -79,7 +78,6 @@ class AgoraVideoService:NSObject{
         agkit?.startPreview()
     }
 
-
     func joinVideoChannel(){
         // Set audio route to speaker
         agkit?.setDefaultAudioRouteToSpeakerphone(true)
@@ -88,8 +86,9 @@ class AgoraVideoService:NSObject{
         // same channel successfully using the same app id.
         // 2. One token is only valid for the channel name that
         // you use to generate this token.
-        agkit?.joinChannel(byToken: token, channelId: channel, info: nil, uid: userID) { [unowned self] (channel, uid, elapsed) -> Void in
+        agkit?.joinChannel(byToken: token, channelId: channel, info: nil, uid: userID) { (channel, uid, elapsed) -> Void in
             // Did join channel "demoChannel1"
+            //todo?
 
         }
         UIApplication.shared.isIdleTimerDisabled = true

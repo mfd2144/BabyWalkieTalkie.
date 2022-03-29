@@ -22,10 +22,6 @@ final class SmartListener:NSObject{
         setListener()
     }
     
-    deinit{
-        print("smart listener deinit")
-    }
-    
     private func setListener(){
         let url = documentsUrl.appendingPathComponent("record.caf")
         let recordSettings: [String: Any] = [

@@ -33,7 +33,7 @@ final class ListenBabyView:UIViewController{
     }()
     
     lazy var switchLabel: UILabel = {
-        let label = createLabel(labelText: "dim" )
+        let label = createLabel(labelText: Local2.dim )
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,17 +41,17 @@ final class ListenBabyView:UIViewController{
    //MARK: - Middle buttons
     
     lazy var closeLabel:UILabel = {
-        let label = createLabel(labelText:"close" )
+        let label = createLabel(labelText:Local2.close )
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return label
     }()
-    lazy var testLabel:UILabel = {
-        let label =  createLabel(labelText:"down" )
+    lazy var downLabel:UILabel = {
+        let label =  createLabel(labelText:Local2.down )
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return label
     }()
-    lazy var cameraLabel:UILabel = {
-        let label = createLabel(labelText:"up" )
+    lazy var upLabel:UILabel = {
+        let label = createLabel(labelText:Local2.up )
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return label
     }()
@@ -74,9 +74,9 @@ final class ListenBabyView:UIViewController{
         return stack
     }()
     lazy var s3 = createStack()
-    lazy var s1Label = createSecondStackLayer(views: [testLabel, s1])
+    lazy var s1Label = createSecondStackLayer(views: [downLabel, s1])
     lazy var s2Label = createSecondStackLayer(views: [closeLabel, s2])
-    lazy var s3Label = createSecondStackLayer(views: [cameraLabel, s3])
+    lazy var s3Label = createSecondStackLayer(views: [upLabel, s3])
     
     
     lazy var buttonStack: UIStackView = {
@@ -92,7 +92,7 @@ final class ListenBabyView:UIViewController{
     //MARK: - TopStack and subcompenents
     lazy var emptyLabel = createLabel(labelText: " ")
     lazy var emptyLabel2 = createLabel(labelText: " ")
-    lazy var sensitivityLabel = createLabel(labelText:"sensitivity")
+    lazy var sensitivityLabel = createLabel(labelText:Local2.sensitivity)
 
     lazy var high = createLight()
     lazy var preHigh = createLight()
@@ -112,7 +112,7 @@ final class ListenBabyView:UIViewController{
          return imageView
      }()
     lazy var lightStack :UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [emptyLabel ,sensitivityLabel,high, preHigh, medium, preMedium, low, emptyLabel2])
+        let stack = UIStackView(arrangedSubviews: [sensitivityLabel,high, preHigh, medium, preMedium, low])
         stack.alignment = .fill
         stack.distribution = .fillEqually
         stack.axis = .vertical
@@ -149,12 +149,9 @@ final class ListenBabyView:UIViewController{
      
     private func drawCapsule()->CAShapeLayer {
         let path = UIBezierPath()
-        let height = UIScreen.main.bounds.height
-        let width = UIScreen.main.bounds.width
-        let buttonHeight = (width-120)/3 + 20
+        let buttonHeight = (screenWidth-120)/3 + 20
         let topSafeHeight = view.safeAreaInsets.top
-        printNew("\(topSafeHeight)")
-        let maximumHeight = (height-buttonHeight)/2-topSafeHeight
+        let maximumHeight = (screenHeight-buttonHeight)/2-topSafeHeight
         lightViewHeight = maximumHeight-buttonSize-100
         path.addArc(withCenter: CGPoint(x: 50, y: 50), radius: 50, startAngle: 0, endAngle: .pi, clockwise: false)
         path.addArc(withCenter: CGPoint(x: 50, y: lightViewHeight!), radius: 50, startAngle: .pi, endAngle: 0, clockwise: false)
@@ -228,7 +225,7 @@ extension ListenBabyView{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -239,6 +236,9 @@ extension ListenBabyView{
                 button.reloadShadow()
             }
         }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isIdleTimerDisabled = false
     }
     
     private func makeRed(_ imageView:UIImageView ) {
@@ -267,14 +267,37 @@ extension ListenBabyView{
         view.addSubview(mainStack)
         view.addSubview(lightView)
         view.addSubview(switchLabel)
+        
+        NSLayoutConstraint.activate([
+            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonSize),
+            mainStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: (-1*buttonDistance)),
+            lightView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
+            lightView.heightAnchor.constraint(equalToConstant: lightViewHeight!+50),
+            lightView.widthAnchor.constraint(equalToConstant: 100),
+            lightView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lightStack.heightAnchor.constraint(equalToConstant: lightViewHeight!),
+            switchLabel.bottomAnchor.constraint(equalTo: dimButton.topAnchor, constant: (-10)),
+            switchLabel.centerXAnchor.constraint(equalTo: dimButton.centerXAnchor),
+            switchLabel.heightAnchor.constraint(equalToConstant: buttonDistance),
+            switchLabel.widthAnchor.constraint(equalToConstant: buttonSize),
+        ])
+        switch UIDevice.current.userInterfaceIdiom{
+        case.phone:
+            setSubviewsForPhones()
+        case.pad:
+            setSubviewsForPads()
+        default:
+            break
+        }
+        }
+    
+    private func setSubviewsForPhones() {
         let phoneWidth = UIScreen.main.coordinateSpace.bounds.width
         let stackWidth = phoneWidth-60//button distance
         let buttonWidth = (stackWidth-60)/3
         let stackHeight = buttonWidth + 20
         
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
-            mainStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: (-1*buttonDistance)),
             mainStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mainStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             buttonStack.heightAnchor.constraint(equalToConstant: stackHeight),
@@ -285,24 +308,36 @@ extension ListenBabyView{
             s2.widthAnchor.constraint(equalToConstant: buttonWidth),
             s3.heightAnchor.constraint(equalToConstant: buttonWidth),
             s3.widthAnchor.constraint(equalToConstant: buttonWidth),
-            lightView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
-            lightView.heightAnchor.constraint(equalToConstant: lightViewHeight!+50),
-            lightView.widthAnchor.constraint(equalToConstant: 100),
-            lightView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            lightStack.heightAnchor.constraint(equalToConstant: lightViewHeight!+50),
-            lightStack.widthAnchor.constraint(equalToConstant: 100),
-            switchLabel.bottomAnchor.constraint(equalTo: dimButton.topAnchor, constant: (-10)),
-            switchLabel.centerXAnchor.constraint(equalTo: dimButton.centerXAnchor),
-            switchLabel.heightAnchor.constraint(equalToConstant: buttonDistance),
-            switchLabel.widthAnchor.constraint(equalToConstant: buttonSize),
-
         ])
         closeButton.layer.cornerRadius = buttonWidth/2
         decreaseSensivity.layer.cornerRadius = (buttonWidth-30)/2
         increaseSensivity.layer.cornerRadius = (buttonWidth-30)/2
         Animator.sharedInstance.showAnimation()
-        }
+    }
 
+    private func setSubviewsForPads() {
+        let stackWidth = screenWidth-460//button distance
+        let buttonWidth = (stackWidth-60)/3
+        let stackHeight = buttonWidth + 20
+   
+        NSLayoutConstraint.activate([
+            mainStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainStack.widthAnchor.constraint(equalToConstant: screenWidth-300),
+            buttonStack.heightAnchor.constraint(equalToConstant: stackHeight),
+            buttonStack.widthAnchor.constraint(equalToConstant: stackWidth),
+            s1.heightAnchor.constraint(equalToConstant: buttonWidth),
+            s1.widthAnchor.constraint(equalToConstant: buttonWidth),
+            s2.heightAnchor.constraint(equalToConstant: buttonWidth),
+            s2.widthAnchor.constraint(equalToConstant: buttonWidth),
+            s3.heightAnchor.constraint(equalToConstant: buttonWidth),
+            s3.widthAnchor.constraint(equalToConstant: buttonWidth),
+          
+        ])
+        closeButton.layer.cornerRadius = buttonWidth/2
+        decreaseSensivity.layer.cornerRadius = (buttonWidth-30)/2
+        increaseSensivity.layer.cornerRadius = (buttonWidth-30)/2
+        Animator.sharedInstance.showAnimation()
+    }
     //MARK: - Set subviews and add targets
     
     private func addTargets(){
@@ -364,11 +399,11 @@ extension ListenBabyView:ListenBabyViewModelDelegate{
         case .connected:
            break
         case .alreadyLogisAsBaby:
-            showAlert(alertTitle: "Caution", message: "Already baby device login to system. Please change device role.", actionTitle: "Go Back", style: .default, actionClosure: viewModel.returnToSelectPage)
+            showAlert(alertTitle:Local.caution, message:Local2.babyCaution, actionTitle: Local.goBack, style: .default, actionClosure: viewModel.returnToSelectPage)
         case .otherDeviceDidUnpair:
-            showAlert(alertTitle: "Caution", message: "Other device disconnect to this device", actionTitle: "Go Back", style: .default, actionClosure: viewModel.returnToSelectPage)
+            showAlert(alertTitle: Local.caution, message: Local2.userUnpair, actionTitle: Local.goBack, style: .default, actionClosure: viewModel.returnToSelectPage)
         case .mustBeConnected:
-            showAlert(alertTitle: "Caution", message: "Baby walkie talkie must be connected to another device", actionTitle: "Go Back", style: .default, actionClosure: viewModel.returnToSelectPage)
+            showAlert(alertTitle: Local.caution, message: Local2.lackOfPairedDev, actionTitle: Local.goBack, style: .default, actionClosure: viewModel.returnToSelectPage)
         }
     }
     private func showAlert(alertTitle:String, message:String, actionTitle:String, style:UIAlertAction.Style, actionClosure:@escaping () -> Void) {

@@ -25,7 +25,7 @@ final class ForgotThePasswordView:UIViewController{
         let label = UILabel()
         label.text =  Local.trouble
         label.textAlignment = .center
-        label.textColor = .none
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
         return label
     }()
@@ -35,7 +35,7 @@ final class ForgotThePasswordView:UIViewController{
         label.text = Local.troubleDescription
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.textColor = .none
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 16, weight: .light)
         return label
     }()
@@ -108,6 +108,11 @@ final class ForgotThePasswordView:UIViewController{
         return button
     }()
     
+    let authorizationButton: UIButton = {
+        let button = UIButton.addNewButton(imageName: "applelogo", title: Local.apple)
+        return button
+  }()
+    
     let backButton: UIButton = {
         let button = UIButton()
         button.setTitle(Local.back, for: .normal)
@@ -136,7 +141,6 @@ final class ForgotThePasswordView:UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        view.scrollViewAccordingToKeyboard()
         textField.delegate = self
         setSubviews()
         setTargets()
@@ -151,7 +155,16 @@ final class ForgotThePasswordView:UIViewController{
         nextButton.reloadShadow()
         fBButton.reloadShadow()
         googleButton.reloadShadow()
+        authorizationButton.reloadShadow()
     }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+            super.viewWillTransition(to: size, with: coordinator)
+            if UIDevice.current.orientation.isLandscape {
+                textField.resignFirstResponder()
+            } else {
+                textField.resignFirstResponder()
+            }
+        }
     
     //MARK: - Set subviews
     
@@ -161,21 +174,28 @@ final class ForgotThePasswordView:UIViewController{
             topStackView.addArrangedSubview(view)
         }
         let stackViews_top = [textField,nextButton]
-        let stackViews_down = [googleButton,fBButton]
+        let stackViews_down = [authorizationButton, googleButton,fBButton]
         for view in stackViews_top{
             bottomStackView_top.addArrangedSubview(view)
         }
         for view in stackViews_down{
             bottomStackView_down.addArrangedSubview(view)
         }
+        bottomStackView_down.spacing = buttonDistance
+        bottomStackView_top.spacing = buttonDistance
         bottomStack.addArrangedSubview(backButton)
         view.addSubview(topStackView)
         view.addSubview(bottomStackView_top)
         view.addSubview(orLabel)
         view.addSubview(bottomStackView_down)
         view.addSubview(bottomStack)
+        let downStackHeight = 3*buttonSize+2*buttonDistance
+        let topStackHeight = 2*buttonSize+buttonDistance
+        
         NSLayoutConstraint.activate([
             bottomStack.heightAnchor.constraint(equalToConstant: buttonSize),
+            bottomStackView_top.heightAnchor.constraint(equalToConstant: topStackHeight),
+            bottomStackView_down.heightAnchor.constraint(equalToConstant: downStackHeight),
             bottomStackView_top.bottomAnchor.constraint(equalTo: orLabel.topAnchor),
             orLabel.heightAnchor.constraint(equalToConstant:buttonSize),
             orLabel.bottomAnchor.constraint(equalTo: bottomStackView_down.topAnchor),
@@ -195,13 +215,9 @@ final class ForgotThePasswordView:UIViewController{
         }
     }
     private func setSubviewsForPhones() {
-        bottomStackView_down.spacing = buttonDistance
-        bottomStackView_top.spacing = buttonDistance
-        let stackHeight = 2*buttonSize+buttonDistance
+        
         NSLayoutConstraint.activate([
             bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -1*buttonDistance),
-            bottomStackView_top.heightAnchor.constraint(equalToConstant: stackHeight),
-            bottomStackView_down.heightAnchor.constraint(equalToConstant: stackHeight),
             bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             bottomStack.widthAnchor.constraint(equalTo: view.widthAnchor),
             topStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant:buttonDistance),
@@ -220,25 +236,20 @@ final class ForgotThePasswordView:UIViewController{
     }
     
     private func setSubviewsForPads(){
-        bottomStackView_down.spacing = buttonSize
-        bottomStackView_top.spacing = buttonSize
-        let stackHeight = 3*buttonSize
         NSLayoutConstraint.activate([
             bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -1*buttonSize),
-            bottomStackView_top.heightAnchor.constraint(equalToConstant: stackHeight),
-            bottomStackView_down.heightAnchor.constraint(equalToConstant: stackHeight),
-            orLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            orLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
-            bottomStackView_top.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            bottomStackView_top.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
-            bottomStackView_down.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            bottomStackView_down.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            orLabel.widthAnchor.constraint(equalToConstant: screenWidth-300),
+            bottomStackView_top.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomStackView_top.widthAnchor.constraint(equalToConstant: screenWidth-300),
+            bottomStackView_down.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomStackView_down.widthAnchor.constraint(equalToConstant: screenWidth-300),
             topStackView.heightAnchor.constraint(equalToConstant: 200),
             topStackView.bottomAnchor.constraint(equalTo: bottomStackView_top.topAnchor, constant: -1*buttonSize),
-            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
-            bottomStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            bottomStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            topStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            topStackView.widthAnchor.constraint(equalToConstant: screenWidth-300),
+            bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomStack.widthAnchor.constraint(equalToConstant: screenWidth-300),
         ])
     }
    
@@ -248,6 +259,8 @@ final class ForgotThePasswordView:UIViewController{
         backButton.addTarget(self, action:#selector(backButtonPressed), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googlePressed), for: .touchUpInside)
         fBButton.addTarget(self, action: #selector(getFacebookUserInfo), for: .touchUpInside)
+        authorizationButton.addTarget(self, action: #selector(handleAppleIdRequest(_ :)), for: .touchUpInside)
+       
     }
     
     @objc private func nextButtonPressed(){
@@ -268,6 +281,13 @@ final class ForgotThePasswordView:UIViewController{
             model.googlePressed()
         }
     }
+    @objc private func handleAppleIdRequest(_ sender:UIButton) {
+        authorizationButton.pressAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.appleButtonPressed()
+        }
+        
+    }
     
     @objc func getFacebookUserInfo(){
         fBButton.pressAnimation()
@@ -285,7 +305,7 @@ extension ForgotThePasswordView:ForgotThePasswordViewModelDelegate{
             switch response {
             case .failure(let error ):
                 guard let error = error as?  FirebaseError else {return}
-                addCaution(title: "Fail", message:error.description )
+                addCaution(title: Local.error, message:error.description )
             default:
                break
             }
@@ -293,7 +313,15 @@ extension ForgotThePasswordView:ForgotThePasswordViewModelDelegate{
         case .isLoading(let loading):
             loading ? Animator.sharedInstance.showAnimation() : Animator.sharedInstance.hideAnimation()
         case.showAnyAlert(let caution):
-            addCaution(title: Local.caution, message: caution)
+            Animator.sharedInstance.hideAnimation()
+            let alert = UIAlertController(title: Local.caution, message: caution, preferredStyle: .alert)
+            let action = UIAlertAction(title: Local.ok, style: .cancel) { _ in
+                if caution == FirebaseLocal.tryOtherWay{
+                    appContainer.authService.signOut()
+                }
+            }
+            alert.addAction(action)
+            present(alert, animated: true)
         case .verificationCodeSend:
             let alertController = UIAlertController(title: Local.caution, message: Local.sentMessage, preferredStyle: .alert)
             let action = UIAlertAction(title: Local.ok, style: .cancel){ [unowned self] _ in
@@ -301,8 +329,6 @@ extension ForgotThePasswordView:ForgotThePasswordViewModelDelegate{
             }
             alertController.addAction(action)
             present(alertController, animated: true)
-            
-            
         }
     }
 }
@@ -313,23 +339,11 @@ extension ForgotThePasswordView:UITextFieldDelegate{
         nextButtonPressed()
         return true
     }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {[unowned self] in
-            topStackView.isHidden = false
-        } completion: { _ in
-            
-        }
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {[unowned self] in
-            topStackView.isHidden = true
-        } completion: { _ in
-            
-        }
-
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        textField.resignFirstResponder()
     }
 }
+
 
 
 

@@ -28,6 +28,7 @@ final class AppRouter:NSObject{
     }
     
     func startAsLoggedIn(_ windowScene: UIWindowScene){
+        appContainer.authService.fetchAppID()
         //Check is there any unsaved purchase data before
         FirebasePaymentService.setOldPayment { [unowned self]  _ in
             window = UIWindow(frame: windowScene.coordinateSpace.bounds)
@@ -45,6 +46,7 @@ final class AppRouter:NSObject{
 
     func isUserLoginOrNot(_ windowScene: UIWindowScene){
        scene = windowScene
+//        start(windowScene)
         if Auth.auth().currentUser != nil {
               startAsLoggedIn(windowScene)
         }else{
@@ -58,16 +60,7 @@ final class AppRouter:NSObject{
               start(scene)
         }
     }
-    
-    func startAnyNewView(_ vc:UIViewController,navControlller:Bool){
-        window = UIWindow(frame: scene.coordinateSpace.bounds)
-        window?.windowScene = scene
-        let view = navControlller ? UINavigationController(rootViewController: vc) : vc
-        window?.rootViewController = view
-        window?.makeKeyAndVisible()
-    }
-    
-   
+
     @objc private func userDidChangeStatus(_ responder:NSNotification){
         //for some user's process app write user document ID to singleton
         DispatchQueue.main.async { [unowned self] in
@@ -75,9 +68,6 @@ final class AppRouter:NSObject{
                 //logout
                   start(scene)
                 FBLogOut.sharedInstance.logOut()
-            }else{
-                // login
-                
             }
         }
     }

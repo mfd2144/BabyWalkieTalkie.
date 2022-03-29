@@ -49,7 +49,7 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
             .default
         timeLogic.sink { [unowned self] bool in
             if bool == false{
-                messageTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(timerFunction), userInfo: nil, repeats: false)
+                messageTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(timerFunction), userInfo: nil, repeats: false)
             }
         }.store(in: &subscriber)
     }
@@ -60,9 +60,7 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
     @objc func startSmartAgain(){
         smartListenerProtocol?.startToListen()
     }
-    deinit {
-        printNew("listen baby view model deinit")
-    }
+
     //user press button
     //first check isthere anybody in channel
     // then return mutual channel id
@@ -79,29 +77,29 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
             switch result{
             case .success(let response):
                 guard let response = response else {
-                    delegate?.handleOutputs(.anyErrorOccurred("Unknown error.Please restart application"))
+                    delegate?.handleOutputs(.anyErrorOccurred(Local2.restartAppCaution))
                     delegate?.handleOutputs(.isLoading(false))
                     return
                 }
                 if response == "notConnected"{
                     delegate?.handleOutputs(.isLoading(false))
                     delegate?.handleOutputs(.mustBeConnected)
-                    return
                 } else if response != "baby"{
+                    
                     firebaseService.enterTheChannel(role: .baby)
                     goOnAudioStartingSequence()
                 } else{
                     delegate?.handleOutputs(.alreadyLogisAsBaby)
                     delegate?.handleOutputs(.isLoading(false))
-                    return
                 }
             case.failure:
                 delegate?.handleOutputs(.isLoading(false))
-                delegate?.handleOutputs(.anyErrorOccurred("Unknown error.Please restart application"))
+                delegate?.handleOutputs(.anyErrorOccurred(Local.unknownError))
                 return
             }
         }
     }
+    
     private func goOnAudioStartingSequence(){
         // start listen to medium
         smartListenerProtocol?.startToListen()
@@ -137,11 +135,11 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
                 guard let _token = _token else {return}
                 token = _token
                 // get rtm token according to channel
-                tokenDelegate?.fetchRtmToken(userName:userName){ rtmTokenResult in
+                tokenDelegate?.fetchRtmToken(userName:userName){[unowned self] rtmTokenResult in
                     switch rtmTokenResult{
                     case.failure(let error):
                         delegate?.handleOutputs(.isLoading(false))
-                        delegate?.handleOutputs(.anyErrorOccurred(error.localizedDescription))
+                        delegate?.handleOutputs(.anyErrorOccurred("\(Local2.tokenError) : \(error.localizedDescription)"))
                     case .success(let _rtmToken):
                         guard let _rtmToken = _rtmToken else {return}
                         rtmToken = _rtmToken
@@ -167,6 +165,7 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
         agoraMessageService = nil
         router.routeTo(.toSelectPage)
     }
+    
     func closePressed() {
         firebaseService.exitTheChannel(role: .baby) { _ in}
         returnToSelectPage()
@@ -194,7 +193,7 @@ final class ListenBabyViewModel:ListenBabyViewModelProtocol{
             case.success:
                 delegate?.handleOutputs(.otherDeviceDidUnpair)
             default:
-                delegate?.handleOutputs(.anyErrorOccurred("Other user disconnected"))
+                delegate?.handleOutputs(.anyErrorOccurred(Local2.otherUserDisconnected))
             }
         }
     }
@@ -245,13 +244,16 @@ extension ListenBabyViewModel:SmartListenerDelegate{
 }
 
 extension ListenBabyViewModel:AgoraMessageServiceProtocol{
-    
+    func agoraServiceError(errorString: String) {
+        delegate?.handleOutputs(.anyErrorOccurred(errorString))
+    }
     func listenerOrSpeaker(_ listener: Bool) {
         //if it value is false, smart listener must be stop and agora audio must listen continuously
         if listener{
             smartListenerProtocol.startToListen()
             stopBroadcast()
-        }else{//parent device is audience
+        }else{
+            //parent device is audience
             smartListenerProtocol.stopToListen()
             agoraService.startBroadcast()
         }
@@ -276,25 +278,5 @@ extension ListenBabyViewModel:AgoraMessageServiceProtocol{
         }
     }
 }
-
-//extension ListenBabyViewModel:SoundPlayerDelegate{
-//    func errorType(_ error: SoundPlayerError) {
-//
-//    }
-//
-//    private func playWhiteSound(){
-//        stopAudio()
-//        player = SoundPlayer()
-//        player.delegate = self
-//        player.playSound()
-//    }
-//
-//    private func stopWhiteSound(){
-//        player.stopSound()
-//        player = nil
-//        startAudio()
-//    }
-//}
-
 
 

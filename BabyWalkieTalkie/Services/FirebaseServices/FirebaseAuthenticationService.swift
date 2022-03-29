@@ -9,11 +9,10 @@ import Foundation
 import FirebaseAuth
 import FBSDKLoginKit
 import FirebaseFunctions
+import os.log
 
 
-struct FirebaseLocalization{
-    static let unknownError = NSLocalizedString("Firebase.unknownError", comment: "")
-}
+
 
 final class FirebaseAuthenticationService{
     typealias result = (FirebaseResults<Any?>)->Void
@@ -22,23 +21,34 @@ final class FirebaseAuthenticationService{
     
     
     public func signIn(email:String,Password:String,completion: @escaping result){
-        Auth.auth().signIn(withEmail: email, password: Password) { _, error in
+        Auth.auth().signIn(withEmail: email, password: Password) { authResult, error in
             if let error = error{
                 completion(.failure(.errorContainer(error.localizedDescription)))
             }else{
-                completion(.success(nil))
+                if let authResult = authResult {
+                    let user = authResult.user
+                    if user.isEmailVerified {
+                        completion(.success(nil))
+                    } else {
+                        user.sendEmailVerification { error in
+                            if let error = error{
+                                completion(.failure(.verificationError(error.localizedDescription)))
+                            }else{
+                                completion(.success("verificationSend"))
+                            }
+                            
+                        }
+                    }
+                  }
             }
         }
     }
     
-    
-    
+        
     public func createNewUserWithEmail(userInfos:UserInfo,completion:@escaping result){
         guard let password = userInfos.password,
               let _ = userInfos.userName,
               let mail = userInfos.mail else { return }
-        
-        
         Auth.auth().createUser(withEmail: mail, password: password) {authDataResult, error in
             if let error = error{
                 completion(.failure(.errorContainer(error.localizedDescription)))
@@ -55,6 +65,7 @@ final class FirebaseAuthenticationService{
                             if let error = error{
                                 completion(.failure(.errorContainer(error.localizedDescription)))
                             }else{
+                                authDataResult?.user.sendEmailVerification(completion: {_ in })
                                 completion(.success(nil))
                             }
                         }
@@ -76,7 +87,7 @@ final class FirebaseAuthenticationService{
             if let error = error {
                 completion(.failure(.errorContainer(error.localizedDescription)))
             }else{
-                guard let providerData = authResult?.user.providerData else {return}
+                guard let providerData = authResult?.user.providerData else {completion(.failure(.providerError)); return}
                 var email: String!
                 for firUserInfo in providerData {
                     email =  firUserInfo.email
@@ -100,7 +111,6 @@ final class FirebaseAuthenticationService{
     
     //MARK: - Login with google
     
-    
     public func loginWithGoogle(_ credential:AuthCredential ,completion:@escaping result){
         Auth.auth().signIn(with: credential) { [unowned self]authResult, error in
             if let error = error {
@@ -111,6 +121,7 @@ final class FirebaseAuthenticationService{
                 for firUserInfo in providerData {
                     email =  firUserInfo.email
                 }
+                
                 
                 guard let mail = email,
                       let name = authResult?.user.displayName
@@ -126,12 +137,44 @@ final class FirebaseAuthenticationService{
                     }
                 }
             }
-            
         }
-        
     }
     
-    
+    func loginWithApple(_ credential:OAuthCredential, name:String?, mail:String? ,completion:@escaping result){
+        Auth.auth().signIn(with: credential) { [unowned self]authResult, error in
+            if let error = error {
+                completion(.failure(.errorContainer(error.localizedDescription)))
+            }else{
+                let data = ["userName":name,
+                            "email":mail]
+                functions.httpsCallable("saveUserToDB").call(data) { response, error in
+                    Animator.sharedInstance.hideAnimation()
+                    if let error = error{
+                        completion(.failure(.errorContainer(error.localizedDescription)))
+                    }else{
+                        let result = (response?.data as? NSDictionary)?["result"] as? String
+                        if result == "error"{
+                            completion(.failure(.errorContainer(FirebaseLocal.tryOtherWay)))
+                        }else{
+                            completion(.success(nil))
+                        }
+                       
+                    }
+                }
+            }
+        }
+    }
+    //MARK: - Fetch agora app id
+    func fetchAppID(){
+        functions.httpsCallable("fetchAgoraAppID").call {result, error in
+            if error != nil {
+                os_log("fetching ID error",log: OSLog.viewCycle, type: .error)
+            }else{
+                let appID = (result?.data as? NSDictionary)?["appID"] as? String
+                AppSingleton.sharedInstance.appID = appID
+            }
+        }
+    }
     
     //MARK: -Reset email link
     
@@ -144,7 +187,6 @@ final class FirebaseAuthenticationService{
             }
         }
     }
-    
     
     //MARK: - Login log out Methods
     public func signOut(){
@@ -160,10 +202,10 @@ final class FirebaseAuthenticationService{
         functions.httpsCallable("removeFCM").call(data) { _, _ in }
     }
     
-    
     func getUserdNameAndId()->ShortUserPresentation?{
         guard let user = Auth.auth().currentUser else {return nil}
-        return ShortUserPresentation(name: user.displayName!, ID: user.uid)
+        //todo
+        return ShortUserPresentation(name: user.displayName ?? "boş", ID: user.uid)
     }
     
     func checkFCM(){
@@ -172,5 +214,13 @@ final class FirebaseAuthenticationService{
         functions.httpsCallable("checkFCM").call(data) { _,_ in  }
     }
     
+    func babyDeviceDisconnect(){
+        let data = ["language":Locale.current.languageCode ?? ""]
+        functions.httpsCallable("babyDeviceDisconnect").call(data){_,_ in }
+    }
+    
+    func parentDeviceDisconnect(){
+        functions.httpsCallable("parentDeviceDisconnect").call{_,_ in }
+    }
 }
 

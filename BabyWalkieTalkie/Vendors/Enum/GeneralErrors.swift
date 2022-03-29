@@ -18,15 +18,15 @@ enum GeneralErrors:Error{
     var description:String{
         switch self {
         case .emptyFieldError:
-            return "Empty textfield"
+            return NSLocalizedString("emptyFieldError", comment: "")
         case.unsufficientText:
-            return "Text must be longer"
+            return NSLocalizedString("unsufficientText", comment: "")
         case.unvalidText:
-            return "Textfield must contain lowercase, uppercase, number, symbol"
+            return NSLocalizedString("unvalidText", comment: "")
         case .userSavingError:
-            return "User couldn't created"
+            return NSLocalizedString("userSavingError", comment: "")
         case .unspesificError:
-            return "An error occured"
+            return NSLocalizedString("UnknownError", comment: "")
         }
     }
 }

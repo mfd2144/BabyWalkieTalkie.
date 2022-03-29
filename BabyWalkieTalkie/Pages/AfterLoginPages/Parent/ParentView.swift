@@ -7,6 +7,14 @@
 
 import UIKit
 
+//"close" = "Close";
+//"test" = "Test";
+//"speak" = "Speak";
+//"camera" = "Camera";
+//"link" = "Link";
+//"internet" = "Internet";
+//"crying" = "Crying";
+
 final class ParentView:UIViewController{
     //MARK: - Variables
     var viewModel: ParentViewModelProtocol!
@@ -14,7 +22,7 @@ final class ParentView:UIViewController{
     
     //MARK: - MainStack
     var mainStack:UIStackView = {
-       let stack = UIStackView()
+        let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .equalSpacing
         stack.alignment = .center
@@ -22,24 +30,24 @@ final class ParentView:UIViewController{
         return stack
     }()
     
-   //MARK: - Middle buttons
+    //MARK: - Middle buttons
     
     lazy var closeLabel:UILabel = {
-        let label = createLabel(labelText:"close" )
+        let label = createLabel(labelText:Local2.close )
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return label
     }()
     lazy var testLabel:UILabel = {
-        let label =  createLabel(labelText:"test" )
+        let label =  createLabel(labelText:Local2.test)
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return label
     }()
     lazy var cameraLabel:UILabel = {
-        let label = createLabel(labelText:"camera" )
+        let label = createLabel(labelText:Local2.camera )
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return label
     }()
-
+    
     lazy var closeButton = createRoundedButton(imageName: "power")
     lazy var testButton = createRoundedButton(imageName: "person.fill.questionmark")
     lazy var cameraButton = createRoundedButton(imageName: "camera")
@@ -72,7 +80,7 @@ final class ParentView:UIViewController{
     }()
     
     lazy var switchLabel: UILabel = {
-        let label = createLabel(labelText: "speak" )
+        let label = createLabel(labelText: Local2.speak )
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -80,25 +88,23 @@ final class ParentView:UIViewController{
     //MARK: - TopStack and subcompenents
     lazy var emptyLabel = createLabel(labelText: " ")
     lazy var emptyLabel2 = createLabel(labelText: " ")
-    lazy var linkLabel = createLabel(labelText:"link")
-    lazy var internetLabel = createLabel(labelText:"intenet")
-    lazy var testLabel2 = createLabel(labelText:"test")
-    lazy var soundLabel = createLabel(labelText:"crying")
+    lazy var linkLabel = createLabel(labelText:Local2.link)
+    lazy var internetLabel = createLabel(labelText:Local2.intenet)
+    lazy var testLabel2 = createLabel(labelText:Local2.test)
+    lazy var soundLabel = createLabel(labelText:Local2.crying)
     lazy var linkLight = createLight()
     lazy var internetConnectionLight = createLight()
     lazy var testLight = createLight()
     lazy var soundLight = createLight()
     
     lazy var lightStack :UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [emptyLabel,linkLabel,linkLight,internetLabel,internetConnectionLight,testLabel2,testLight,soundLabel,soundLight,emptyLabel2])
+        let stack = UIStackView(arrangedSubviews: [linkLabel,linkLight,internetLabel,internetConnectionLight,testLabel2,testLight,soundLabel,soundLight])
         stack.alignment = .fill
         stack.distribution = .fillEqually
         stack.axis = .vertical
         stack.translatesAutoresizingMaskIntoConstraints = false
-     return stack
+        return stack
     }()
-
-  
     
     lazy var lightView:UIView = {
         let view = UIView()
@@ -111,11 +117,11 @@ final class ParentView:UIViewController{
     
     //MARK: - ViewFunctions
     private func createStack()->UIStackView {
-            let stack = UIStackView()
-            stack.isLayoutMarginsRelativeArrangement = true
-            stack.directionalLayoutMargins = .init(top: 15, leading: 15, bottom: 15, trailing: 15)
-            stack.translatesAutoresizingMaskIntoConstraints = false
-            return stack
+        let stack = UIStackView()
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.directionalLayoutMargins = .init(top: 15, leading: 15, bottom: 15, trailing: 15)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }
     private func createSecondStackLayer(views:[UIView])->UIStackView  {
         let stack = UIStackView(arrangedSubviews: views)
@@ -126,15 +132,12 @@ final class ParentView:UIViewController{
         stack.alignment = .fill
         return stack
     }
-     
+    
     private func drawCapsule()->CAShapeLayer {
         let path = UIBezierPath()
-        let height = UIScreen.main.bounds.height
-        let width = UIScreen.main.bounds.width
-        let buttonHeight = (width-120)/3 + 20
+        let buttonHeight = (screenWidth-120)/3 + 20
         let topSafeHeight = view.safeAreaInsets.top
-        printNew("\(topSafeHeight)")
-        let maximumHeight = (height-buttonHeight)/2-topSafeHeight
+        let maximumHeight = (screenHeight-buttonHeight)/2-topSafeHeight
         lightViewHeight = maximumHeight-buttonSize-100
         path.addArc(withCenter: CGPoint(x: 50, y: 50), radius: 50, startAngle: 0, endAngle: .pi, clockwise: false)
         path.addArc(withCenter: CGPoint(x: 50, y: lightViewHeight!), radius: 50, startAngle: .pi, endAngle: 0, clockwise: false)
@@ -146,7 +149,7 @@ final class ParentView:UIViewController{
         shapeLayer.lineJoin = .round
         shapeLayer.masksToBounds = false
         return shapeLayer
-}
+    }
     
     private func createRoundedButton(imageName:String)->UIButton {
         let button = UIButton()
@@ -184,10 +187,7 @@ final class ParentView:UIViewController{
     }
 }
 
-
-
 extension ParentView{
-    
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -199,7 +199,6 @@ extension ParentView{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -213,12 +212,11 @@ extension ParentView{
     }
     
     //MARK: - Set subviews and targets
-
+    
     private func setShadows() {
         testButton.addShadow2()
         cameraButton.addShadow2()
         closeButton.addShadow2()
-
     }
     
     func setSubview() {
@@ -231,17 +229,34 @@ extension ParentView{
         view.addSubview(mainStack)
         view.addSubview(lightView)
         view.addSubview(switchLabel)
-        
+        NSLayoutConstraint.activate([
+            mainStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: (-1*buttonDistance)),
+            lightView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
+            lightView.heightAnchor.constraint(equalToConstant: lightViewHeight!+50),
+            lightView.widthAnchor.constraint(equalToConstant: 100),
+            lightView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lightStack.heightAnchor.constraint(equalToConstant: lightViewHeight!),
+            switchLabel.bottomAnchor.constraint(equalTo: speakButton.topAnchor, constant: (-10)),
+            switchLabel.centerXAnchor.constraint(equalTo: speakButton.centerXAnchor),
+            switchLabel.heightAnchor.constraint(equalToConstant: buttonDistance),
+            switchLabel.widthAnchor.constraint(equalToConstant: buttonSize),
+            
+        ])
+        switch UIDevice.current.userInterfaceIdiom{
+        case.phone:
+            setSubviewsForPhones()
+        case.pad:
+            setSubviewsForPads()
+        default:
+            break
+        }
+    }
+    private func setSubviewsForPhones() {
         let phoneWidth = UIScreen.main.coordinateSpace.bounds.width
         let stackWidth = phoneWidth-60//button distance
         let buttonWidth = (stackWidth-60)/3
         let stackHeight = buttonWidth + 20
-        
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
-            mainStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: (-1*buttonDistance)),
-            mainStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             buttonStack.heightAnchor.constraint(equalToConstant: stackHeight),
             buttonStack.widthAnchor.constraint(equalToConstant: stackWidth),
             s1.heightAnchor.constraint(equalToConstant: buttonWidth),
@@ -250,23 +265,38 @@ extension ParentView{
             s2.widthAnchor.constraint(equalToConstant: buttonWidth),
             s3.heightAnchor.constraint(equalToConstant: buttonWidth),
             s3.widthAnchor.constraint(equalToConstant: buttonWidth),
-            lightView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
-            lightView.heightAnchor.constraint(equalToConstant: lightViewHeight!+50),
-            lightView.widthAnchor.constraint(equalToConstant: 100),
-            lightView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            lightStack.heightAnchor.constraint(equalToConstant: lightViewHeight!+50),
-            lightStack.widthAnchor.constraint(equalToConstant: 100),
-            switchLabel.bottomAnchor.constraint(equalTo: speakButton.topAnchor, constant: (-10)),
-            switchLabel.centerXAnchor.constraint(equalTo: speakButton.centerXAnchor),
-            switchLabel.heightAnchor.constraint(equalToConstant: buttonDistance),
-            switchLabel.widthAnchor.constraint(equalToConstant: buttonSize),
-
+            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonSize),
+            mainStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        
         closeButton.layer.cornerRadius = buttonWidth/2
         testButton.layer.cornerRadius = (buttonWidth-30)/2
         cameraButton.layer.cornerRadius = (buttonWidth-30)/2
-        }
+        Animator.sharedInstance.showAnimation()
+    }
+    
+    private func setSubviewsForPads() {
+        let stackWidth = screenWidth-460//button distance
+        let buttonWidth = (stackWidth-60)/3
+        let stackHeight = buttonWidth + 20
+        NSLayoutConstraint.activate([
+            buttonStack.heightAnchor.constraint(equalToConstant: stackHeight),
+            buttonStack.widthAnchor.constraint(equalToConstant: stackWidth),
+            s1.heightAnchor.constraint(equalToConstant: buttonWidth),
+            s1.widthAnchor.constraint(equalToConstant: buttonWidth),
+            s2.heightAnchor.constraint(equalToConstant: buttonWidth),
+            s2.widthAnchor.constraint(equalToConstant: buttonWidth),
+            s3.heightAnchor.constraint(equalToConstant: buttonWidth),
+            s3.widthAnchor.constraint(equalToConstant: buttonWidth),
+            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonSize),
+            mainStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainStack.widthAnchor.constraint(equalToConstant: screenWidth-300)
+        ])
+        closeButton.layer.cornerRadius = buttonWidth/2
+        testButton.layer.cornerRadius = (buttonWidth-30)/2
+        cameraButton.layer.cornerRadius = (buttonWidth-30)/2
+        Animator.sharedInstance.showAnimation()
+    }
     
     private func addTarget(){
         testButton.addTarget(self, action: #selector(testBabyDevice), for: .touchUpInside)
@@ -279,7 +309,7 @@ extension ParentView{
             viewModel.speakPressed()
             //todo
         }
-       
+        
     }
     
     @objc private func testBabyDevice(){
@@ -291,7 +321,7 @@ extension ParentView{
         cameraButton.pressAnimation()
         viewModel.videoPressed()
     }
-
+    
     @objc func closePressed(){
         closeButton.pressAnimation()
         DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
@@ -306,7 +336,7 @@ extension ParentView{
         switch style{
         case .cancel:
             action = UIAlertAction(title: actionTitle, style: style)
-       default:
+        default:
             action = UIAlertAction(title: actionTitle, style: style) { _ in actionClosure() }
         }
         alert.addAction(action)
@@ -314,11 +344,12 @@ extension ParentView{
     }
 }
 
+
 extension ParentView: ParentViewModelDelegate{
     func handleOutputs(outputs: ParentViewModelOutputs) {
         switch outputs {
         case .anyErrorOccurred(let error):
-            addCaution(title: "Error", message: error)
+            addCaution(title: Local.error, message: error)
         case .isLoading(let loading):
             loading ? Animator.sharedInstance.showAnimation() : Animator.sharedInstance.hideAnimation()
         case .babyDeviceConnect(let logic):
@@ -326,34 +357,41 @@ extension ParentView: ParentViewModelDelegate{
             if logic == false{
                 testLight.image = UIImage(systemName:"capsule.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)
             }
-        case .testResult(let result,let time):
-                selectTestView(result, time: time)
+        case .testResult(let result,let string):
+            selectTestView(result, stringData: string)
         case.alreadyLogisAsParent:
-            showAlert(alertTitle: "Caution",
-                    message:  "Already parent device login to system. Please change device role.",
-                      actionTitle: "Go Back",
+            showAlert(alertTitle: Local.caution,
+                      message:  Local2.parentCaution,
+                      actionTitle: Local.goBack,
                       style: .default, actionClosure: viewModel.returnToSelectPage )
         case .babyDeviceNotConnect:
-            addCaution(title: "Caution", message: "Baby device isn't connected yet")
+            addCaution(title: Local.caution, message:Local2.noBabyDevice )
         case .thereNotPairedDevice:
-            showAlert(alertTitle: "Caution",
-                    message:  "There isn't any paired device yet",
-                      actionTitle: "Go Back",
+            showAlert(alertTitle: Local.caution,
+                      message: Local2.lackOfPairedDev ,
+                      actionTitle: Local.goBack,
                       style: .default, actionClosure:viewModel.returnToSelectPage)
         case .otherDeviceDidUnpair:
-                    showAlert(alertTitle: "Caution",
-                    message:  "Other device unpaired ",
-                      actionTitle: "Go Back",
+            showAlert(alertTitle: Local.caution,
+                      message: Local2.noBabyDevice,
+                      actionTitle: Local.goBack,
                       style: .default, actionClosure:viewModel.returnToSelectPage)
         case.videoDidNotPurchased:
-            addCaution(title: "Caution", message: "You must purchase video package first")
+            addCaution(title: Local.caution, message: Local2.videoPurchaseCaution)
         case .connectionStatus(let logic):
             internetConnectionLight.image =  logic ?  UIImage(systemName:"capsule.fill")?.withTintColor(.green, renderingMode: .alwaysOriginal) : UIImage(systemName:"capsule.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+        case .crying(let bool):
+            soundLight.image = bool ?  UIImage(systemName:"capsule.fill")?.withTintColor(.green, renderingMode: .alwaysOriginal) : UIImage(systemName:"capsule.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)
         }
-        }
-    func selectTestView(_ result:Bool,time:String?){
+    }
+    func selectTestView(_ result:Bool,stringData:String?){
         DispatchQueue.main.async { [unowned self] in
-            testLight.image = result ? UIImage(systemName:"capsule.fill")?.withTintColor(.green, renderingMode: .alwaysOriginal) : UIImage(systemName:"capsule.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+            if result{
+                testLight.image = UIImage(systemName:"capsule.fill")?.withTintColor(.green, renderingMode: .alwaysOriginal)
+            } else {
+                testLight.image = UIImage(systemName:"capsule.fill")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+                addCaution(title: Local.caution, message: stringData ?? Local2.babyImportantCaution)
+            }
         }
     }
 }

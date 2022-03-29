@@ -12,9 +12,19 @@ import AgoraRtcKit
 class VideoChatViewController: UIViewController {
     
     @IBOutlet weak var remoteContainer: UIView!
-    @IBOutlet weak var turnButton: UIButton!
-    @IBOutlet weak var remoteVideoMutedIndicator: UIImageView!
-    @IBOutlet weak var micButton: UIButton!
+    let turnButton:UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "switch"), for: .normal)
+        return button
+    }()
+    let micButton:UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "mic"), for: .normal)
+        return button
+    }()
+    
     
     weak var parentView:ParentView!
     weak var logVC: LogViewController?
@@ -23,41 +33,60 @@ class VideoChatViewController: UIViewController {
     var remoteVideo: AgoraRtcVideoCanvas?
     var token:String?
     var channelID:String?
-    //let appID:String = "3d3cffb6fa994521b3e0617bb8063577"
+    var appId:String?
     var firebaseService : FirebaseAgoraService!
     
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        appId = AppSingleton.sharedInstance.appID
         initializeVideo()
-        
+        setSubViews()
     }
+ 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-       
-        
     }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         leaveChannel()
         messageService.sendMessage(.audio)
         parentView.viewModel.setAgora()
     }
+    
+    private func setSubViews(){
+        remoteVideo?.view?.layer.zPosition = -100
+       
+        view.addSubview(micButton)
+        view.addSubview(turnButton)
+        micButton.layer.zPosition = 100
+        turnButton.layer.zPosition = 100
+        micButton.addTarget(self, action: #selector(didClickMuteButton(_ :)), for: .touchUpInside)
+        turnButton.addTarget(self, action: #selector(turnButtonClicked(_ :)), for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            micButton.widthAnchor.constraint(equalToConstant: buttonSize),
+            micButton.heightAnchor.constraint(equalTo: micButton.widthAnchor),
+            micButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            micButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -1*buttonSize),
+            turnButton.widthAnchor.constraint(equalToConstant: buttonSize),
+            turnButton.heightAnchor.constraint(equalTo: turnButton.widthAnchor),
+            turnButton.centerXAnchor.constraint(equalTo: view.centerXAnchor,constant: view.frame.width/4),
+            turnButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -1*buttonSize),
+        ])
+    }
+    
     func initializeVideo() {
         firebaseService = FirebaseAgoraService(role: .parent)
-        firebaseService.fetchAppID {[unowned self] result in
-            switch result{
-            case .success(let appID):
-                guard let appID = appID else{
-                    return
-                }
-                agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: appID, delegate: self)
-                joinChannel()
-                setupVideo()
-            case.failure(let error):
-                print(error.localizedDescription)
-            }
+        guard let appId = appId else{
+            //todo
+            // show error code ?
+            return
         }
+        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: self)
+        joinChannel()
+        setupVideo()
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let identifier = segue.identifier else {
@@ -97,24 +126,21 @@ class VideoChatViewController: UIViewController {
         // you use to generate this token.
         agoraKit.joinChannel(byToken: token, channelId: channelID, info: nil, uid: 1) { [unowned self] (channel, uid, elapsed) -> Void in
             // Did join channel "demoChannel1"
-            self.logVC?.log(type: .info, content: "did join channel")
+            self.logVC?.log(type: .info, content: Local2.joinChannel)
         }
         UIApplication.shared.isIdleTimerDisabled = true
     }
     
     func leaveChannel() {
         // leave channel and end chat
-        printNew("leave çalıştı")
         agoraKit.leaveChannel(nil)
         UIApplication.shared.isIdleTimerDisabled = false
-        self.logVC?.log(type: .info, content: "did leave channel")
+        self.logVC?.log(type: .info, content: Local2.leaveChannel)
         agoraKit = nil
     }
-    
-    @IBAction func didClickMuteButton(_ sender: UIButton) {
+    @objc func didClickMuteButton(_ sender: UIButton) {
         sender.isSelected.toggle()
         // mute local audio
-        print(sender.isSelected)
         if sender.isSelected{
             sender.setImage(UIImage(named: "mute"), for: .normal)
         }else{
@@ -124,8 +150,7 @@ class VideoChatViewController: UIViewController {
     }
     
     
-    @IBAction func turnButtonClicked(_ sender: UIButton) {
-        printNew("here")
+    @objc func turnButtonClicked(_ sender: UIButton) {
         messageService.sendMessage(.turnCamera)
     }
     
@@ -153,8 +178,7 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
         if remoteVideo != nil {
             return
         }
-        
-        let view = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: parent.frame.size))
+        let view = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: remoteContainer.frame.size))
         remoteVideo = AgoraRtcVideoCanvas()
         remoteVideo!.view = view
         remoteVideo!.renderMode = .hidden
@@ -170,11 +194,12 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
     ///   - uid: ID of the user or host who leaves a channel or goes offline.
     ///   - reason: Reason why the user goes offline
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid:UInt, reason:AgoraUserOfflineReason) {
+        self.logVC?.log(type: .info, content: Local2.otherDeviceLeave)
 //        isRemoteVideoRender = false
-        if let it = remoteVideo, it.uid == uid {
-            removeFromParent(it)
-            remoteVideo = nil
-        }
+//        if let it = remoteVideo, it.uid == uid {
+//            removeFromParent(it)
+//            remoteVideo = nil
+//        }
     }
     
     /// Occurs when a remote user’s video stream playback pauses/resumes.
@@ -191,8 +216,7 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
     ///   - engine: RTC engine instance
     ///   - warningCode: Warning code
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        print(warningCode)
-        logVC?.log(type: .warning, content: "did occur warning, code: \(warningCode.rawValue)")
+        logVC?.log(type: .warning, content: " \(Local2.logWarning) \(warningCode.rawValue)")
     }
     
     /// Reports an error during SDK runtime.
@@ -200,6 +224,8 @@ extension VideoChatViewController: AgoraRtcEngineDelegate {
     ///   - engine: RTC engine instance
     ///   - errorCode: Error code
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        logVC?.log(type: .error, content: "did occur error, code: \(errorCode.rawValue)")
+        logVC?.log(type: .error, content: "\(Local2.logError) \(errorCode.rawValue)")
     }
 }
+
+

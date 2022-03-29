@@ -39,18 +39,13 @@ final class ParentViewModel:ParentViewModelProtocol{
         connectionStatus = Network.reachability.status == .unreachable ? false : true
 #endif
     }
-    deinit{
-        print("parent deinit")
-    }
-    
     func startEverything(){
         delegate?.handleOutputs(outputs: .connectionStatus(connectionStatus))
-        delegate?.handleOutputs(outputs: .isLoading(true))
         // check channel condition,change channel role as parent
         firebaseService.decideAboutChannel(){ [unowned self]result in
             switch result{
             case .success(let response):
-                guard let response = response else {fatalError("empty result")}
+                guard let response = response else {delegate?.handleOutputs(outputs: .anyErrorOccurred(Local2.restartAppCaution)) ; return}
                 if response == "notConnected"{
                     delegate?.handleOutputs(outputs: .thereNotPairedDevice)
                 } else if response != "parent" {
@@ -64,6 +59,7 @@ final class ParentViewModel:ParentViewModelProtocol{
             }
         }
     }
+    
     private func otherWorks(){
         firebaseService.fetchChannelID { [unowned self] result in
             switch result{
@@ -75,7 +71,7 @@ final class ParentViewModel:ParentViewModelProtocol{
                 guard let _channelID = _channelID else {return}
                 channelID = _channelID
                 //after channelID fetch rtc token
-                tokenDelegate.fetchRtcToken( channel: _channelID) { tokenResult in
+                tokenDelegate.fetchRtcToken( channel: _channelID) { [unowned self] tokenResult in
                     switch tokenResult{
                     case.failure(let error):
                         delegate?.handleOutputs(outputs: .isLoading(false))
@@ -83,7 +79,7 @@ final class ParentViewModel:ParentViewModelProtocol{
                     case .success(let _token):
                         token = _token
                         //fetch ftm token
-                        tokenDelegate.fetchRtmToken(userName:userName) { rtmTokenResult in
+                        tokenDelegate.fetchRtmToken(userName:userName) { [unowned self] rtmTokenResult in
                             switch rtmTokenResult{
                             case.failure(let error):
                                 delegate?.handleOutputs(outputs: .anyErrorOccurred(error.localizedDescription))
@@ -105,6 +101,7 @@ final class ParentViewModel:ParentViewModelProtocol{
         self.agoraService = AgoraAudioService( token: token, channel: channelID, username:"parent" , role:.audience)
         self.agoraMessageService = AgoraMessageService(rtmToken: rtmToken, channel: channelID, username: "parent")
         agoraMessageService.delegate = self
+        agoraService.delegate = self
         agoraService?.startBroadcast()
         delegate?.handleOutputs(outputs: .isLoading(false))
     }
@@ -118,8 +115,9 @@ final class ParentViewModel:ParentViewModelProtocol{
  
     func  testPressed(){
         guard let agoraMessageService = agoraMessageService else {
-            delegate?.handleOutputs(outputs: .anyErrorOccurred("Try again"))
-            return }
+            delegate?.handleOutputs(outputs: .anyErrorOccurred(Local2.restartAppCaution))
+            return
+        }
         delegate?.handleOutputs(outputs: .isLoading(true))
         agoraMessageService.sendMessage(.test)
         timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(testTimer), userInfo: nil, repeats: false)
@@ -128,7 +126,7 @@ final class ParentViewModel:ParentViewModelProtocol{
     @objc private func testTimer(){
         delegate?.handleOutputs(outputs: .isLoading(false))
         if !messageLogic{
-            delegate?.handleOutputs(outputs: .testResult(false, "check your baby!!!"))
+            delegate?.handleOutputs(outputs: .testResult(false, Local2.babyImportantCaution))
         }else{
             messageLogic = false
         }
@@ -136,7 +134,7 @@ final class ParentViewModel:ParentViewModelProtocol{
     
     func speakPressed(){
         guard let agoraMessageService = agoraMessageService else {
-            delegate?.handleOutputs(outputs: .anyErrorOccurred("Try again"))
+            delegate?.handleOutputs(outputs: .anyErrorOccurred(Local.unknownError))
             return }
         if isListener {
             agoraService.makeSpeaker()
@@ -152,7 +150,7 @@ final class ParentViewModel:ParentViewModelProtocol{
         guard isBabyDeviceOnline else {delegate?.handleOutputs(outputs: .babyDeviceNotConnect); return}//is baby device coonnected
         guard didVideoPurchased else {delegate?.handleOutputs(outputs: .videoDidNotPurchased);return}//check video package was purchased
         guard let agoraMessageService = agoraMessageService else {
-            delegate?.handleOutputs(outputs: .anyErrorOccurred("Try again")); return }
+            delegate?.handleOutputs(outputs: .anyErrorOccurred(Local.unknownError)); return }
         agoraMessageService.sendMessage(.video)
         agoraService.stopBroadcast()
         agoraService = nil
@@ -183,22 +181,32 @@ final class ParentViewModel:ParentViewModelProtocol{
             case.success:
                 delegate?.handleOutputs(outputs: .otherDeviceDidUnpair)
             default:
-                delegate?.handleOutputs(outputs: .anyErrorOccurred("Other user disconnected"))
+                delegate?.handleOutputs(outputs: .anyErrorOccurred(Local2.otherUserDisconnected))
             }
         }
     }
 }
 extension ParentViewModel: AgoraMessageServiceProtocol{
+    func agoraServiceError(errorString: String) {
+        delegate?.handleOutputs(outputs: .anyErrorOccurred(errorString))
+    }
+    
     func testOK() {
-        let time = Date.actualStringTime()
         messageLogic = true
         timer?.invalidate()
         delegate?.handleOutputs(outputs: .isLoading(false))
-        delegate?.handleOutputs(outputs:.testResult(true, time))
+        delegate?.handleOutputs(outputs:.testResult(true, nil))
     }
     func didOtherDeviceConnect(_ logic: Bool) {
         isBabyDeviceOnline = logic
         delegate?.handleOutputs(outputs: .babyDeviceConnect(logic))
+    }
+}
+
+//MARK: - Agora audio delegate
+extension ParentViewModel:AgoraAudioServicePorotocol{
+    func memberCondition(_ bool:Bool) {
+        delegate?.handleOutputs(outputs: .crying(bool))
     }
 }
 extension ParentViewModel{
@@ -217,6 +225,5 @@ extension ParentViewModel{
     }
     
 }
-
 
 

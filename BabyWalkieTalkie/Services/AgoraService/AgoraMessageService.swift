@@ -15,24 +15,23 @@ import AgoraRtmKit
     func didOtherDeviceConnect(_ logic:Bool)
     @objc optional func selectConnectionType(type:ConnectionSource)
     @objc optional func listenerOrSpeaker(_ listener:Bool)
+    func agoraServiceError(errorString:String)
 }
 
 class AgoraMessageService: NSObject{
     var channel: String
-    //var appId = "3d3cffb6fa994521b3e0617bb8063577"
     var rtmToken:String?
     var username: String
     var delegate:AgoraMessageServiceProtocol?
+    var appId:String?
     
     init(rtmToken:String?,  channel: String, username: String) {
         self.channel = channel
         self.username = username
         self.rtmToken = rtmToken
+        self.appId = AppSingleton.sharedInstance.appID
         super.init()
         connectAgora()
-    }
-    deinit {
-        print("Agora  message deinit")
     }
 
     var rtmkit: AgoraRtmKit?
@@ -44,7 +43,11 @@ class AgoraMessageService: NSObject{
     
     private func connectAgora() {
         // Create connection to RTM
-        rtmkit = AgoraRtmKit(appId: appID, delegate: self)
+        guard let appId = appId else {
+            delegate?.agoraServiceError(errorString: Local2.agoraError)
+            return
+        }
+        rtmkit = AgoraRtmKit(appId: appId, delegate: self)
         rtmkit?.login(byToken: self.rtmToken, user: self.username)
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {[unowned self] in
             rtmChannel = rtmkit?.createChannel(withId: channel, delegate: self)
@@ -53,8 +56,8 @@ class AgoraMessageService: NSObject{
 private func joinChannel() {
         self.rtmChannel?.join(completion: { [unowned self] (errcode) in
             if errcode == .channelErrorOk {
-                rtmChannel?.getMembersWithCompletion({ c, _ in
-                    if c?.count == 2{
+                rtmChannel?.getMembersWithCompletion({[unowned self] numberOfMember, _ in
+                    if numberOfMember?.count == 2{
                         delegate?.didOtherDeviceConnect(true)
                     }else{
                         delegate?.didOtherDeviceConnect(false)
@@ -62,7 +65,8 @@ private func joinChannel() {
                 })
               
             }else{
-                fatalError("mesaj kanalına giremedi")
+                //todo
+                delegate?.agoraServiceError(errorString: Local.unknownError)
             }
         })
     }
@@ -129,12 +133,8 @@ extension AgoraMessageService{
     }
 }
 
-enum Orders{
-    case test
-}
 
-protocol AgoraAudioServicePorotocol:AnyObject{
-    func test(_ order:Orders)
-}
+
+
 
 

@@ -10,6 +10,7 @@ import Firebase
 import UserNotifications
 import FirebaseMessaging
 import FBSDKCoreKit
+import os.log
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -33,16 +34,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         catch {
             switch error as? Network.Error {
-            case let .failedToCreateWith(hostname)?:
-                print("Network error:\nFailed to create reachability object With host named:", hostname)
-            case let .failedToInitializeWith(address)?:
-                print("Network error:\nFailed to initialize reachability object With address:", address)
+            case .failedToCreateWith:
+                os_log("Network error:\nFailed to create reachability object", log: OSLog.viewCycle, type: .error)
+            case .failedToInitializeWith:
+                os_log("Network error:\nFailed to initialize reachability object", log: OSLog.viewCycle, type: .error)
             case .failedToSetCallout?:
-                print("Network error:\nFailed to set callout")
+                os_log("Network error:\nFailed to set callout", log: OSLog.viewCycle, type: .error)
             case .failedToSetDispatchQueue?:
-                print("Network error:\nFailed to set DispatchQueue")
+                os_log("Network error:\nFailed to set DispatchQueue", log: OSLog.viewCycle, type: .error)
             case .none:
-                print(error)
+                os_log("Unknown error", log: OSLog.viewCycle, type: .error)
             }
         }
         return true
@@ -57,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert,.badge,.sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
-        
         application.registerForRemoteNotifications()
     }
     
@@ -74,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 }
+
 @available(iOS 10, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
     // Receive displayed notifications for iOS 10 devices.
@@ -85,7 +86,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         // With swizzling disabled you must let Messaging know about the message, for Analytics
         Messaging.messaging().appDidReceiveMessage(userInfo)
         let title = notification.request.content.title
-        if  title == "Disconnect"{
+        if  title == "Disconnect" || title == "Bağlantı Kesildi" {
             let actualController = (appContainer.router.window?.rootViewController as? UINavigationController)?.visibleViewController
             if let selectview = actualController as? SelectRoleView{
                 // change condition

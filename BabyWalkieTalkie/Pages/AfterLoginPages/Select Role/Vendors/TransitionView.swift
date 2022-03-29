@@ -40,7 +40,7 @@ final class TransionView:UIView{
     let label: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.text = NSLocalizedString("firstPC.title", comment: "")
+        label.text = Local.appName
         label.textColor = MyColor.purple
         label.font = UIFont.systemFont(ofSize: 30, weight: .heavy)
         label.translatesAutoresizingMaskIntoConstraints = false

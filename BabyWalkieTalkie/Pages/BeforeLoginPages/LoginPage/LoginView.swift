@@ -9,7 +9,7 @@ import UIKit
 
 final class LoginView:UIViewController{
     var model:LoginViewModelProtocol!
-
+    
     
     let topStack:UIStackView = {
         let stack = UIStackView()
@@ -29,7 +29,7 @@ final class LoginView:UIViewController{
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-   
+    
     lazy var nameField:UITextField = {
         let field = UITextField()
         field.backgroundColor = MyColor.buttonColor
@@ -59,8 +59,6 @@ final class LoginView:UIViewController{
         field.setRightPaddingPoints(20)
         field.setLeftPaddingPoints(20)
         return field
-        
-        
     }()
     
     let forgotThePassword:UILabel = {
@@ -72,7 +70,6 @@ final class LoginView:UIViewController{
         return label
     }()
     
-    
     let loginButton:UIButton = {
         let title = Local.logIn
         let button = UIButton.addNewButton(imageName: nil, title: title)
@@ -82,14 +79,14 @@ final class LoginView:UIViewController{
     
     let orLabel:UILabel = {
         let label = UILabel()
-        label.text = "veya"
+        label.text = Local.or
         label.textColor = .black
         label.textAlignment = .center
         label.font = UIFont.preferredFont(forTextStyle: .title2)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     let googleButton :UIButton = {
         let button = UIButton.addNewButton(imageName: "google", title: Local.google)
         return button
@@ -99,7 +96,10 @@ final class LoginView:UIViewController{
         let button = UIButton.addNewButton(imageName: "fb", title: Local.facebook)
         return button
     }()
-    
+    let authorizationButton: UIButton = {
+        let button = UIButton.addNewButton(imageName: "applelogo", title: Local.apple)
+        return button
+    }()
     
     let cautionLabel:UILabel = {
         let label = UILabel()
@@ -136,28 +136,24 @@ final class LoginView:UIViewController{
     }()
     
     //MARK: - Life cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setSubviews()
         setTargets()
         nameField.delegate = self
-        passwordField.delegate = self
-        
     }
     
     override func viewDidLayoutSubviews() {
         loginButton.reloadShadow()
         fBButton.reloadShadow()
         googleButton.reloadShadow()
+        authorizationButton.reloadShadow()
     }
-
-    
     
     //MARK: - Set subviews
     private func setSubviews(){
-        let middlestackViews = [fBButton,googleButton]
+        let middlestackViews = [authorizationButton,fBButton,googleButton]
         for _view in middlestackViews{
             middleStack.addArrangedSubview(_view)
         }
@@ -170,12 +166,11 @@ final class LoginView:UIViewController{
         view.addSubview(orLabel)
         view.addSubview(middleStack)
         view.addSubview(bottomStack)
-        
-        
         bottomInnerStack.addArrangedSubview(cautionLabel)
         bottomInnerStack.addArrangedSubview(signUpButton)
         bottomStack.addArrangedSubview(bottomInnerStack)
-
+        topStack.spacing = buttonDistance
+        bottomStack.spacing = buttonDistance
         NSLayoutConstraint.activate([
             bottomStack.heightAnchor.constraint(equalToConstant: buttonSize),
             bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -199,15 +194,12 @@ final class LoginView:UIViewController{
     
     private func setSubviewsForPhones() {
         let stackHeight = 3*buttonSize+2*buttonDistance
-        let bottomStackH = 2*buttonSize+buttonDistance
-        topStack.spacing = buttonDistance
-        bottomStack.spacing = buttonDistance
         NSLayoutConstraint.activate([
             topStack.heightAnchor.constraint(equalToConstant:stackHeight),
             topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
             topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
             topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
-            middleStack.heightAnchor.constraint(equalToConstant:bottomStackH),
+            middleStack.heightAnchor.constraint(equalToConstant:stackHeight),
             middleStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: buttonDistance),
             middleStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: buttonDistance*(-1)),
             middleStack.bottomAnchor.constraint(equalTo: bottomStack.topAnchor,constant: buttonDistance*(-1)),
@@ -217,23 +209,20 @@ final class LoginView:UIViewController{
         ])
     }
     private func setSubviewsForPads() {
-        let stackHeight = 5*buttonSize
-        let bottomStackH = 3*buttonSize
-        topStack.spacing = buttonSize
-        middleStack.spacing = buttonSize
+        let stackHeight = 3*buttonSize+2*buttonDistance
         NSLayoutConstraint.activate([
             topStack.heightAnchor.constraint(equalToConstant:stackHeight),
-            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            topStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            topStack.widthAnchor.constraint(equalToConstant: screenWidth-300),
             topStack.bottomAnchor.constraint(equalTo: loginButton.topAnchor,constant: -1*buttonSize),
-            middleStack.heightAnchor.constraint(equalToConstant:bottomStackH),
-            middleStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 200),
-            middleStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            middleStack.heightAnchor.constraint(equalToConstant:stackHeight),
+            middleStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            middleStack.widthAnchor.constraint(equalToConstant: screenWidth-300),
             middleStack.bottomAnchor.constraint(equalTo: bottomStack.topAnchor,constant: buttonSize*(-1)),
-            loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 200),
-            loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -200),
+            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginButton.widthAnchor.constraint(equalToConstant: screenWidth-300),
             bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: buttonDistance*(-1)),
-            ])
+        ])
     }
     
     //MARK: - Add button target
@@ -241,6 +230,7 @@ final class LoginView:UIViewController{
         googleButton.addTarget(self, action: #selector(googlePressed), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
         signUpButton.addTarget(self, action:#selector(signUpButtonPressed), for: .touchUpInside)
+        authorizationButton.addTarget(self, action: #selector(handleAppleIdRequest(_ :)), for: .touchUpInside)
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(forgotPasswordPressed))
         forgotThePassword.addGestureRecognizer(tapRecognizer)
         forgotThePassword.isUserInteractionEnabled = true
@@ -250,11 +240,21 @@ final class LoginView:UIViewController{
     @objc private func loginButtonPressed(_ sender: UIButton){
         loginButton.pressAnimation()
         DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
-            model.logIn(nameField.text!, passwordField.text!)
+            nextPagePreparation()
             nameField.endEditing(true)
             passwordField.endEditing(true)
         }
-       
+        
+    }
+    
+    
+    @objc private func handleAppleIdRequest(_ sender:UIButton) {
+        authorizationButton.pressAnimation()
+        authorizationButton.reloadShadow()
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.15) { [unowned self] in
+            model.appleButtonPressed()
+        }
+        
     }
     
     @objc private func googlePressed(){
@@ -264,7 +264,6 @@ final class LoginView:UIViewController{
             model.googlePressed()
         }
     }
- 
     
     @objc private func signUpButtonPressed(_ sender: UIButton){
         nameField.endEditing(true)
@@ -283,45 +282,43 @@ final class LoginView:UIViewController{
             fBButton.reloadShadow()
         }
     }
+    private func nextPagePreparation(){
+        passwordField.callText { passwordString in
+            model.logIn(nameField.text!, passwordString)
+        }
+    }
 }
 
 //MARK: - Outputs of model
 extension LoginView:LoginViewModelDelegate{
     func handleModelOutputs(_ output: LoginModelOutputs) {
         switch output {
-        case .loggedIn(let response):
-            switch response {
-            case .failure(let error ):
-                guard let error = error as?  FirebaseError else {return}
-                addCaution(title: "Fail", message:error.description )
-            default:
-               break
-            }
-            
         case .setLoading(let isLoading):
-            if isLoading{
-                Animator.sharedInstance.showAnimation()
-            }else{
-                Animator.sharedInstance.hideAnimation()
-            }
+         isLoading ? Animator.sharedInstance.showAnimation() : Animator.sharedInstance.hideAnimation()
         case .anyErrorOccurred(let error):
-            addCaution(title: NSLocalizedString("Error", comment: ""), message: error)
+            Animator.sharedInstance.hideAnimation()
+            let alert = UIAlertController(title: Local.caution, message: error, preferredStyle: .alert)
+            let action = UIAlertAction(title: Local.ok, style: .cancel) { _ in
+                if error == FirebaseLocal.tryOtherWay{
+                    appContainer.authService.signOut()
+                }
+            }
+            alert.addAction(action)
+            present(alert, animated: true)
+        case .verificationSent:
+            addCaution(title: Local.verificationMail, message:Local.verificationMailDes)
         }
-    
     }
 }
-
 extension LoginView:UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         return true
     }
-    
-   
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        passwordField.resignFirstResponder()
+        nameField.resignFirstResponder()
+    }
 }
-
-
-
 
 

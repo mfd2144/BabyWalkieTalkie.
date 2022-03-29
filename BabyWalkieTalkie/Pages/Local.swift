@@ -26,6 +26,7 @@ struct Local{
     static let or = NSLocalizedString("Or", comment: "")
     static let google = NSLocalizedString("Google", comment: "")
     static let facebook = NSLocalizedString("Facebook", comment: "")
+    static let apple = NSLocalizedString("Apple", comment: "")
     static let emailPlaceHolder = NSLocalizedString("Login.emailplaceholder" , comment: "")
     static let passwordPlaceHolder = NSLocalizedString("Login.passwordplaceholder", comment: "")
     static let forgotPassword = NSLocalizedString("Login.forgotPassword" , comment: "")
@@ -43,7 +44,17 @@ struct Local{
     static let emptyField = NSLocalizedString("Signup.emptyField", comment: "")
     static let emailError = NSLocalizedString("Signup.emailError", comment: "")
     static let fbError =  NSLocalizedString("Firebase.error", comment: "")
+    static let faceError = NSLocalizedString("Face.Error", comment: "")
+    static let verificationError = NSLocalizedString("verificationError", comment: "")
+   static let unknownError = NSLocalizedString("UnknownError", comment: "")
+    static let emptyData = NSLocalizedString("EmptyData", comment: "")
+    static let verificationMail = NSLocalizedString("verificationMail", comment: "")
+    static let verificationMailDes = NSLocalizedString("verificationMailDes", comment: "")
+    static let registerSuccess = NSLocalizedString( "registerSuccess", comment:  "")
+    static let goBack = NSLocalizedString( "goBack", comment:  "")
+    static let diffEmailCaution = NSLocalizedString( "diffEmailCaution", comment:  "")
 }
+
 
 
 

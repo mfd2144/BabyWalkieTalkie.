@@ -43,7 +43,9 @@ class FirebaseMatchService{
         }
     }
     func disconnetUsers(completion:@escaping stringResult){
-        function.httpsCallable("killTheChannel").call { response,error in
+        let lan = Locale.current.languageCode
+        let data = ["language":lan]
+        function.httpsCallable("killTheChannel").call(data) { response,error in
             if let error = error{
                 completion(.failure(error))
             }else{
@@ -63,5 +65,6 @@ class FirebaseMatchService{
             }
         }
     }
+
 }
 

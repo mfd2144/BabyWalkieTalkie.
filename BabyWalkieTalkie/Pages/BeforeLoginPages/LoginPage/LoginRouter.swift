@@ -23,7 +23,6 @@ final class LoginRouter:LoginRouterProtocol{
        
         case.toUserPage:
             appContainer.router.checkLogin()
-            
             }
         }
 }

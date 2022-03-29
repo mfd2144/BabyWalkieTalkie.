@@ -20,7 +20,6 @@ struct Log {
             }
         }
     }
-    
     var type: ContentType
     var content: String
 }

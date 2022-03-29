@@ -16,6 +16,7 @@ final class SignUpMethodView:UIViewController{
         stack.axis = .vertical
         stack.alignment = .fill
         stack.distribution = .fillEqually
+        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
@@ -34,6 +35,7 @@ final class SignUpMethodView:UIViewController{
         stack.axis = .vertical
         stack.distribution = .fill
         stack.alignment = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
@@ -44,7 +46,7 @@ final class SignUpMethodView:UIViewController{
         textField.keyboardType = .default
         return textField
     }()
-
+    
     lazy var emailTextField2: UITextField = {
         let phString = Local.emailPlaceholder2
         let textField = createTextField(placeHolderText: phString, type: .emailAddress)
@@ -61,8 +63,7 @@ final class SignUpMethodView:UIViewController{
         return textField
     }()
     
-    let passwordTextField: UITextField = {
-//        let textField = UITextField()
+    let passwordTextField: PasswordFieldWithEye = {
         let textField = PasswordFieldWithEye()
         let phString = Local.passwordPlaceholder
         textField.borderStyle = .roundedRect
@@ -75,7 +76,7 @@ final class SignUpMethodView:UIViewController{
         textField.setLeftPaddingPoints(20)
         return textField
     }()
-
+    
     let nextButton: UIButton = {
         let button = UIButton.addNewButton(imageName: nil, title: Local.button)
         return button
@@ -100,7 +101,21 @@ final class SignUpMethodView:UIViewController{
     override func viewDidLayoutSubviews() {
         nextButton.reloadShadow()
     }
-
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.current.orientation.isLandscape{
+            emailTextField.resignFirstResponder()
+            emailTextField2.resignFirstResponder()
+            userNameTextField.resignFirstResponder()
+            passwordTextField.resignFirstResponder()
+        } else{
+            emailTextField.resignFirstResponder()
+            emailTextField2.resignFirstResponder()
+            userNameTextField.resignFirstResponder()
+            passwordTextField.resignFirstResponder()
+        }
+    }
     //MARK: - Add subviews
     private func setSubviews(){
         switch UIDevice.current.userInterfaceIdiom{
@@ -112,7 +127,7 @@ final class SignUpMethodView:UIViewController{
             break
         }
     }
-
+    
     private func setSubviewsForPhones(){
         let views = [ emailTextField,emailTextField2 ,userNameTextField,passwordTextField,nextButton]
         for _view in views{
@@ -124,8 +139,17 @@ final class SignUpMethodView:UIViewController{
         let stackHeight = 5*buttonSize+4*buttonDistance
         topStack.spacing = buttonDistance
         stack.spacing = buttonDistance
-        topStack.putSubviewAt(top: view.safeAreaLayoutGuide.topAnchor, bottom: nil, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: buttonDistance, bottomDis: 0, leadingDis: buttonDistance, trailingDis: (-1)*buttonDistance, heightFloat: (2*buttonDistance+buttonSize), widthFloat: nil, heightDimension: nil, widthDimension: nil)
-        stack.putSubviewAt(top: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: buttonDistance, bottomDis: (-1)*buttonDistance, leadingDis: buttonDistance, trailingDis: (-1)*buttonDistance, heightFloat: stackHeight, widthFloat: nil, heightDimension: nil, widthDimension: nil)
+        
+        NSLayoutConstraint.activate([
+            topStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            topStack.heightAnchor.constraint(equalToConstant: 2*buttonDistance+buttonSize),
+            topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: buttonDistance),
+            topStack.widthAnchor.constraint(equalToConstant:screenWidth-buttonSize),
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.heightAnchor.constraint(equalToConstant: stackHeight),
+            stack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -1*buttonDistance),
+            stack.widthAnchor.constraint(equalToConstant:screenWidth-buttonSize)
+        ])
     }
     
     private func setSubviewsForPads(){
@@ -135,11 +159,20 @@ final class SignUpMethodView:UIViewController{
         }
         view.addSubview(topStack)
         view.addSubview(stack)
-        let stackHeight = 9*buttonSize
-        topStack.spacing = buttonSize
-        stack.spacing = buttonSize
-        topStack.putSubviewAt(top: nil, bottom: stack.topAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: 0, bottomDis:-1*buttonSize , leadingDis: 200, trailingDis: -200, heightFloat: 3*buttonSize, widthFloat: nil, heightDimension: nil, widthDimension: nil)
-        stack.putSubviewAt(top: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, topDis: 0, bottomDis:-1*buttonSize , leadingDis: 200, trailingDis: -200, heightFloat: stackHeight, widthFloat: nil, heightDimension: nil, widthDimension: nil)
+        let stackHeight = 5*buttonSize+4*buttonDistance
+        topStack.spacing = buttonDistance
+        stack.spacing = buttonDistance
+        
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.heightAnchor.constraint(equalToConstant: stackHeight),
+            stack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -1*buttonDistance),
+            stack.widthAnchor.constraint(equalToConstant:screenWidth-300),
+            topStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            topStack.heightAnchor.constraint(equalToConstant: 2*buttonDistance+buttonSize),
+            topStack.bottomAnchor.constraint(equalTo: stack.topAnchor,constant:-1*buttonDistance),
+            topStack.widthAnchor.constraint(equalToConstant:screenWidth-300),
+        ])
     }
     
     //MARK: - Add target
@@ -147,17 +180,28 @@ final class SignUpMethodView:UIViewController{
         nextButton.addTarget(self, action: #selector(nextButtonPressed), for: .touchUpInside)
     }
     
-    @objc private func nextButtonPressed(){
+    @objc private func nextButtonPressed() {
         nextButton.pressAnimation()
-        guard  emailTextField.text == emailTextField2.text else {return}
-        let user = UserInfo(userName: userNameTextField.text, password: passwordTextField.text, mail: emailTextField.text)
         emailTextField.endEditing(true)
         emailTextField2.endEditing(true)
         passwordTextField.endEditing(true)
         userNameTextField.endEditing(true)
         DispatchQueue.main.asyncAfter(deadline: .now()+0.15) {[unowned self] in
+            nextPagePreparation()
+        }
+    }
+    private func nextPagePreparation(){
+        guard let trimmedEmail = emailTextField.text?.trimmingCharacters(in: .whitespaces),
+              let trimmedEmail2 = emailTextField2.text?.trimmingCharacters(in: .whitespaces),
+              trimmedEmail == trimmedEmail2 else{
+            addCaution(title: Local.caution, message:Local.diffEmailCaution)
+            return
+        }
+        passwordTextField.callText(){ string in
+            let user = UserInfo(userName: userNameTextField.text, password: string, mail: emailTextField.text)
             viewModel.signUp(user)
         }
+        
     }
 }
 
@@ -166,13 +210,12 @@ extension SignUpMethodView:SignUpMethodViewModelDelegate{
     func handleOutput(_ output: SignUpMethodViewModelOutputs) {
         switch output {
         case .showAnyAlert(let caution):
+          Animator.sharedInstance.hideAnimation()
             addCaution(title: Local.caution, message: caution)
         case .isLoading(let loading):
-            if loading{
-                Animator.sharedInstance.showAnimation()
-            }else{
-                Animator.sharedInstance.hideAnimation()
-            }
+           loading ? Animator.sharedInstance.showAnimation() : Animator.sharedInstance.hideAnimation()
+        case .signUpCompleted:
+            signUpCompleted()
         }
     }
     
@@ -189,18 +232,32 @@ extension SignUpMethodView:SignUpMethodViewModelDelegate{
         textField.setLeftPaddingPoints(20)
         return textField
     }
+    
+    private func signUpCompleted() {
+        let alertView = UIAlertController(title: Local.registerSuccess, message: Local.verificationMailDes, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: Local.goBack, style: .default) {[unowned self] _ in
+            navigationController?.popToRootViewController(animated: true)
+        }
+        alertView.addAction(alertAction)
+        present(alertView, animated: true, completion: nil)
+    }
 }
 
 extension SignUpMethodView:UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        nextButtonPressed()
+        nextPagePreparation()
         textField.endEditing(true)
         return true
     }
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        emailTextField.resignFirstResponder()
+        emailTextField2.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        userNameTextField.resignFirstResponder()
     }
 }
+
 
 
 

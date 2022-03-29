@@ -17,18 +17,10 @@ protocol SignUpMethodViewModelProtocol:AnyObject{
 enum SignUpMethodViewModelOutputs:Equatable{
     case showAnyAlert(String)
     case isLoading(Bool)
+    case signUpCompleted
 }
 
 protocol SignUpMethodViewModelDelegate:AnyObject{
    func handleOutput(_ output:SignUpMethodViewModelOutputs)
 }
-
-enum SingUpMethodRoutes{
-    case toUserPage
-}
-
-protocol SignUpMethodRouterProtocol:AnyObject{
-    func routeToPage(_ route:SingUpMethodRoutes)
-}
-
 

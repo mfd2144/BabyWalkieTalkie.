@@ -30,6 +30,7 @@ enum ParentViewModelOutputs{
     case otherDeviceDidUnpair
     case videoDidNotPurchased
     case connectionStatus(Bool)
+    case crying(Bool)
 }
 protocol ParentViewModelDelegate:AnyObject{
     func handleOutputs(outputs:ParentViewModelOutputs)

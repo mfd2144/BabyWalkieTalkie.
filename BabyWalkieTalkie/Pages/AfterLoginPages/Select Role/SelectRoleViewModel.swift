@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
-
     
     //MARK: - Variables
     weak var delegate: SelectRoleViewModelDelegate?
@@ -45,7 +44,7 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
     }
     
     
-   
+    
     //MARK: - Data Check
     ///If phone lost internet connection before, this part will change revelant part of user data on net
     func checkDidConnetionLostBefore() {
@@ -110,8 +109,9 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
             case.success(let string):
                 guard let string = string,string != "baby" else{
                     delegate?.handleOutputs(.isLoading(false))
+                    delegate?.handleOutputs(.showAnyAlert(Local2.babyStillOnline))
                     return }
-                matchService.disconnetUsers { results in
+                matchService.disconnetUsers {[unowned self] results in
                     delegate?.handleOutputs(.isLoading(false))
                     switch results{
                     case .failure(let error):
@@ -131,10 +131,11 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
         //first check connection-done
         guard let status = connectionStatus, status else  {delegate?.handleOutputs(.badConnection);return}
         guard iAPCondition != .finished && iAPCondition != nil else {delegate?.handleOutputs(.membershipCaution);return}
-        //check did user purchase video 
-        if iAPCondition == .alreadyMember(.videoAudio){
+        //check did user purchase video
+        switch iAPCondition{
+        case .threeDays,.twoDays,.oneDay,.alreadyMember(.video),.alreadyMember(.videoAudio):
             router.routeToPage(.toParentControl(true))
-        }else{
+        default:
             router.routeToPage(.toParentControl(false))
         }
     }
@@ -149,7 +150,13 @@ final class SelectRoleViewModel:NSObject,SelectRoleViewModelProtocol{
         router.routeToPage(.toPurchaseTable(helper: iAPHelper))
     }
 }
+
+
 extension SelectRoleViewModel:CustomMCDelegate{
+    func userDidNotAllowLocalNW() {
+        delegate?.handleOutputs(.showAnyAlert(Local2.networkCaution))
+    }
+    
     func sameUser() {
         delegate?.handleOutputs(.sameUser)
     }
@@ -213,7 +220,7 @@ extension SelectRoleViewModel{
         matchService.fetchRegisterDate {[unowned self] result in
             switch result{
             case .failure(let error):
-                print(error.localizedDescription)
+                delegate?.handleOutputs(.showAnyAlert("\(Local.unknownError) : \(error.localizedDescription)"))
             case .success(let dateString):
                 // "Sat Nov 20 2021 17:12:10 GMT+0000 (Coordinated Universal Time)"
                 guard let dateString = dateString else{return}
@@ -274,3 +281,6 @@ extension SelectRoleViewModel:IAPHelperDelegate{
         delegate?.handleOutputs(.isLoading(true))
     }
 }
+
+
+

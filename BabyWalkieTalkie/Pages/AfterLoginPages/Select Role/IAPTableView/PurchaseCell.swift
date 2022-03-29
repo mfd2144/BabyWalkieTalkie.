@@ -47,7 +47,7 @@ class PurchaseCell: UITableViewCell {
               accessoryView = self.newBuyButton()
           }
       } else {
-        detailTextLabel?.text = "Not available"
+          detailTextLabel?.text = Local2.notAvailable
       }
     }
   }
@@ -66,7 +66,7 @@ class PurchaseCell: UITableViewCell {
   func newBuyButton() -> UIButton {
     let button = UIButton(type: .system)
     button.setTitleColor(tintColor, for: .normal)
-      let buy = LocalAfterPages.buy
+      let buy = Local2.buy
     button.setTitle(buy, for: .normal)
     button.addTarget(self, action: #selector(PurchaseCell.buyButtonTapped(_:)), for: .touchUpInside)
     button.sizeToFit()

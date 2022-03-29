@@ -19,7 +19,7 @@ enum DecodeErrors:Error{
         case .urlPathFail(let string):
             return string
         case.emptyData:
-            return "Empty Data"
+            return Local.emptyData
         }
     }
 }
@@ -31,11 +31,18 @@ enum TransactionError:Error{
 
 public enum FirebaseError:Error{
     case errorContainer(String)
+    case verificationError(String)
+    case providerError
     
     var description:String{
         switch self {
         case .errorContainer(let caution):
             return caution
+        case .verificationError(let error):
+            return "\(Local.verificationError) : \(error)"
+        case .providerError:
+            return Local.unknownError
         }
     }
 }
+

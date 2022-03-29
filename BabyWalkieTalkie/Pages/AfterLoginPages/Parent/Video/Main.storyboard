@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,51 +18,9 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U9u-fT-DFZ" userLabel="remoteVideo">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Wh-nG-1kC" userLabel="muteButton">
-                                        <rect key="frame" x="160" y="571" width="55" height="55"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="55" id="Ab8-hJ-1bi"/>
-                                            <constraint firstAttribute="width" secondItem="7Wh-nG-1kC" secondAttribute="height" multiplier="1:1" id="smz-6r-qjO"/>
-                                        </constraints>
-                                        <state key="normal" title="Mute" image="mic"/>
-                                        <state key="selected" image="mute"/>
-                                        <state key="highlighted" image="mic_pressed"/>
-                                        <connections>
-                                            <action selector="didClickMuteButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hCE-ta-byU"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lvV-dj-Yy2" userLabel="turnButton">
-                                        <rect key="frame" x="270" y="571" width="55" height="55"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="lvV-dj-Yy2" secondAttribute="height" multiplier="1:1" id="LBQ-JQ-a62"/>
-                                            <constraint firstAttribute="width" constant="55" id="zP8-Nv-0XW"/>
-                                        </constraints>
-                                        <state key="normal" title="Mute" image="switch"/>
-                                        <state key="selected" image="mute"/>
-                                        <state key="highlighted" image="mic_pressed"/>
-                                        <connections>
-                                            <action selector="turnButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="z8C-bp-Bem"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" red="0.28264099359512329" green="0.25691255927085876" blue="0.34382003545761108" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="7Wh-nG-1kC" secondAttribute="bottom" constant="41" id="AHG-W6-4ft"/>
-                                    <constraint firstAttribute="bottom" secondItem="lvV-dj-Yy2" secondAttribute="bottom" constant="41" id="mkk-8G-u5N"/>
-                                    <constraint firstAttribute="trailing" secondItem="lvV-dj-Yy2" secondAttribute="trailing" constant="50" id="tTR-Gm-9Se"/>
-                                    <constraint firstItem="7Wh-nG-1kC" firstAttribute="centerX" secondItem="U9u-fT-DFZ" secondAttribute="centerX" id="uBt-q1-dAo"/>
-                                    <constraint firstItem="lvV-dj-Yy2" firstAttribute="width" secondItem="lvV-dj-Yy2" secondAttribute="height" multiplier="1:1" id="zy9-S5-5Vs"/>
-                                </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LZg-5L-xeZ" userLabel="remoteVideoMutedIndicator">
-                                <rect key="frame" x="137.5" y="283.5" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="hhQ-Z7-CG0"/>
-                                    <constraint firstAttribute="width" secondItem="LZg-5L-xeZ" secondAttribute="height" multiplier="1:1" id="wWK-UO-1nf"/>
-                                </constraints>
-                            </imageView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QRw-lx-Hkf">
                                 <rect key="frame" x="16" y="450" width="195" height="86"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -78,27 +36,21 @@
                         <viewLayoutGuide key="safeArea" id="bhC-Zh-0jg"/>
                         <color key="backgroundColor" red="0.28264099359512329" green="0.25691255927085876" blue="0.34382003545761108" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="LZg-5L-xeZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2YX-WB-UuO"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="trailing" secondItem="bhC-Zh-0jg" secondAttribute="trailing" id="3VW-mb-Wud"/>
+                            <constraint firstItem="bhC-Zh-0jg" firstAttribute="bottom" secondItem="QRw-lx-Hkf" secondAttribute="bottom" constant="131" id="9vG-6b-vPH"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="leading" secondItem="bhC-Zh-0jg" secondAttribute="leading" id="Jad-zl-4Gt"/>
-                            <constraint firstItem="LZg-5L-xeZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YdT-SS-WbL"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="bottom" secondItem="bhC-Zh-0jg" secondAttribute="bottom" id="dg1-Ff-82G"/>
                             <constraint firstItem="QRw-lx-Hkf" firstAttribute="leading" secondItem="bhC-Zh-0jg" secondAttribute="leading" constant="16" id="jhm-Hp-f9G"/>
-                            <constraint firstItem="QRw-lx-Hkf" firstAttribute="top" secondItem="LZg-5L-xeZ" secondAttribute="bottom" constant="66.5" id="o2i-sU-43I"/>
                             <constraint firstItem="U9u-fT-DFZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="pID-WY-ovL"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="micButton" destination="7Wh-nG-1kC" id="Re9-h7-ykU"/>
                         <outlet property="remoteContainer" destination="U9u-fT-DFZ" id="Z12-jR-svL"/>
-                        <outlet property="remoteVideoMutedIndicator" destination="LZg-5L-xeZ" id="mmM-KM-ixK"/>
-                        <outlet property="turnButton" destination="lvV-dj-Yy2" id="euR-l1-IQR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="I3D-AK-gJA">
                     <connections>
-                        <action selector="didClickLocalContainer:" destination="BYZ-38-t0r" id="fC2-xt-0lA"/>
                         <outlet property="delegate" destination="BYZ-38-t0r" id="5Cq-7c-CZh"/>
                     </connections>
                 </tapGestureRecognizer>
@@ -114,10 +66,4 @@
             <point key="canvasLocation" x="-927" y="533"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="mic" width="220" height="220"/>
-        <image name="mic_pressed" width="220" height="220"/>
-        <image name="mute" width="204" height="204"/>
-        <image name="switch" width="220" height="220"/>
-    </resources>
 </document>

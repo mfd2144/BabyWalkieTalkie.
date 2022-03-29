@@ -40,9 +40,7 @@ class CustomView:UIView{
         addPaths()
         addTarget()
     }
-    deinit{
-        printNew("custom view deinit")
-    }
+
     private func addTarget(){
         tabRecognizer = UITapGestureRecognizer(target: self, action: #selector(tabBar))
         addGestureRecognizer(tabRecognizer)

@@ -15,16 +15,19 @@ extension UIButton {
      
         button.addShadow()
         if imageName != nil{
-            let buttonImage = UIImage(named: imageName!)?.withRenderingMode(.alwaysOriginal).withTintColor(.gray)
-            var image:UIImage!
+            var buttonImage:UIImage!
             
-            if let buttonImage = buttonImage  {
-                image = buttonImage
+            if let image = UIImage(systemName: imageName!)?.withRenderingMode(.alwaysOriginal).withTintColor(.gray){
+                buttonImage = image
             }else{
-                image = UIImage()
+                buttonImage = UIImage(named: imageName!)?.withRenderingMode(.alwaysOriginal).withTintColor(.gray)
             }
             
-            button.setImage(image, for: .normal)
+            if  buttonImage == nil  {
+               buttonImage = UIImage()
+            }
+            
+            button.setImage(buttonImage, for: .normal)
             button.setTitle(title, for: .normal)
             let bImage = button.imageView!
             let bTitle = button.titleLabel!
@@ -68,7 +71,7 @@ extension UIButton {
         let bImage = button.imageView!
         let bTitle = button.titleLabel!
        let textSize = bTitle.intrinsicContentSize.width
-       let leftPadding = (UIScreen.main.bounds.width-(textSize+buttonSize)-(2*buttonDistance))/2
+       let leftPadding = (screenWidth-(textSize+buttonSize)-(2*buttonDistance))/2
            NSLayoutConstraint.activate([
                bImage.heightAnchor.constraint(equalTo: button.heightAnchor,multiplier: 0.5),
                bImage.widthAnchor.constraint(equalTo: button.heightAnchor),
@@ -80,7 +83,8 @@ extension UIButton {
         let bImage = button.imageView!
         let bTitle = button.titleLabel!
         let textSize = bTitle.intrinsicContentSize.width
-        let leftPadding = (UIScreen.main.bounds.width-(textSize+buttonSize)-400)/2
+        let leftPadding = (screenWidth-(textSize+buttonSize)-300)/2
+        
             NSLayoutConstraint.activate([
                 bImage.heightAnchor.constraint(equalTo: button.heightAnchor,multiplier: 0.5),
                 bImage.widthAnchor.constraint(equalTo: button.heightAnchor),
